@@ -17,7 +17,8 @@ class ItemView
 
     public function emitItemThumbnail($useCoverImage = true)
     {
-        $url = ItemView::getImageUrl($this->item, $useCoverImage);
+        $getThumbnail = true;
+        $url = ItemView::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
         if (empty($url))
         {
@@ -88,13 +89,13 @@ class ItemView
         return img($fallbackImageFilename);
     }
 
-    public static function getImageUrl($item, $useCoverImage)
+    public static function getImageUrl($item, $useCoverImage, $thumbnail = false)
     {
         $coverImageIdentifier = self::getCoverImageIdentifier($item->id);
         $coverImageItem = empty($coverImageIdentifier) ? null : ItemView::getItemFromIdentifier($coverImageIdentifier);
 
-        $itemImageUrl = self::getItemFileUrl($item);
-        $coverImageUrl = empty($coverImageItem) ? '' : self::getItemFileUrl($coverImageItem);
+        $itemImageUrl = self::getItemFileUrl($item, $thumbnail);
+        $coverImageUrl = empty($coverImageItem) ? '' : self::getItemFileUrl($coverImageItem, $thumbnail);
 
         if ($useCoverImage)
         {
