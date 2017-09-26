@@ -1,6 +1,6 @@
 # AvantCommon
 
-This plugin is required by the [AvantRelationships](https://github.com/gsoules/AvantRelationships) plugin. It provides no functionality of its own.
+This plugin is required by the [AvantRelationships](https://github.com/gsoules/AvantRelationships) and [AvantSearch](https://github.com/gsoules/AvantSearch) plugins. It provides no functionality of its own.
 
 ## Installation
 
