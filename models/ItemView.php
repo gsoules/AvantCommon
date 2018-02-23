@@ -115,6 +115,19 @@ class ItemView
         return $url;
     }
 
+    private static function getItemElementMetadata($item, $parts)
+    {
+        try
+        {
+            $metadata = metadata($item, array($parts[0], $parts[1]), array('no_filter' => true));
+        }
+        catch (Omeka_Record_Exception $e)
+        {
+            $metadata = '???';
+        }
+        return $metadata;
+    }
+
     protected static function getItemFileUrl($item, $thumbnail = false)
     {
         $url = '';
@@ -154,8 +167,7 @@ class ItemView
 
     public static function getItemIdentifier($item)
     {
-        $parts = self::getPartsForIdentifierElement();
-        return metadata($item, array($parts[0], $parts[1]), array('no_filter' => true));
+        return self::getItemElementMetadata($item, self::getPartsForIdentifierElement());
     }
 
     public static function getItemImageUri(Item $item)
@@ -175,13 +187,17 @@ class ItemView
 
     public static function getItemTitle($item)
     {
-        $parts = self::getPartsForTitleElement();
-        return metadata($item, array($parts[0], $parts[1]), array('no_filter' => true));
+        return self::getItemElementMetadata($item, self::getPartsForTitleElement());
     }
 
     public static function getPartsForIdentifierElement()
     {
         $parts = explode(',', get_option('common_identifier'));
+        if (empty($parts[0]))
+        {
+            $parts[0] = 'Dublin Core';
+            $parts[1] = 'Identifier';
+        }
         $parts = array_map('trim', $parts);
         return $parts;
     }
@@ -189,6 +205,11 @@ class ItemView
     public static function getPartsForTitleElement()
     {
         $parts = explode(',', get_option('common_title'));
+        if (empty($parts[0]))
+        {
+            $parts[0] = 'Dublin Core';
+            $parts[1] = 'Title';
+        }
         $parts = array_map('trim', $parts);
         return $parts;
     }
