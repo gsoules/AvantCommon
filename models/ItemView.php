@@ -68,6 +68,9 @@ class ItemView
 
     public static function getCoverImageIdentifier($itemId)
     {
+        if (!plugin_is_active('AvantRelationships'))
+            return '';
+
         $db = get_db();
         return $db->getTable('RelationshipImages')->getImageItemIdentifier($itemId);
     }
@@ -135,7 +138,8 @@ class ItemView
 
     public static function getItemFromIdentifier($identifier)
     {
-        $element = get_db()->getTable('Element')->findByElementSetNameAndElementName('Dublin Core', 'Identifier');
+        $parts = explode(',', get_option('common_identifier'));
+        $element = get_db()->getTable('Element')->findByElementSetNameAndElementName($parts[0], $parts[1]);
         $items = get_records('Item', array('advanced' => array(array('element_id' => $element->id, 'type' => 'is exactly', 'terms' => $identifier))));
         if (empty($items))
             return null;
@@ -150,7 +154,8 @@ class ItemView
 
     public static function getItemIdentifier($item)
     {
-        return metadata($item, array('Dublin Core', 'Identifier'), array('no_filter' => true));
+        $parts = self::getPartsForIdentifierElement();
+        return metadata($item, array($parts[0], $parts[1]), array('no_filter' => true));
     }
 
     public static function getItemImageUri(Item $item)
@@ -170,6 +175,21 @@ class ItemView
 
     public static function getItemTitle($item)
     {
-        return metadata($item, array('Dublin Core', 'Title'), array('no_filter' => true));
+        $parts = self::getPartsForTitleElement();
+        return metadata($item, array($parts[0], $parts[1]), array('no_filter' => true));
+    }
+
+    public static function getPartsForIdentifierElement()
+    {
+        $parts = explode(',', get_option('common_identifier'));
+        $parts = array_map('trim', $parts);
+        return $parts;
+    }
+
+    public static function getPartsForTitleElement()
+    {
+        $parts = explode(',', get_option('common_title'));
+        $parts = array_map('trim', $parts);
+        return $parts;
     }
 }
