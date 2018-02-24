@@ -123,6 +123,7 @@ class ItemView
         }
         catch (Omeka_Record_Exception $e)
         {
+            // The user configured a bad value for the identifier or title.
             $metadata = '???';
         }
         return $metadata;
@@ -151,7 +152,7 @@ class ItemView
 
     public static function getItemFromIdentifier($identifier)
     {
-        $parts = explode(',', get_option('common_identifier'));
+        $parts = self::getPartsForIdentifierElement();
         $element = get_db()->getTable('Element')->findByElementSetNameAndElementName($parts[0], $parts[1]);
         $items = get_records('Item', array('advanced' => array(array('element_id' => $element->id, 'type' => 'is exactly', 'terms' => $identifier))));
         if (empty($items))
@@ -195,6 +196,7 @@ class ItemView
         $parts = explode(',', get_option('common_identifier'));
         if (empty($parts[0]))
         {
+            // Provide good values in case the user configured a blank value for the identifier.
             $parts[0] = 'Dublin Core';
             $parts[1] = 'Identifier';
         }
@@ -207,6 +209,7 @@ class ItemView
         $parts = explode(',', get_option('common_title'));
         if (empty($parts[0]))
         {
+            // Provide good values in case the user configured a blank value for the title.
             $parts[0] = 'Dublin Core';
             $parts[1] = 'Title';
         }
