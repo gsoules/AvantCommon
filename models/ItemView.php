@@ -115,11 +115,11 @@ class ItemView
         return $url;
     }
 
-    private static function getItemElementMetadata($item, $parts)
+    private static function getItemElementMetadata($item, $parts, $asHtml = true)
     {
         try
         {
-            $metadata = metadata($item, array($parts[0], $parts[1]), array('no_filter' => true));
+            $metadata = metadata($item, array($parts[0], $parts[1]), array('no_filter' => true, 'no_escape' => !$asHtml));
         }
         catch (Omeka_Record_Exception $e)
         {
@@ -186,9 +186,9 @@ class ItemView
         return $uri;
     }
 
-    public static function getItemTitle($item)
+    public static function getItemTitle($item, $asHtml = true)
     {
-        return self::getItemElementMetadata($item, self::getPartsForTitleElement());
+        return self::getItemElementMetadata($item, self::getPartsForTitleElement(), $asHtml);
     }
 
     public static function getPartsForIdentifierElement()
