@@ -92,6 +92,12 @@ class ItemView
         return img($fallbackImageFilename);
     }
 
+    public static function getIdentifierElementName()
+    {
+        $parts = ItemView::getPartsForIdentifierElement();
+        return $parts[1];
+    }
+
     public static function getImageUrl($item, $useCoverImage, $thumbnail = false)
     {
         $coverImageIdentifier = self::getCoverImageIdentifier($item->id);
@@ -215,5 +221,11 @@ class ItemView
         }
         $parts = array_map('trim', $parts);
         return $parts;
+    }
+
+    public static function getTitleElementName()
+    {
+        $parts = ItemView::getPartsForTitleElement();
+        return $parts[1];
     }
 }
