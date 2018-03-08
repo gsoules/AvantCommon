@@ -139,6 +139,13 @@ class ItemView
         return empty($element) ? 0 : $element->id;
     }
 
+    public static function getElementNameFromId($elementId)
+    {
+        $db = get_db();
+        $element = $db->getTable('Element')->find($elementId);
+        return isset($element) ? $element->name : '';
+    }
+
     public static function getFallbackImageUrl($item)
     {
         $fallbackImageFilename = apply_filters('fallback_image_name', 'fallback-file.png', array('item' => $item));
@@ -290,6 +297,11 @@ class ItemView
         }
         $parts = array_map('trim', $parts);
         return $parts;
+    }
+
+    public static function getTitleElementId()
+    {
+        return self::getElementIdForElementName(self::getTitleElementName());
     }
 
     public static function getTitleElementName()
