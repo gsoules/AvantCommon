@@ -15,6 +15,24 @@ class ItemView
         return $html;
     }
 
+    public function emitItemPreview($useCoverImage = true)
+    {
+        $html = $this->emitItemHeader($useCoverImage);
+        $html .= "<div>";
+        $html .= $this->emitItemThumbnail($useCoverImage);
+        $html .= $this->emitItemTitle();
+        $html .= "</div>";
+        return $html;
+    }
+
+    public function emitItemPreviewAsListElement($useCoverImage = true, $attributes = '')
+    {
+        $html = "<li $attributes>";
+        $html .= $this->emitItemPreview($useCoverImage);
+        $html .= "</li>";
+        return $html;
+    }
+
     public function emitItemThumbnail($useCoverImage = true)
     {
         $getThumbnail = true;
@@ -48,22 +66,47 @@ class ItemView
         return $html;
     }
 
-    public function emitItemPreview($useCoverImage = true)
+    public static function fetchElementsByValue($elementId, $value)
     {
-        $html = $this->emitItemHeader($useCoverImage);
-        $html .= "<div>";
-        $html .= $this->emitItemThumbnail($useCoverImage);
-        $html .= $this->emitItemTitle();
-        $html .= "</div>";
-        return $html;
+        if (empty($value))
+            return;
+        $db = get_db();
+        $select = $db->select()
+            ->from($db->ElementText)
+            ->where('element_id = ?', $elementId)
+            ->where('text = ?', $value)
+            ->where('record_type = ?', 'Item');
+        $results = $db->getTable('ElementText')->fetchObjects($select);
+        return $results;
     }
 
-    public function emitItemPreviewAsListElement($useCoverImage = true, $attributes = '')
+    protected static function fetchItemsWithElementValue($elementId, $value)
     {
-        $html = "<li $attributes>";
-        $html .= $this->emitItemPreview($useCoverImage);
-        $html .= "</li>";
-        return $html;
+        // Escape double quotes.
+        $value = str_replace('"', '\"', $value);
+
+        $db = get_db();
+        $elementTextsTable = $db->ElementTexts;
+        $itemsTable = $db->Items;
+
+        $sql = "
+            SELECT $itemsTable.id
+            FROM $db->Item
+            INNER JOIN $db->ElementTexts ON $itemsTable.id = $elementTextsTable.record_id
+            WHERE $elementTextsTable.element_id = $elementId AND $elementTextsTable.text = \"$value\"";
+
+        return $sql;
+    }
+
+    public static function getAdvancedSearchUrl($elementId, $value)
+    {
+        $params['advanced'][0]['element_id'] = $elementId;
+        $params['advanced'][0]['type'] = 'is exactly';
+        $params['advanced'][0]['terms'] = $value;
+        $queryString = http_build_query($params);
+        $action = is_admin_theme() ? 'items/browse' : 'find';
+        $url = url("$action?$queryString");
+        return $url;
     }
 
     public static function getCoverImageIdentifier($itemId)
@@ -86,10 +129,28 @@ class ItemView
         return $coverImageItem ? $coverImageItem : null;
     }
 
+    public static function getElementIdForElementName($elementName)
+    {
+        $db = get_db();
+        $elementTable = $db->getTable('Element');
+        $element = $elementTable->findByElementSetNameAndElementName('Dublin Core', $elementName);
+        if (empty($element))
+            $element = $elementTable->findByElementSetNameAndElementName('Item Type Metadata', $elementName);
+        return empty($element) ? 0 : $element->id;
+    }
+
     public static function getFallbackImageUrl($item)
     {
         $fallbackImageFilename = apply_filters('fallback_image_name', 'fallback-file.png', array('item' => $item));
         return img($fallbackImageFilename);
+    }
+
+    public static function getFirstItemWithElementValue($elementId, $value)
+    {
+        $sql = self::fetchItemsWithElementValue($elementId, $value);
+        $db = get_db();
+        $result = $db->query($sql)->fetch();
+        return $result;
     }
 
     public static function getIdentifierElementName()
@@ -166,15 +227,15 @@ class ItemView
         return $items[0];
     }
 
+    public static function getItemIdentifier($item)
+    {
+        return self::getItemElementMetadata($item, self::getPartsForIdentifierElement());
+    }
+
     public static function getItemIdFromIdentifier($identifier)
     {
         $item = self::getItemFromIdentifier($identifier);
         return empty($item) ? 0 : $item->id;
-    }
-
-    public static function getItemIdentifier($item)
-    {
-        return self::getItemElementMetadata($item, self::getPartsForIdentifierElement());
     }
 
     public static function getItemImageUri(Item $item)
@@ -190,6 +251,14 @@ class ItemView
             $uri = self::getFallbackImageUrl($item);
         }
         return $uri;
+    }
+
+    public static function getItemsWithElementValue($elementId, $value)
+    {
+        $sql = self::fetchItemsWithElementValue($elementId, $value);
+        $db = get_db();
+        $results = $db->query($sql)->fetchAll();
+        return $results;
     }
 
     public static function getItemTitle($item, $asHtml = true)
