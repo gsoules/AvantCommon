@@ -40,8 +40,7 @@ class ItemView
 
         if (empty($url))
         {
-            $fallbackImageFilename = apply_filters('fallback_image_name', 'fallback-file.png', array('item' => $this->item));
-            $url = img("$fallbackImageFilename");
+            $url = self::getFallbackImageUrl($this->item);
         }
 
         $title = ItemView::getItemTitle($this->item);
@@ -148,8 +147,19 @@ class ItemView
 
     public static function getFallbackImageUrl($item)
     {
-        $fallbackImageFilename = apply_filters('fallback_image_name', 'fallback-file.png', array('item' => $item));
-        return img($fallbackImageFilename);
+        $defaultFallbackImageFileName = 'fallback-file.png';
+        $fallbackImageFilename = apply_filters('fallback_image_name', $defaultFallbackImageFileName, array('item' => $item));
+
+        try
+        {
+            $url = img($fallbackImageFilename);
+        }
+        catch (InvalidArgumentException $e)
+        {
+            $url = img($defaultFallbackImageFileName);
+        }
+
+        return $url;
     }
 
     public static function getFirstItemWithElementValue($elementId, $value)
