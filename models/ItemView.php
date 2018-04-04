@@ -176,6 +176,11 @@ class ItemView
         return $parts[1];
     }
 
+    public static function getIdentifierPrefix()
+    {
+        return get_option('common_identifier_prefix');
+    }
+
     public static function getImageUrl($item, $useCoverImage, $thumbnail = false)
     {
         $coverImageIdentifier = self::getCoverImageIdentifier($item->id);
@@ -249,6 +254,14 @@ class ItemView
         return self::getItemElementMetadata($item, self::getPartsForIdentifierElement());
     }
 
+    public static function getItemIdentifierAlias($item)
+    {
+        $parts = self::getPartsForIdentifierAliasElement();
+        if (empty($parts[0]))
+            $parts = self::getPartsForIdentifierElement();
+        return self::getItemElementMetadata($item, $parts);
+    }
+
     public static function getItemIdFromIdentifier($identifier)
     {
         $item = self::getItemFromIdentifier($identifier);
@@ -291,6 +304,18 @@ class ItemView
             // Provide good values in case the user configured a blank value for the identifier.
             $parts[0] = 'Dublin Core';
             $parts[1] = 'Identifier';
+        }
+        $parts = array_map('trim', $parts);
+        return $parts;
+    }
+
+    public static function getPartsForIdentifierAliasElement()
+    {
+        $parts = explode(',', get_option('common_identifier_alias'));
+        if (empty($parts[0]))
+        {
+            $parts[0] = '';
+            $parts[1] = '';
         }
         $parts = array_map('trim', $parts);
         return $parts;

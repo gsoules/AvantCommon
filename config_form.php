@@ -29,6 +29,25 @@ if (empty($titleElement))
     </div>
 </div>
 
+<div class="field">
+    <div class="two columns alpha">
+        <label for="common_identifier_alias"><?php echo __('Identifier Alias'); ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("The element used as an alias for the item Identifier"); ?></p>
+        <?php echo $view->formText('common_identifier_alias', get_option('common_identifier_alias')); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label for="common_identifier_prefix"><?php echo __('Identifier Prefix'); ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("Text that will appear before the identifier or alias"); ?></p>
+        <?php echo $view->formText('common_identifier_prefix', get_option('common_identifier_prefix')); ?>
+    </div>
+</div>
 
 <div class="field">
     <div class="two columns alpha">

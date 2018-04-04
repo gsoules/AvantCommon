@@ -20,6 +20,8 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookConfig()
     {
         set_option('common_identifier', $_POST['common_identifier']);
+        set_option('common_identifier_alias', $_POST['common_identifier_alias']);
+        set_option('common_identifier_prefix', $_POST['common_identifier_prefix']);
         set_option('common_title', $_POST['common_title']);
     }
 
@@ -36,5 +38,11 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
     protected function head()
     {
         queue_css_file('avant-common');
+
+        if (plugin_is_active('AvantCustom') || plugin_is_active('AvantRelationships'))
+        {
+            queue_css_file('magnific-popup');
+            queue_js_file('jquery.magnific-popup.min');
+        }
     }
 }
