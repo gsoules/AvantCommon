@@ -44,8 +44,16 @@ class ItemView
         }
 
         $title = ItemView::getItemTitle($this->item);
-        $imgTag = "<img src='$url' alt='$title' title='$title'>";
-        $html = link_to_item($imgTag, array(), null, $this->item);
+        $imgTag = "<img src='$url'>";
+        $url = ItemView::getImageUrl($this->item, true);
+        if (empty($url))
+        {
+            $html = $imgTag;
+        }
+        else
+        {
+            $html = "<a class='lightbox' href='$url'>$imgTag</a>";
+        }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
         $html = "<div class=\"$class\">$html</div>";
 
