@@ -1,3 +1,14 @@
+.document-icon::before {
+    color:#C01A00;
+    content: "\f15c";
+    font-family: "FontAwesome";
+    font-size: 17px;
+}
+
+.document-icon:hover::before {
+    color: #8C0E02;
+}
+
 .action-button {
     padding: 3px 5px 3px 5px;
     margin-bottom: 6px;
