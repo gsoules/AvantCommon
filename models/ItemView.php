@@ -60,14 +60,10 @@ class ItemView
         return $html;
     }
 
-    public function emitItemTitle($showIdentifier = false)
+    public function emitItemTitle()
     {
         $title = self::getItemTitle($this->item);
         $identifier = '';
-        if ($showIdentifier)
-        {
-            $identifier = " (<span class=\"related-item-identifier\">{self::getItemIdentifier($this->item)}</span>)";
-        }
         $url = url("items/show/{$this->item->id}");
         $html = "<div class=\"element-text\"><a href=\"$url\">$title</a>$identifier</div>";
         return $html;
