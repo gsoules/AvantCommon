@@ -1,3 +1,8 @@
+.item-preview-identifier {
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .document-icon,
 .document-icon-thumb,
 .pdf-icon,
@@ -150,7 +155,7 @@
     width:165px;
     display:inline-block;
     vertical-align:top;
-    margin:0 18px 0 0;
+    margin:0 18px 12px 0;
 }
 
 #related-items-graph h2 {
