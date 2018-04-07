@@ -1,12 +1,52 @@
-.document-icon::before {
-    color:#C01A00;
-    content: "\f15c";
-    font-family: "FontAwesome";
-    font-size: 17px;
+.document-icon,
+.document-icon-thumb,
+.pdf-icon,
+.pdf-icon-thumb {
+    position: relative;
+    display: inline-block;
 }
 
-.document-icon:hover::before {
-    color: #8C0E02;
+.document-icon::before,
+.document-icon-thumb::before,
+.pdf-icon::before,
+.pdf-icon-thumb::before {
+    font-family: "FontAwesome";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate( -50%, -50% );
+}
+
+.document-icon::before,
+.document-icon-thumb::before {
+    font-size: 48px;
+    content: "\f15c";
+    color: rgba(0, 85, 150, 0.70);
+}
+
+.document-icon-thumb::before {
+    font-size: 24px;
+}
+
+.document-icon:hover::before,
+.document-icon-thumb:hover::before {
+    color: rgba(0, 85, 150, 0.90);
+}
+
+.pdf-icon::before,
+.pdf-icon-thumb::before {
+    font-size: 48px;
+    content: "\f1c1";
+    color: rgba(150, 0, 0, .70);
+}
+
+.pdf-icon-thumb::before {
+    font-size: 24px;
+}
+
+.pdf-icon:hover::before,
+.pdf-icon-thumb:hover::before {
+    color: rgba(150, 0, 0, .90);
 }
 
 .action-button {
@@ -263,8 +303,8 @@
 Override the default green for buttons on hover.
  */
 .mfp-close {
-    color: #333 !important;
-    background: rgba(0, 0, 0, 0);
+    color: red !important;
+    font-size:48px !important;
 }
 
 .mfp-close:hover {

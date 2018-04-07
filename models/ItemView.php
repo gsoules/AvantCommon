@@ -170,6 +170,27 @@ class ItemView
         return $url;
     }
 
+    public static function getFileHtml($file, $isThumbnail)
+    {
+        $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
+        $isImageFile = substr($file->mime_type, 0, 6) == 'image/';
+
+        if ($isImageFile)
+        {
+            $class = 'lightbox';
+        }
+        else
+        {
+            $isPdfFile = substr($file->mime_type, 0, 15) == 'application/pdf';
+            $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
+            if ($isThumbnail)
+                $class .= '-thumb';
+        }
+
+        $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'target' => '_blank')));
+        return $html;
+    }
+
     public static function getFirstItemWithElementValue($elementId, $value)
     {
         $sql = self::fetchItemsWithElementValue($elementId, $value);
