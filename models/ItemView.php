@@ -107,9 +107,11 @@ class ItemView
         $params['advanced'][0]['type'] = 'is exactly';
         $params['advanced'][0]['terms'] = $value;
         $queryString = http_build_query($params);
-        $action = is_admin_theme() ? 'items/browse' : 'find';
-        $url = url("$action?$queryString");
-        return $url;
+
+        $useOmekaSearch = is_admin_theme() | !plugin_is_active('AvantSearch');
+        $action = $useOmekaSearch ? 'items/browse' : 'find';
+
+        return url("$action?$queryString");
     }
 
     public static function getCoverImageIdentifier($itemId)
@@ -147,6 +149,21 @@ class ItemView
         $db = get_db();
         $element = $db->getTable('Element')->find($elementId);
         return isset($element) ? $element->name : '';
+    }
+
+    public static function getElementSetNameForElementName($elementName)
+    {
+        $db = get_db();
+        $elementTable = $db->getTable('Element');
+
+        $elementSetName = 'Dublin Core';
+        $element = $elementTable->findByElementSetNameAndElementName($elementSetName, $elementName);
+        if (empty($element))
+        {
+            $elementSetName = 'Item Type Metadata';
+            $element = $elementTable->findByElementSetNameAndElementName($elementSetName, $elementName);
+        }
+        return empty($element) ? '' : $elementSetName;
     }
 
     public static function getFallbackImageUrl($item)
@@ -229,7 +246,7 @@ class ItemView
         return $url;
     }
 
-    private static function getItemElementMetadata($item, $parts, $asHtml = true)
+    public static function getItemElementMetadata($item, $parts, $asHtml = true)
     {
         try
         {
@@ -237,8 +254,7 @@ class ItemView
         }
         catch (Omeka_Record_Exception $e)
         {
-            // The user configured a bad value for the identifier or title.
-            $metadata = '???';
+            $metadata = '';
         }
         return $metadata;
     }
