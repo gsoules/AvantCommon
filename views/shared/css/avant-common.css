@@ -249,11 +249,6 @@
     background-color: #eee;
 }
 
-#xrelated-items-graph h2 {
-	margin: 16px 0 0 0;
-    padding: 0;
-}
-
 #relationship-items-list li {
     margin-bottom: 6px;
 }
@@ -304,16 +299,17 @@
     font-weight: bold;
 }
 
-/* The button that appears in the upper right corner of the magnific popup.
-Override the default green for buttons on hover.
- */
+/* Magnific popup */
 .mfp-close {
     color: red !important;
     font-size:48px !important;
 }
 
-.mfp-close:hover {
-    background: transparent none repeat scroll 0 0;
+.mfp-close,
+.mfp-close:hover,
+.mfp-arrow,
+.mfp-arrow:hover {
+    background: transparent !important;
     box-shadow: none;
 }
 
