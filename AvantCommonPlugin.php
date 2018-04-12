@@ -37,12 +37,11 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     protected function head()
     {
-        queue_css_file('avant-common');
-
-        if (plugin_is_active('AvantCustom') || plugin_is_active('AvantRelationships'))
+        if (plugin_is_active('AvantSearch') || plugin_is_active('AvantRelationships'))
         {
             queue_css_file('magnific-popup');
             queue_js_file('jquery.magnific-popup.min');
         }
+        queue_css_file('avant-common');
     }
 }
