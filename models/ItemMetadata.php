@@ -45,7 +45,7 @@ class ItemMetadata
         return get_option('common_identifier_prefix');
     }
 
-    public static function getItemElementMetadata($item, $parts, $asHtml = true)
+    public static function getElementMetadata($item, $parts, $asHtml = true)
     {
         try
         {
@@ -75,7 +75,7 @@ class ItemMetadata
 
     public static function getItemIdentifier($item)
     {
-        return self::getItemElementMetadata($item, self::getPartsForIdentifierElement());
+        return self::getElementMetadata($item, self::getPartsForIdentifierElement());
     }
 
     public static function getItemIdentifierAlias($item)
@@ -83,7 +83,7 @@ class ItemMetadata
         $parts = self::getPartsForIdentifierAliasElement();
         if (empty($parts[0]))
             $parts = self::getPartsForIdentifierElement();
-        return self::getItemElementMetadata($item, $parts);
+        return self::getElementMetadata($item, $parts);
     }
 
     public static function getItemIdFromIdentifier($identifier)
@@ -102,7 +102,7 @@ class ItemMetadata
 
     public static function getItemTitle($item, $asHtml = true)
     {
-        return self::getItemElementMetadata($item, self::getPartsForTitleElement(), $asHtml);
+        return self::getElementMetadata($item, self::getPartsForTitleElement(), $asHtml);
     }
 
     public static function getPartsForIdentifierElement()
