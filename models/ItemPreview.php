@@ -8,15 +8,24 @@ class ItemPreview
         $this->item = $item;
     }
 
-    public function emitItemHeader($useCoverImage = false)
+    public function emitItemHeader()
     {
-        $html = apply_filters('item_thumbnail_header', '', array('item' => $this->item, 'use_cover_image' => $useCoverImage));
+        $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
+        if ($this->item->public == 0)
+            $identifier .= '*';
+
+        $prefx = ItemMetadata::getIdentifierPrefix();
+        $url = url("items/show/{$this->item->id}");
+
+        $html = '<div class="item-preview-header">';
+        $html .= "<a class='item-preview-identifier' href=\"$url\">{$prefx}{$identifier}</a>";
+        $html .= '</div>';
         return $html;
     }
 
     public function emitItemPreview($useCoverImage = true)
     {
-        $html = $this->emitItemHeader($useCoverImage);
+        $html = $this->emitItemHeader();
         $html .= "<div>";
         $html .= $this->emitItemThumbnail($useCoverImage);
         $html .= $this->emitItemTitle();
@@ -42,7 +51,6 @@ class ItemPreview
             $url = self::getFallbackImageUrl($this->item);
         }
 
-        $title = ItemMetadata::getItemTitle($this->item);
         $imgTag = "<img src='$url'>";
         $url = self::getImageUrl($this->item, true);
         if (empty($url))
@@ -91,7 +99,14 @@ class ItemPreview
     public static function getFallbackImageUrl($item)
     {
         $defaultFallbackImageFileName = 'fallback-file.png';
-        $fallbackImageFilename = apply_filters('fallback_image_name', $defaultFallbackImageFileName, array('item' => $item));
+
+        if (is_admin_theme() || $item == null)
+            $fallbackImageFilename = '';
+        else
+            $fallbackImageFilename = apply_filters('fallback_image_name', $defaultFallbackImageFileName, array('item' => $item));
+
+        if (empty($fallbackImageFilename))
+            $fallbackImageFilename = $defaultFallbackImageFileName;
 
         try
         {
