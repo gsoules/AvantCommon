@@ -1,3 +1,8 @@
+:root {
+    --preview-link-color: #c76941;
+    --preview-link-hover-color: #e57f52;
+}
+
 .item-preview-identifier {
     font-size: 12px;
     font-weight: bold;
@@ -105,21 +110,14 @@
     font-family: "Roboto Condensed",sans-serif;
 }
 
-.item-preview a:link {
-    color: #c76941;
+.item-preview a:link,
+.item-preview a:visited {
+    color: var(--preview-link-color);
     text-decoration: none;
 }
 
-.item-preview a:visited {
-    color: #c76941;
-}
-
 .item-preview a:hover {
-    color: #e57f52;
-}
-
-.item-preview a:active {
-    color: #c76941;
+    color: var(--preview-link-hover-color);
 }
 
 .item-preview.cover-image img,
