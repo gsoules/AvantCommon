@@ -19,10 +19,10 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookConfig()
     {
-        set_option('common_identifier', $_POST['common_identifier']);
-        set_option('common_identifier_alias', $_POST['common_identifier_alias']);
-        set_option('common_identifier_prefix', $_POST['common_identifier_prefix']);
-        set_option('common_title', $_POST['common_title']);
+        set_option('avantcommon_identifier', $_POST['avantcommon_identifier']);
+        set_option('avantcommon_identifier_alias', $_POST['avantcommon_identifier_alias']);
+        set_option('avantcommon_identifier_prefix', $_POST['avantcommon_identifier_prefix']);
+        set_option('avantcommon_title', $_POST['avantcommon_title']);
     }
 
     public function hookConfigForm()

@@ -42,7 +42,7 @@ class ItemMetadata
 
     public static function getIdentifierPrefix()
     {
-        return get_option('common_identifier_prefix');
+        return get_option('avantcommon_identifier_prefix');
     }
 
     public static function getElementMetadata($item, $parts, $asHtml = true)
@@ -107,7 +107,7 @@ class ItemMetadata
 
     public static function getPartsForIdentifierElement()
     {
-        $parts = explode(',', get_option('common_identifier'));
+        $parts = explode(',', get_option('avantcommon_identifier'));
         if (empty($parts[0]))
         {
             // Provide good values in case the user configured a blank value for the identifier.
@@ -120,7 +120,7 @@ class ItemMetadata
 
     public static function getPartsForIdentifierAliasElement()
     {
-        $parts = explode(',', get_option('common_identifier_alias'));
+        $parts = explode(',', get_option('avantcommon_identifier_alias'));
         if (empty($parts[0]))
         {
             $parts[0] = '';
@@ -132,7 +132,7 @@ class ItemMetadata
 
     public static function getPartsForTitleElement()
     {
-        $parts = explode(',', get_option('common_title'));
+        $parts = explode(',', get_option('avantcommon_title'));
         if (empty($parts[0]))
         {
             // Provide good values in case the user configured a blank value for the title.

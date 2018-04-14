@@ -1,10 +1,10 @@
 <?php $view = get_view();
 
-$identifierElement = get_option('common_identifier');
+$identifierElement = get_option('avantcommon_identifier');
 if (empty($identifierElement))
     $identifierElement = 'Dublin Core, Identifier';
 
-$titleElement = get_option('common_title');
+$titleElement = get_option('avantcommon_title');
 if (empty($titleElement))
     $titleElement = 'Dublin Core, Title';
 
@@ -21,41 +21,41 @@ if (empty($titleElement))
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="common_identifier"><?php echo __('Identifier Element'); ?></label>
+        <label for="avantcommon_identifier"><?php echo __('Identifier Element'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used to uniquely identify an Item"); ?></p>
-        <?php echo $view->formText('common_identifier', $identifierElement); ?>
+        <?php echo $view->formText('avantcommon_identifier', $identifierElement); ?>
     </div>
 </div>
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="common_identifier_alias"><?php echo __('Identifier Alias'); ?></label>
+        <label for="avantcommon_identifier_alias"><?php echo __('Identifier Alias'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used as an alias for the item Identifier"); ?></p>
-        <?php echo $view->formText('common_identifier_alias', get_option('common_identifier_alias')); ?>
+        <?php echo $view->formText('avantcommon_identifier_alias', get_option('common_identifier_alias')); ?>
     </div>
 </div>
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="common_identifier_prefix"><?php echo __('Identifier Prefix'); ?></label>
+        <label for="avantcommon_identifier_prefix"><?php echo __('Identifier Prefix'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("Text that will appear before the identifier or alias"); ?></p>
-        <?php echo $view->formText('common_identifier_prefix', get_option('common_identifier_prefix')); ?>
+        <?php echo $view->formText('avantcommon_identifier_prefix', get_option('common_identifier_prefix')); ?>
     </div>
 </div>
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="common_title"><?php echo __('Title Element'); ?></label>
+        <label for="avantcommon_title"><?php echo __('Title Element'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used for an Item's title"); ?></p>
-        <?php echo $view->formText('common_title', $titleElement); ?>
+        <?php echo $view->formText('avantcommon_title', $titleElement); ?>
     </div>
 </div>
 
