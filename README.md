@@ -6,10 +6,10 @@ This plugin supports and is required by the following plugins:
 * [AvantCustom](https://github.com/gsoules/AvantCustom)
 * [AvantElements](https://github.com/gsoules/AvantElements)
 * [AvantRelationships](https://github.com/gsoules/AvantRelationships)
-* [AvantSearch](https://github.com/gsoules/AvantSearch) plugins.
+* [AvantSearch](https://github.com/gsoules/AvantSearch)
  
-AvantCommon provides no functionality of its own, but does require configuration to support the plugins above.
-that depend on it. See the **Usage** section below for more information.
+AvantCommon provides no functionality by itself, but does require configuration to support the plugins above
+that depend on it. See the **Usage** section below to learn how to configure this plugin.
 
 ## Dependencies
 AvantCommon depends on the following open source libraries which are included in the `views/shared/javascripts` folder.
@@ -25,7 +25,7 @@ feature described below).
 1. Activate the plugin from the Admin → Settings → Plugins page.
 1. Enable the Lightbox feature (optional) as explained below.
 
-##### Enabling the Lightbox feature
+#### Enabling the Lightbox feature
 
 The AvantCommon plugin provides support for the Lightbox feature that is used by AvantSearch and AvantRelationships.
 When enabled, the Lightbox feature lets you click on a thumbnail to see it's original-size image appear in a popup. You
@@ -53,6 +53,9 @@ Identifier Alias | The element used as an alias for the item Identifier. Leave t
 Identifier Prefix | The prefix is text that will appear before the identifier or alias. You can leave it blank or provide a value. For example: `Item` or `Catalogue #'.
 Title Element | The element used for an Item's title. Like the Identifier Element, specify an element here if you use another element besides the Dublin Core Title element to store an item's title information.
 
+## Warning
+
+Use it at your own risk.
 
 ##  License
 
