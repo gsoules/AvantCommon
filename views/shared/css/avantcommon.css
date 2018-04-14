@@ -1,0 +1,135 @@
+:root {
+    --preview-link-color: #c76941;
+    --preview-link-hover-color: #e57f52;
+}
+
+.item-preview-identifier {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.document-icon,
+.document-icon-thumb,
+.pdf-icon,
+.pdf-icon-thumb {
+    position: relative;
+    display: inline-block;
+}
+
+.document-icon::before,
+.document-icon-thumb::before,
+.pdf-icon::before,
+.pdf-icon-thumb::before {
+    font-family: "FontAwesome";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate( -50%, -50% );
+}
+
+.document-icon::before,
+.document-icon-thumb::before {
+    font-size: 48px;
+    content: "\f15c";
+    color: rgba(0, 85, 150, 0.70);
+}
+
+.document-icon-thumb::before {
+    font-size: 24px;
+}
+
+.document-icon:hover::before,
+.document-icon-thumb:hover::before {
+    color: rgba(0, 85, 150, 0.90);
+}
+
+.pdf-icon::before,
+.pdf-icon-thumb::before {
+    font-size: 48px;
+    content: "\f1c1";
+    color: rgba(150, 0, 0, .70);
+}
+
+.pdf-icon-thumb::before {
+    font-size: 24px;
+}
+
+.pdf-icon:hover::before,
+.pdf-icon-thumb:hover::before {
+    color: rgba(150, 0, 0, .90);
+}
+
+.action-button {
+    padding: 3px 5px 3px 5px;
+    margin-bottom: 6px;
+}
+
+.item-preview {
+    list-style-type:none;
+    margin-left:12px;
+    padding-left:0;
+}
+
+.item-preview a {
+    font-family: "Roboto Condensed",sans-serif;
+}
+
+.item-preview a:link,
+.item-preview a:visited {
+    color: var(--preview-link-color);
+    text-decoration: none;
+}
+
+.item-preview a:hover {
+    color: var(--preview-link-hover-color);
+}
+
+.item-preview.cover-image img,
+.item-preview.cover-image .item-img {
+    width: auto;
+}
+
+.item-preview .element-text {
+    line-height: 18px;
+    margin:4px 0;
+    padding-left: 6px;
+    padding-bottom: 6px;
+}
+
+.item-preview .item-img {
+    margin-top: 2px;
+    max-height:165px;
+    vertical-align:middle;
+    width:165px;
+}
+
+.item-preview .item-img img {
+    background: #fff;
+    border: 1px solid #ccc;
+   	box-shadow: 4px 4px 6px 0 rgba(0,0,0,0.25);
+    box-sizing:border-box;
+    max-height: 155px;
+    max-width: 100%;
+    padding: 2px;
+}
+
+.item-preview li {
+    width:165px;
+    display:inline-block;
+    vertical-align:top;
+    margin:0 18px 12px 0;
+}
+
+/* Magnific popup */
+.mfp-close {
+    color: red !important;
+    font-size:48px !important;
+}
+
+.mfp-close,
+.mfp-close:hover,
+.mfp-arrow,
+.mfp-arrow:hover {
+    background: transparent !important;
+    box-shadow: none;
+}

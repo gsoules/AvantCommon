@@ -42,6 +42,6 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
             queue_css_file('magnific-popup');
             queue_js_file('jquery.magnific-popup.min');
         }
-        queue_css_file('avant-common');
+        queue_css_file('avantcommon');
     }
 }
