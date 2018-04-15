@@ -1,31 +1,29 @@
 <?php $view = get_view();
 
-$identifierElement = get_option('avantcommon_identifier');
-if (empty($identifierElement))
-    $identifierElement = 'Dublin Core, Identifier';
+$identifierElementId = get_option('avantcommon_identifier');
+if (empty($identifierElementId))
+    $identifierElementName = 'Identifier';
+else
+    $identifierElementName = ItemMetadata::getElementNameFromId($identifierElementId);
 
-$titleElement = get_option('avantcommon_title');
-if (empty($titleElement))
-    $titleElement = 'Dublin Core, Title';
-
+$identifierAliasElementId = get_option('avantcommon_identifier_alias');
+if (empty($identifierAliasElementId))
+    $identifierAliasElementName = '';
+else
+    $identifierAliasElementName = ItemMetadata::getElementNameFromId($identifierAliasElementId);
 ?>
-<p>
-    The values specified below must be in the form "&lt;element set name&gt;, &lt;element name&gt;".
-    <br/>
-    The two values must be separated by a comma with or without spaces around it.
-    <br/>
-    The element set name must be "Dublin Core" or "Item Type Metadata".
-    <br/>
-    Examples: "Dublin Core, Identifier" or "Item Type Metadata, Catalog Number".
-</p>
+
+<div class="plugin-help">
+    <a href="https://github.com/gsoules/AvantCommon#usage" target="_blank">Learn about the configuration options on this page</a>
+</div>
 
 <div class="field">
     <div class="two columns alpha">
         <label for="avantcommon_identifier"><?php echo __('Identifier Element'); ?></label>
     </div>
     <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The element used to uniquely identify an Item"); ?></p>
-        <?php echo $view->formText('avantcommon_identifier', $identifierElement); ?>
+        <p class="explanation"><?php echo __("The name of the element used to uniquely identify an Item."); ?></p>
+        <?php echo $view->formText('avantcommon_identifier', $identifierElementName); ?>
     </div>
 </div>
 
@@ -34,8 +32,8 @@ if (empty($titleElement))
         <label for="avantcommon_identifier_alias"><?php echo __('Identifier Alias'); ?></label>
     </div>
     <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The element used as an alias for the item Identifier"); ?></p>
-        <?php echo $view->formText('avantcommon_identifier_alias', get_option('common_identifier_alias')); ?>
+        <p class="explanation"><?php echo __("The name of the element used as an alias for the item Identifier. Leave blank if not using an alias."); ?></p>
+        <?php echo $view->formText('avantcommon_identifier_alias', $identifierAliasElementName); ?>
     </div>
 </div>
 
@@ -44,19 +42,8 @@ if (empty($titleElement))
         <label for="avantcommon_identifier_prefix"><?php echo __('Identifier Prefix'); ?></label>
     </div>
     <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("Text that will appear before the identifier or alias"); ?></p>
-        <?php echo $view->formText('avantcommon_identifier_prefix', get_option('common_identifier_prefix')); ?>
+        <p class="explanation"><?php echo __("Text that will appear before the identifier or alias."); ?></p>
+        <?php echo $view->formText('avantcommon_identifier_prefix', get_option('avantcommon_identifier_prefix')); ?>
     </div>
 </div>
-
-<div class="field">
-    <div class="two columns alpha">
-        <label for="avantcommon_title"><?php echo __('Title Element'); ?></label>
-    </div>
-    <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The element used for an Item's title"); ?></p>
-        <?php echo $view->formText('avantcommon_title', $titleElement); ?>
-    </div>
-</div>
-
 
