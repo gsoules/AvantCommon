@@ -34,18 +34,7 @@ class ItemMetadata
         return empty($element) ? '' : $elementSetName;
     }
 
-    public static function getIdentifierElementName()
-    {
-        $parts = ItemMetadata::getPartsForIdentifierElement();
-        return $parts[1];
-    }
-
-    public static function getIdentifierPrefix()
-    {
-        return get_option('avantcommon_identifier_prefix');
-    }
-
-    public static function getElementMetadata($item, $parts, $asHtml = true)
+    public static function getElementTextFromElementName($item, $parts, $asHtml = true)
     {
         try
         {
@@ -58,6 +47,37 @@ class ItemMetadata
         return $metadata;
     }
 
+    public static function getElementTextFromElementId($item, $elementId, $asHtml = true)
+    {
+        $db = get_db();
+        $element = $db->getTable('Element')->find($elementId);
+        $text = '';
+        if (!empty($element))
+        {
+            $texts = $item->getElementTextsByRecord($element);
+            $text = $texts[0]['text'];
+        }
+        return $asHtml ? html_escape($text) : $text;
+    }
+
+    public static function getIdentifierAliasElementName()
+    {
+        $elementName = ItemMetadata::getElementNameFromId(get_option('avantcommon_identifier_alias'));
+        if (empty($elementName))
+            $elementName = ItemMetadata::getIdentifierElementName();
+        return $elementName;
+    }
+
+    public static function getIdentifierElementName()
+    {
+        return ItemMetadata::getElementNameFromId(get_option('avantcommon_identifier'));
+    }
+
+    public static function getIdentifierPrefix()
+    {
+        return get_option('avantcommon_identifier_prefix');
+    }
+
     public static function getItemFromId($id)
     {
         return get_record_by_id('Item', $id);
@@ -65,9 +85,8 @@ class ItemMetadata
 
     public static function getItemFromIdentifier($identifier)
     {
-        $parts = self::getPartsForIdentifierElement();
-        $element = get_db()->getTable('Element')->findByElementSetNameAndElementName($parts[0], $parts[1]);
-        $items = get_records('Item', array('advanced' => array(array('element_id' => $element->id, 'type' => 'is exactly', 'terms' => $identifier))));
+        $elementId = get_option('avantcommon_identifier');
+        $items = get_records('Item', array('advanced' => array(array('element_id' => $elementId, 'type' => 'is exactly', 'terms' => $identifier))));
         if (empty($items))
             return null;
         return $items[0];
@@ -75,15 +94,17 @@ class ItemMetadata
 
     public static function getItemIdentifier($item)
     {
-        return self::getElementMetadata($item, self::getPartsForIdentifierElement());
+        return self::getElementTextFromElementId($item, get_option('avantcommon_identifier'));
     }
 
     public static function getItemIdentifierAlias($item)
     {
-        $parts = self::getPartsForIdentifierAliasElement();
-        if (empty($parts[0]))
-            $parts = self::getPartsForIdentifierElement();
-        return self::getElementMetadata($item, $parts);
+        $aliasElementId = get_option('avantcommon_identifier_alias');
+        if (empty($aliasElementId))
+            $aliasText = self::getItemIdentifier($item);
+        else
+            $aliasText = self::getElementTextFromElementId($item, $aliasElementId);
+        return $aliasText;
     }
 
     public static function getItemIdFromIdentifier($identifier)
@@ -102,45 +123,7 @@ class ItemMetadata
 
     public static function getItemTitle($item, $asHtml = true)
     {
-        return self::getElementMetadata($item, self::getPartsForTitleElement(), $asHtml);
-    }
-
-    public static function getPartsForIdentifierElement()
-    {
-        $parts = explode(',', get_option('avantcommon_identifier'));
-        if (empty($parts[0]))
-        {
-            // Provide good values in case the user configured a blank value for the identifier.
-            $parts[0] = 'Dublin Core';
-            $parts[1] = 'Identifier';
-        }
-        $parts = array_map('trim', $parts);
-        return $parts;
-    }
-
-    public static function getPartsForIdentifierAliasElement()
-    {
-        $parts = explode(',', get_option('avantcommon_identifier_alias'));
-        if (empty($parts[0]))
-        {
-            $parts[0] = '';
-            $parts[1] = '';
-        }
-        $parts = array_map('trim', $parts);
-        return $parts;
-    }
-
-    public static function getPartsForTitleElement()
-    {
-        $parts = explode(',', get_option('avantcommon_title'));
-        if (empty($parts[0]))
-        {
-            // Provide good values in case the user configured a blank value for the title.
-            $parts[0] = 'Dublin Core';
-            $parts[1] = 'Title';
-        }
-        $parts = array_map('trim', $parts);
-        return $parts;
+        return self::getElementTextFromElementId($item, self::getTitleElementId(), $asHtml);
     }
 
     public static function getTitleElementId()
@@ -150,7 +133,6 @@ class ItemMetadata
 
     public static function getTitleElementName()
     {
-        $parts = ItemMetadata::getPartsForTitleElement();
-        return $parts[1];
+        return 'Title';
     }
 }
