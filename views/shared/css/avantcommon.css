@@ -133,3 +133,21 @@
     background: transparent !important;
     box-shadow: none;
 }
+
+.plugin-help {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.plugin-help a {
+    vertical-align: middle;
+}
+
+.plugin-help::before {
+    content: "\f059";
+    font-family: "FontAwesome";
+    font-size: 22px;
+    padding-right: 4px;
+    vertical-align: middle;
+    color: green;
+}

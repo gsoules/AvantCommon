@@ -51,7 +51,6 @@ Option | Description
 Identifier Element |  The element used to uniquely identify an Item. Often this is the Dublin Core 'Identifier' element, but if your installation uses a different element for this purpose, specify it here. For example: `Item Type Metadata, Object ID`. Note that the Identifier Element is what you'll using when establishing relationships using the AvantRelationships plugin.
 Identifier Alias | The element used as an alias for the item Identifier. Leave this blank if you want the Identifier Element's value to display as an item's identifier. However, if your installation uses a different element for the public facing identifier value, specify that element here. For example, if you use a `Catalogue #` element to store composite catalogue number such as `2018.123.001`, you could specify that element here. For example: `Item Type Metadata, Catalogue #`
 Identifier Prefix | The prefix is text that will appear before the identifier or alias. You can leave it blank or provide a value. For example: `Item` or `Catalogue #'.
-Title Element | The element used for an Item's title. Like the Identifier Element, specify an element here if you use another element besides the Dublin Core Title element to store an item's title information.
 
 ## Warning
 
