@@ -23,7 +23,6 @@ class AvantCommon
             throw new Omeka_Validate_Exception($errorMessage);
         }
 
-
         $elementId = ItemMetadata::getElementIdForElementName($identifierAliasElementName);
         if (!empty($identifierAliasElementName) && $elementId == 0)
         {

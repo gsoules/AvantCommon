@@ -73,6 +73,11 @@ class ItemMetadata
         return ItemMetadata::getElementNameFromId(get_option('avantcommon_identifier'));
     }
 
+    public static function getIdentifierElementId()
+    {
+        return self::getElementIdForElementName(self::getIdentifierElementName());
+    }
+
     public static function getIdentifierPrefix()
     {
         return get_option('avantcommon_identifier_prefix');

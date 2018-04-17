@@ -1,4 +1,5 @@
-<?php $view = get_view();
+<?php
+$view = get_view();
 
 $identifierElementId = get_option('avantcommon_identifier');
 if (empty($identifierElementId))
