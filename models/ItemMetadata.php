@@ -55,7 +55,7 @@ class ItemMetadata
         if (!empty($element))
         {
             $texts = $item->getElementTextsByRecord($element);
-            $text = $texts[0]['text'];
+            $text = isset($texts[0]['text']) ? $texts[0]['text'] : '';
         }
         return $asHtml ? html_escape($text) : $text;
     }
