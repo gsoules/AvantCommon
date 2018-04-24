@@ -3,6 +3,18 @@
     --preview-link-hover-color: #e57f52;
 }
 
+.learn-more a:link, .learn-more a:visited {
+    color:#006600;
+}
+
+.learn-more a:link {
+    font-weight:bold;
+}
+
+.learn-more a:hover {
+    color:#009900;
+}
+
 .item-preview-identifier {
     font-size: 12px;
     font-weight: bold;
