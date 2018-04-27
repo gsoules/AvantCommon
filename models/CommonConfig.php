@@ -9,7 +9,9 @@ class CommonConfig
 
     protected static function configurationErrorsDetected()
     {
-        return $_SERVER['REQUEST_METHOD'] == 'POST';
+        $isPost = $_SERVER['REQUEST_METHOD'] == 'POST';
+        $isItemSave = isset($_POST['Elements']);
+        return $isPost && !$isItemSave;
     }
 
     protected static function getOptionData($optionName)

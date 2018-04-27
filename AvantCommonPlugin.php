@@ -15,6 +15,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookAdminHead($args)
     {
+        queue_css_file('avantcommon-admin');
         $this->head();
     }
 
@@ -35,6 +36,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookPublicHead($args)
     {
+        queue_css_file('avantcommon');
         $this->head();
     }
 
@@ -45,6 +47,5 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
             queue_css_file('magnific-popup');
             queue_js_file('jquery.magnific-popup.min');
         }
-        queue_css_file('avantcommon');
     }
 }

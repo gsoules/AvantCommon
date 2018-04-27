@@ -1,0 +1,47 @@
+:root {
+    --preview-link-color: #c76941;
+    --preview-link-hover-color: #e57f52;
+}
+
+#avantcommon_identifier,
+#avantcommon_identifier_alias,
+#avantcommon_identifier_prefix,
+#avantcommon_year_start,
+#avantcommon_year_end {
+    width: 40%;
+}
+
+.learn-more a:link, .learn-more a:visited {
+    color:#006600;
+}
+
+.learn-more a:link {
+    font-weight:bold;
+}
+
+.learn-more a:hover {
+    color:#009900;
+}
+
+.item-preview-identifier {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.plugin-help {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.plugin-help a {
+    vertical-align: middle;
+}
+
+.plugin-help::before {
+    content: "\f059";
+    font-family: "FontAwesome";
+    font-size: 22px;
+    padding-right: 4px;
+    vertical-align: middle;
+    color: green;
+}

@@ -8,7 +8,7 @@ $startYearOption = ElementsConfig::getOptionTextForYearStart();
 $endYearOption = ElementsConfig::getOptionTextForYearEnd();
 ?>
 
-<div class="plugin-help">
+<div class="plugin-help learn-more">
     <a href="https://github.com/gsoules/AvantCommon#usage" target="_blank">Learn about the configuration options on this page</a>
 </div>
 
