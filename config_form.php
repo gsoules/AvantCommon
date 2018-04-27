@@ -4,7 +4,8 @@ $view = get_view();
 $identifierElementName = CommonConfig::getOptionTextForIdentifier();
 $identifierAliasElementName = CommonConfig::getOptionTextForIdentifierAlias();
 $identifierPrefix = CommonConfig::getOptionTextForIdentifierPrefix();
-$startEndYearsOption = ElementsConfig::getOptionTextForStartEndYears();
+$startYearOption = ElementsConfig::getOptionTextForYearStart();
+$endYearOption = ElementsConfig::getOptionTextForYearEnd();
 ?>
 
 <div class="plugin-help">
@@ -16,7 +17,7 @@ $startEndYearsOption = ElementsConfig::getOptionTextForStartEndYears();
         <label><?php echo __('Identifier Element'); ?></label>
     </div>
     <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The name of the element used to uniquely identify an Item."); ?></p>
+        <p class="explanation"><?php echo __("The element used to uniquely identify an Item."); ?></p>
         <?php echo $view->formText(CommonConfig::OPTION_IDENTIFIER, $identifierElementName); ?>
     </div>
 </div>
@@ -26,7 +27,7 @@ $startEndYearsOption = ElementsConfig::getOptionTextForStartEndYears();
         <label><?php echo __('Identifier Alias'); ?></label>
     </div>
     <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The name of the element used as an alias for the item Identifier. Leave blank if not using an alias."); ?></p>
+        <p class="explanation"><?php echo __("The element used as an alias for the Item Identifier element."); ?></p>
         <?php echo $view->formText(CommonConfig::OPTION_IDENTIFIER_ALIAS, $identifierAliasElementName); ?>
     </div>
 </div>
@@ -43,11 +44,21 @@ $startEndYearsOption = ElementsConfig::getOptionTextForStartEndYears();
 
 <div class="field">
     <div class="two columns alpha">
-        <label><?php echo __('Start/End Years'); ?></label>
+        <label><?php echo __('Start Year'); ?></label>
     </div>
     <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The names of elements used to store Start and End years."); ?></p>
-        <?php echo $view->formTextarea(CommonConfig::OPTION_START_END_YEARS, $startEndYearsOption, array('rows' => 2)); ?>
+        <p class="explanation"><?php echo __("The element used to store the Start year."); ?></p>
+        <?php echo $view->formText(CommonConfig::OPTION_YEAR_START, $startYearOption); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo __('End Year'); ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("The element used to store the End year."); ?></p>
+        <?php echo $view->formText(CommonConfig::OPTION_YEAR_END, $endYearOption); ?>
     </div>
 </div>
 

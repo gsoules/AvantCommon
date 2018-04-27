@@ -4,7 +4,8 @@ class CommonConfig
     const OPTION_IDENTIFIER = 'avantcommon_identifier';
     const OPTION_IDENTIFIER_ALIAS = 'avantcommon_identifier_alias';
     const OPTION_IDENTIFIER_PREFIX = 'avantcommon_identifier_prefix';
-    const OPTION_START_END_YEARS = 'avantcommon_start_end_years';
+    const OPTION_YEAR_START = 'avantcommon_year_start';
+    const OPTION_YEAR_END = 'avantcommon_year_end';
 
     protected static function configurationErrorsDetected()
     {
@@ -45,9 +46,14 @@ class CommonConfig
         return get_option(self::OPTION_IDENTIFIER_ALIAS);
     }
 
-    public static function getOptionDataForStartEndYears()
+    public static function getOptionDataForYearEnd()
     {
-        return self::getOptionData(self::OPTION_START_END_YEARS);
+        return get_option(self::OPTION_YEAR_END);
+    }
+
+    public static function getOptionDataForYearStart()
+    {
+        return get_option(self::OPTION_YEAR_START);
     }
 
     protected static function getOptionText($optionName)
@@ -103,9 +109,30 @@ class CommonConfig
         return get_option(self::OPTION_IDENTIFIER_PREFIX);
     }
 
-    public static function getOptionTextForStartEndYears()
+    public static function getOptionTextForYearEnd()
     {
-        return self::getOptionText(self::OPTION_START_END_YEARS);
+        if (self::configurationErrorsDetected())
+        {
+            $text = $_POST[self::OPTION_YEAR_END];
+        }
+        else
+        {
+            $text = ItemMetadata::getElementNameFromId(get_option(self::OPTION_YEAR_END));
+        }
+        return $text;
+    }
+
+    public static function getOptionTextForYearStart()
+    {
+        if (self::configurationErrorsDetected())
+        {
+            $text = $_POST[self::OPTION_YEAR_START];
+        }
+        else
+        {
+            $text = ItemMetadata::getElementNameFromId(get_option(self::OPTION_YEAR_START));
+        }
+        return $text;
     }
 
     public static function saveOptionDataForIdentifier()
@@ -121,13 +148,15 @@ class CommonConfig
 
     public static function saveOptionDataForIdentifierAlias()
     {
-        $identifierAliasElementName = trim($_POST[self::OPTION_IDENTIFIER_ALIAS]);
-        if (!empty($identifierAliasElementName))
+        $elementName = trim($_POST[self::OPTION_IDENTIFIER_ALIAS]);
+        $elementId = 0;
+
+        if (!empty($elementName))
         {
-            $elementId = ItemMetadata::getElementIdForElementName($identifierAliasElementName);
+            $elementId = ItemMetadata::getElementIdForElementName($elementName);
             if ($elementId == 0)
             {
-                throw new Omeka_Validate_Exception(__('Identifier Alias') . ': ' . __('"%s" is not an element.)', $identifierAliasElementName));
+                throw new Omeka_Validate_Exception(__('Identifier Alias') . ': ' . __('"%s" is not an element.)', $elementName));
             }
         }
         set_option(self::OPTION_IDENTIFIER_ALIAS, $elementId);
@@ -143,7 +172,7 @@ class CommonConfig
         self::saveOptionDataForIdentifier();
         self::saveOptionDataForIdentifierAlias();
         self::saveOptionDataForIdentifierPrefix();
-        self::saveOptionDataForStartEndYears();
+        self::saveOptionDataForYearStartEnd();
     }
 
     protected static function saveOptionData($optionName, $optionLabel)
@@ -165,34 +194,45 @@ class CommonConfig
         set_option($optionName, json_encode($elements));
     }
 
-    public static function saveOptionDataForStartEndYears()
+    public static function saveOptionDataForYearStartEnd()
     {
-        $elements = array();
-        $names = array_map('trim', explode(PHP_EOL, $_POST[self::OPTION_START_END_YEARS]));
-        foreach ($names as $name)
+        $startYearElementId = 0;
+        $endYearElementId = 0;
+
+        $startYear = trim($_POST[self::OPTION_YEAR_START]);
+        if (!empty($startYear))
         {
-            if (empty($name))
-                continue;
-            $elementId = ItemMetadata::getElementIdForElementName($name);
-            if ($elementId == 0)
+            $startYearElementId = ItemMetadata::getElementIdForElementName($startYear);
+            if ($startYearElementId == 0)
             {
-                throw new Omeka_Validate_Exception(__('Start/End Years') . ': ' . __('\'%s\' is not an element.', $name));
+                throw new Omeka_Validate_Exception(__('Start Year') . ': ' . __('\'%s\' is not an element.', $startYear));
             }
-            $elements[] = $elementId;
         }
 
-        $count = count($elements);
+        $endYear = trim($_POST[self::OPTION_YEAR_END]);
+        if (!empty($endYear))
+        {
+            $endYearElementId = ItemMetadata::getElementIdForElementName($endYear);
+            if ($endYearElementId == 0)
+            {
+                throw new Omeka_Validate_Exception(__('End Year') . ': ' . __('\'%s\' is not an element.', $endYear));
+            }
+        }
+
+        $count = $startYearElementId == 0 ? 0 : 1;
+        $count += $endYearElementId == 0 ? 0 : 1;
         if (!($count == 0 || $count == 2))
         {
-            throw new Omeka_Validate_Exception(__('Start/End Years') . ': ' . __('Exactly two elements are required to specify Start Year and End Year.', $name));
+            throw new Omeka_Validate_Exception(__('Both the Start Year and End Year must be specified or both must be blank.'));
         }
 
-        if ($count == 2 && $elements[0] == $elements[1])
+        if ($count == 2 && $startYearElementId == $endYearElementId)
         {
-            throw new Omeka_Validate_Exception(__('Start/End Years') . ': ' . __('The start and end year cannot be the same element', $name));
+            throw new Omeka_Validate_Exception(__('Start Yead and End Year cannot be the same element'));
         }
 
-        set_option(self::OPTION_START_END_YEARS, json_encode($elements));
+        set_option(self::OPTION_YEAR_START, $startYearElementId);
+        set_option(self::OPTION_YEAR_END, $endYearElementId);
     }
 
     public static function setDefaultOptionValues()
@@ -202,6 +242,7 @@ class CommonConfig
 
         set_option(self::OPTION_IDENTIFIER_ALIAS, 0);
         set_option(self::OPTION_IDENTIFIER_PREFIX, __('Item'));
-        set_option(self::OPTION_START_END_YEARS, '[]');
+        set_option(self::OPTION_YEAR_START, 0);
+        set_option(self::OPTION_YEAR_END, 0);
     }
 }
