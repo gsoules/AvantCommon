@@ -6,6 +6,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         'admin_head',
         'config',
         'config_form',
+        'install',
         'public_head'
     );
 
@@ -19,12 +20,17 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookConfig()
     {
-        AvantCommon::saveConfiguration();
+        CommonConfig::saveConfiguration();
     }
 
     public function hookConfigForm()
     {
         require dirname(__FILE__) . '/config_form.php';
+    }
+
+    public function hookInstall()
+    {
+        CommonConfig::setDefaultOptionValues();
     }
 
     public function hookPublicHead($args)

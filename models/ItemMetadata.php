@@ -62,7 +62,7 @@ class ItemMetadata
 
     public static function getIdentifierAliasElementName()
     {
-        $elementName = ItemMetadata::getElementNameFromId(get_option('avantcommon_identifier_alias'));
+        $elementName = CommonConfig::getOptionTextForIdentifierAlias();
         if (empty($elementName))
             $elementName = ItemMetadata::getIdentifierElementName();
         return $elementName;
@@ -70,7 +70,7 @@ class ItemMetadata
 
     public static function getIdentifierElementName()
     {
-        return ItemMetadata::getElementNameFromId(get_option('avantcommon_identifier'));
+        return CommonConfig::getOptionTextForIdentifier();
     }
 
     public static function getIdentifierElementId()
@@ -80,7 +80,7 @@ class ItemMetadata
 
     public static function getIdentifierPrefix()
     {
-        return get_option('avantcommon_identifier_prefix');
+        return CommonConfig::getOptionTextForIdentifierPrefix();
     }
 
     public static function getItemFromId($id)
@@ -90,7 +90,7 @@ class ItemMetadata
 
     public static function getItemFromIdentifier($identifier)
     {
-        $elementId = get_option('avantcommon_identifier');
+        $elementId = CommonConfig::getOptionDataForIdentifier();
         $items = get_records('Item', array('advanced' => array(array('element_id' => $elementId, 'type' => 'is exactly', 'terms' => $identifier))));
         if (empty($items))
             return null;
@@ -99,12 +99,12 @@ class ItemMetadata
 
     public static function getItemIdentifier($item)
     {
-        return self::getElementTextFromElementId($item, get_option('avantcommon_identifier'));
+        return self::getElementTextFromElementId($item, CommonConfig::getOptionDataForIdentifier());
     }
 
     public static function getItemIdentifierAlias($item)
     {
-        $aliasElementId = get_option('avantcommon_identifier_alias');
+        $aliasElementId = CommonConfig::getOptionDataForIdentifierAlias();
         if (empty($aliasElementId))
             $aliasText = self::getItemIdentifier($item);
         else

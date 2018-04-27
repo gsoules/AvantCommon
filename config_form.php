@@ -1,17 +1,10 @@
 <?php
 $view = get_view();
 
-$identifierElementId = get_option('avantcommon_identifier');
-if (empty($identifierElementId))
-    $identifierElementName = 'Identifier';
-else
-    $identifierElementName = ItemMetadata::getElementNameFromId($identifierElementId);
-
-$identifierAliasElementId = get_option('avantcommon_identifier_alias');
-if (empty($identifierAliasElementId))
-    $identifierAliasElementName = '';
-else
-    $identifierAliasElementName = ItemMetadata::getElementNameFromId($identifierAliasElementId);
+$identifierElementName = CommonConfig::getOptionTextForIdentifier();
+$identifierAliasElementName = CommonConfig::getOptionTextForIdentifierAlias();
+$identifierPrefix = CommonConfig::getOptionTextForIdentifierPrefix();
+$startEndYearsOption = ElementsConfig::getOptionTextForStartEndYears();
 ?>
 
 <div class="plugin-help">
@@ -20,31 +13,41 @@ else
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="avantcommon_identifier"><?php echo __('Identifier Element'); ?></label>
+        <label><?php echo __('Identifier Element'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The name of the element used to uniquely identify an Item."); ?></p>
-        <?php echo $view->formText('avantcommon_identifier', $identifierElementName); ?>
+        <?php echo $view->formText(CommonConfig::OPTION_IDENTIFIER, $identifierElementName); ?>
     </div>
 </div>
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="avantcommon_identifier_alias"><?php echo __('Identifier Alias'); ?></label>
+        <label><?php echo __('Identifier Alias'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The name of the element used as an alias for the item Identifier. Leave blank if not using an alias."); ?></p>
-        <?php echo $view->formText('avantcommon_identifier_alias', $identifierAliasElementName); ?>
+        <?php echo $view->formText(CommonConfig::OPTION_IDENTIFIER_ALIAS, $identifierAliasElementName); ?>
     </div>
 </div>
 
 <div class="field">
     <div class="two columns alpha">
-        <label for="avantcommon_identifier_prefix"><?php echo __('Identifier Prefix'); ?></label>
+        <label><?php echo __('Identifier Prefix'); ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("Text that will appear before the identifier or alias."); ?></p>
-        <?php echo $view->formText('avantcommon_identifier_prefix', get_option('avantcommon_identifier_prefix')); ?>
+        <?php echo $view->formText(CommonConfig::OPTION_IDENTIFIER_PREFIX, $identifierPrefix); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo __('Start/End Years'); ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("The names of elements used to store Start and End years."); ?></p>
+        <?php echo $view->formTextarea(CommonConfig::OPTION_START_END_YEARS, $startEndYearsOption, array('rows' => 2)); ?>
     </div>
 </div>
 
