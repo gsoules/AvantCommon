@@ -1,5 +1,11 @@
 # AvantCommon
 
+#################################################
+
+> **This plugin is under development. Please wait for Release 2.0.**
+
+#################################################
+
 This plugin supports and is required by the following plugins:
  
 * [AvantAdmin](https://github.com/gsoules/AvantAdmin)
