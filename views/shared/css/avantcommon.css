@@ -3,14 +3,6 @@
     --preview-link-hover-color: #e57f52;
 }
 
-#avantcommon_identifier,
-#avantcommon_identifier_alias,
-#avantcommon_identifier_prefix,
-#avantcommon_year_start,
-#avantcommon_year_end {
-    width: 40%;
-}
-
 .item-preview-identifier {
     font-size: 12px;
     font-weight: bold;
