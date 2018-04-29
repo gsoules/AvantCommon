@@ -34,6 +34,24 @@ class ItemMetadata
         return empty($element) ? '' : $elementSetName;
     }
 
+    public static function getElementsByValue($elementId, $value)
+    {
+        $results = array();
+
+        if (!empty($value))
+        {
+            $db = get_db();
+            $select = $db->select()
+                ->from($db->ElementText)
+                ->where('element_id = ?', $elementId)
+                ->where('text = ?', $value)
+                ->where('record_type = ?', 'Item');
+            $results = $db->getTable('ElementText')->fetchObjects($select);
+        }
+
+        return $results;
+    }
+
     public static function getElementTextFromElementName($item, $parts, $asHtml = true)
     {
         try
