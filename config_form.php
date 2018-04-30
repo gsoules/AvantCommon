@@ -4,8 +4,8 @@ $view = get_view();
 $identifierElementName = CommonConfig::getOptionTextForIdentifier();
 $identifierAliasElementName = CommonConfig::getOptionTextForIdentifierAlias();
 $identifierPrefix = CommonConfig::getOptionTextForIdentifierPrefix();
-$startYearOption = ElementsConfig::getOptionTextForYearStart();
-$endYearOption = ElementsConfig::getOptionTextForYearEnd();
+$startYearOption = CommonConfig::getOptionTextForYearStart();
+$endYearOption = CommonConfig::getOptionTextForYearEnd();
 ?>
 
 <div class="plugin-help learn-more">
@@ -14,7 +14,7 @@ $endYearOption = ElementsConfig::getOptionTextForYearEnd();
 
 <div class="field">
     <div class="two columns alpha">
-        <label><?php echo __('Identifier Element'); ?></label>
+        <label><?php echo CONFIG_LABEL_IDENTIFIER; ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used to uniquely identify an Item."); ?></p>
@@ -24,7 +24,7 @@ $endYearOption = ElementsConfig::getOptionTextForYearEnd();
 
 <div class="field">
     <div class="two columns alpha">
-        <label><?php echo __('Identifier Alias'); ?></label>
+        <label><?php echo CONFIG_LABEL_IDENTIFIER_ALIAS; ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used as an alias for the Item Identifier element."); ?></p>
@@ -34,7 +34,7 @@ $endYearOption = ElementsConfig::getOptionTextForYearEnd();
 
 <div class="field">
     <div class="two columns alpha">
-        <label><?php echo __('Identifier Prefix'); ?></label>
+        <label><?php echo CONFIG_LABEL_IDENTIFIER_PREFIX; ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("Text that will appear before the identifier or alias."); ?></p>
@@ -44,7 +44,7 @@ $endYearOption = ElementsConfig::getOptionTextForYearEnd();
 
 <div class="field">
     <div class="two columns alpha">
-        <label><?php echo __('Start Year'); ?></label>
+        <label><?php echo CONFIG_LABEL_YEAR_START; ?></label>
     </div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used to store the Start year."); ?></p>
@@ -54,8 +54,8 @@ $endYearOption = ElementsConfig::getOptionTextForYearEnd();
 
 <div class="field">
     <div class="two columns alpha">
-        <label><?php echo __('End Year'); ?></label>
-    </div>
+        <label><?php echo CONFIG_LABEL_YEAR_END; ?></label>
+</div>
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The element used to store the End year."); ?></p>
         <?php echo $view->formText(CommonConfig::OPTION_YEAR_END, $endYearOption); ?>
