@@ -53,6 +53,7 @@ class ConfigOptions
     protected static function getOptionListData($optionName)
     {
         $rawData = self::getRawData($optionName);
+        $data = array();
 
         foreach ($rawData as $elementId)
         {
