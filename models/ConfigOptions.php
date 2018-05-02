@@ -17,6 +17,11 @@ class ConfigOptions
         }
     }
 
+    protected static function errorIfNotElement($elementId, $optionLabel, $elementName)
+    {
+        self::errorIf($elementId == 0, $optionLabel, __("'%s' is not an element.", $elementName));
+    }
+
     protected static function errorRowIf($condition, $optionLabel, $rowId, $message)
     {
         if ($condition)
@@ -25,15 +30,29 @@ class ConfigOptions
         }
     }
 
-    protected static function getOptionData($optionName)
+    public static function getOptionDefinitionData($optionName)
     {
-        $rawData = json_decode(get_option($optionName), true);
-        if (empty($rawData))
+        $rawData = self::getRawData($optionName);
+        $optionData = array();
+
+        foreach ($rawData as $elementId => $data)
         {
-            $rawData = array();
+            $elementName = ItemMetadata::getElementNameFromId($elementId);
+            if (empty($elementName))
+            {
+                // This element must have been deleted since the AvantElements configuration was last saved.
+                continue;
+            }
+            $data['name'] = $elementName;
+            $optionData[$elementId] = $data;
         }
 
-        $data = array();
+        return $optionData;
+    }
+
+    protected static function getOptionListData($optionName)
+    {
+        $rawData = self::getRawData($optionName);
 
         foreach ($rawData as $elementId)
         {
@@ -49,7 +68,7 @@ class ConfigOptions
         return $data;
     }
 
-    protected static function getOptionText($optionName)
+    protected static function getOptionListText($optionName)
     {
         if (self::configurationErrorsDetected())
         {
@@ -57,7 +76,7 @@ class ConfigOptions
         }
         else
         {
-            $data = self::getOptionData($optionName);
+            $data = self::getOptionListData($optionName);
             $text = '';
             foreach ($data as $elementName)
             {
@@ -81,7 +100,7 @@ class ConfigOptions
         return $rawData;
     }
 
-    protected static function saveOptionData($optionName, $optionLabel)
+    protected static function saveOptionListData($optionName, $optionLabel)
     {
         $elements = array();
         $names = array_map('trim', explode(PHP_EOL, $_POST[$optionName]));

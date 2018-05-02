@@ -34,7 +34,7 @@ class ItemMetadata
         return empty($element) ? '' : $elementSetName;
     }
 
-    public static function getElementsByValue($elementId, $value)
+    public static function getElementTextsByValue($elementId, $value)
     {
         $results = array();
 
@@ -50,6 +50,18 @@ class ItemMetadata
         }
 
         return $results;
+    }
+
+    public static function getElementTextsById($item, $elementId)
+    {
+        $db = get_db();
+        $select = $db->select()
+            ->from($db->ElementText)
+            ->where('element_id = ?', $elementId)
+            ->where('record_id = ?', $item->id)
+            ->where('record_type = ?', 'Item');
+        $elementText = $db->getTable('ElementText')->fetchObject($select);
+        return $elementText;
     }
 
     public static function getElementTextFromElementName($item, $parts, $asHtml = true)
