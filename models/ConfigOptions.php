@@ -8,6 +8,13 @@ class ConfigOptions
         return $isPost && !$isItemSave;
     }
 
+    public static function emitOptionNotSupported($pluginName, $hash)
+    {
+        echo "<p class='explanation learn-more'>" . __('Option not available for this installation. ');
+        echo "<a class='avantsearch-help' href='https://github.com/gsoules/$pluginName#$hash' target='_blank'>" . __('Learn more.') . "</a>";
+        echo "</p>";
+    }
+
     protected static function errorIf($condition, $optionLabel, $message)
     {
         if ($condition)
