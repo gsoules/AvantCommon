@@ -2,6 +2,18 @@
 
 class ItemMetadata
 {
+    public static function getAllElementTextsForElementName($item, $elementName)
+    {
+        $elementSetName = self::getElementSetNameForElementName($elementName);
+        $elementTexts = $item->getElementTexts($elementSetName, $elementName);
+        $texts = array();
+        foreach ($elementTexts as $elementText)
+        {
+            $texts[] = $elementText->getText();
+        }
+        return $texts;
+    }
+
     public static function getElementIdForElementName($elementName)
     {
         $db = get_db();
@@ -52,29 +64,18 @@ class ItemMetadata
         return $results;
     }
 
-    public static function getElementTextsById($item, $elementId)
-    {
-        $db = get_db();
-        $select = $db->select()
-            ->from($db->ElementText)
-            ->where('element_id = ?', $elementId)
-            ->where('record_id = ?', $item->id)
-            ->where('record_type = ?', 'Item');
-        $elementText = $db->getTable('ElementText')->fetchObject($select);
-        return $elementText;
-    }
-
-    public static function getElementTextFromElementName($item, $parts, $asHtml = true)
+    public static function getElementTextForElementName($item, $elementName, $asHtml = true)
     {
         try
         {
-            $metadata = metadata($item, array($parts[0], $parts[1]), array('no_filter' => true, 'no_escape' => !$asHtml));
+            $elementSetName = self::getElementSetNameForElementName($elementName);
+            $text = metadata($item, array($elementSetName, $elementName), array('no_filter' => true, 'no_escape' => !$asHtml));
         }
         catch (Omeka_Record_Exception $e)
         {
-            $metadata = '';
+            $text = '';
         }
-        return $metadata;
+        return $text;
     }
 
     public static function getElementTextFromElementId($item, $elementId, $asHtml = true)
