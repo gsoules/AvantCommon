@@ -3,9 +3,10 @@ class ConfigOptions
 {
     protected static function configurationErrorsDetected()
     {
-        $isPost = $_SERVER['REQUEST_METHOD'] == 'POST';
-        $isItemSave = isset($_POST['Elements']);
-        return $isPost && !$isItemSave;
+        // When a configuration occurs, the Configure Plugin page posts back to itself to display the error
+        // after the user presses the Save button.
+        $isConfigSave = isset($_POST['install_plugin']);
+        return $isConfigSave;
     }
 
     public static function emitOptionNotSupported($pluginName, $hash)
