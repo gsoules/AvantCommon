@@ -1,6 +1,6 @@
 :root {
-    --preview-link-color: #c76941;
-    --preview-link-hover-color: #e57f52;
+    --preview-link-color: #666;
+    --preview-link-hover-color: #aaa;
 }
 
 .item-preview-identifier {

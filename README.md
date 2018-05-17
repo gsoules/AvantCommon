@@ -37,7 +37,7 @@ The AvantCommon plugin provides support for the Lightbox feature that is used by
 When enabled, the Lightbox feature lets you click on a thumbnail to see it's original-size image appear in a popup. You
 can then click the large image in the popup to see the next image on the page (and continue clicking to see the others).
 You can also use the popup's left and right arrows to set the other imageson the page. You can close the popup by
- licking on the X in the upper right corner of the popup, or by clicking on the page outside the popup, or by using the Esc key.
+clicking on the X in the upper right corner of the popup, or by clicking on the page outside the popup, or by using the Esc key.
 
 To enable the Lightbox feature, add the following line of code just above the closing `</body>` tag in your theme's `footer.php` file.
 
@@ -54,9 +54,15 @@ An item preview is the item's thumbnail image with it's identifier above and it'
 
 Option | Description
 --------|------------
-Identifier Element |  The element used to uniquely identify an Item. Often this is the Dublin Core 'Identifier' element, but if your installation uses a different element for this purpose, specify it here. For example: `Item Type Metadata, Object ID`. Note that the Identifier Element is what you'll using when establishing relationships using the AvantRelationships plugin.
+Identifier&nbsp;Element |  The element used to uniquely identify an Item. Often this is the Dublin Core 'Identifier' element, but if your installation uses a different element for this purpose, specify it here. For example: `Item Type Metadata, Object ID`. Note that the Identifier Element is what you'll using when establishing relationships using the AvantRelationships plugin.
 Identifier Alias | The element used as an alias for the item Identifier. Leave this blank if you want the Identifier Element's value to display as an item's identifier. However, if your installation uses a different element for the public facing identifier value, specify that element here. For example, if you use a `Catalogue #` element to store composite catalogue number such as `2018.123.001`, you could specify that element here. For example: `Item Type Metadata, Catalogue #`
 Identifier Prefix | The prefix is text that will appear before the identifier or alias. You can leave it blank or provide a value. For example: `Item` or `Catalogue #'.
+Private Elements | xxx
+Unused&nbsp;Elements | yyy
+Start Year | sss
+End Year | eee
+
+*Explain that Private and Unused elements eliminate the need to use the HideElements plugin.*
 
 ## Warning
 

@@ -4,6 +4,13 @@ $view = get_view();
 $identifierElementName = CommonConfig::getOptionTextForIdentifier();
 $identifierAliasElementName = CommonConfig::getOptionTextForIdentifierAlias();
 $identifierPrefix = CommonConfig::getOptionTextForIdentifierPrefix();
+
+$privateElementsOption = CommonConfig::getOptionTextForPrivateElements();
+$privateElementOptionRows = max(2, count(explode(PHP_EOL, $privateElementsOption)));
+
+$unusedElementsOption = CommonConfig::getOptionTextForUnusedElements();
+$unusedElementsOptionRows = max(2, count(explode(PHP_EOL, $unusedElementsOption)));
+
 $startYearOption = CommonConfig::getOptionTextForYearStart();
 $endYearOption = CommonConfig::getOptionTextForYearEnd();
 ?>
@@ -39,6 +46,26 @@ $endYearOption = CommonConfig::getOptionTextForYearEnd();
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("Text that will appear before the identifier or alias."); ?></p>
         <?php echo $view->formText(CommonConfig::OPTION_IDENTIFIER_PREFIX, $identifierPrefix); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo CONFIG_LABEL_PRIVATE_ELEMENTS; ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("Elements that should not be visible to public users."); ?></p>
+        <?php echo $view->formTextarea(CommonConfig::OPTION_PRIVATE_ELEMENTS, $privateElementsOption, array('rows' => $privateElementOptionRows)); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo CONFIG_LABEL_UNUSED_ELEMENTS; ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("Elements that are not being used by this installation."); ?></p>
+        <?php echo $view->formTextarea(CommonConfig::OPTION_UNUSED_ELEMENTS, $unusedElementsOption, array('rows' => $unusedElementsOptionRows)); ?>
     </div>
 </div>
 
