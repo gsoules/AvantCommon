@@ -59,7 +59,8 @@ class ItemPreview
         }
         else
         {
-            $html = "<a class='lightbox' href='$url'>$imgTag</a>";
+            $caption = ItemMetadata::getItemTitle($this->item);
+            $html = "<a class='lightbox' href='$url' title='$caption'>$imgTag</a>";
         }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
         $html = "<div class=\"$class\">$html</div>";
@@ -128,6 +129,7 @@ class ItemPreview
         if ($isImageFile)
         {
             $class = 'lightbox';
+            $title = basename($file->filename);
         }
         else
         {
@@ -135,9 +137,10 @@ class ItemPreview
             $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
             if ($isThumbnail)
                 $class .= '-thumb';
+            $title = '';
         }
 
-        $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'target' => '_blank')));
+        $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'target' => '_blank')));
         return $html;
     }
 

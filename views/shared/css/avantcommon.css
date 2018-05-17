@@ -122,7 +122,7 @@
 
 /* Magnific popup */
 .mfp-close {
-    color: red !important;
+    color: #b50000 !important;
     font-size:48px !important;
 }
 
@@ -132,4 +132,14 @@
 .mfp-arrow:hover {
     background: transparent !important;
     box-shadow: none;
+}
+
+.mfp-counter {
+    color: #F3F3F3;
+    font-size: 100%;
+}
+
+.mfp-title {
+    color: #F3F3F3;
+    font-weight: bold;
 }
