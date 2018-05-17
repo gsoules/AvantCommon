@@ -57,7 +57,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
                 unset($elements[$key]);
             }
         }
-        
+
         return $elements;
     }
 

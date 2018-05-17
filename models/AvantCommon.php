@@ -41,10 +41,15 @@ class AvantCommon
     public static function getPostTextForElementName($elementName)
     {
         // Return the element's posted value. If it has more than one, only return the first.
-        // Use current() instead of [0] in case the 0th element was deleted using the Remove button.
+        $text = '';
         $elementId = ItemMetadata::getElementIdForElementName($elementName);
-        $values = $_POST['Elements'][$elementId];
-        $text = current($values)['text'];
+
+        if (!empty($elementId))
+        {
+            // Use current() instead of [0] in case the 0th element was deleted using the Remove button.
+            $values = $_POST['Elements'][$elementId];
+            $text = empty($values) ? '' : current($values)['text'];
+        }
         return $text;
     }
 
