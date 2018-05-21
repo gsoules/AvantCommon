@@ -53,6 +53,11 @@ class AvantCommon
         return $text;
     }
 
+    public static function isAjaxRequest()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+
     public static function setPostTextForElementId($elementId, $text)
     {
         $_POST['Elements'][$elementId][0]['text'] = $text;
