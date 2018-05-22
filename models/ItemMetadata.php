@@ -171,4 +171,23 @@ class ItemMetadata
     {
         return 'Title';
     }
+
+    public static function updateElementText($item, $elementId, $text)
+    {
+        $element = $item->getElementById($elementId);
+
+        // Remove the old value(s) for this element.
+        $elementTexts = $item->getElementTextsByRecord($element);
+        foreach ($elementTexts as $elementText)
+        {
+            $elementText->delete();
+        }
+
+        // Add the new value.
+        if (strlen($text) != 0)
+        {
+            $item->addTextForElement($element, $text);
+            $item->saveElementTexts();
+        }
+    }
 }
