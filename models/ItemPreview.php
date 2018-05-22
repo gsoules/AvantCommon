@@ -60,6 +60,7 @@ class ItemPreview
         else
         {
             $caption = ItemMetadata::getItemTitle($this->item);
+            $caption = empty($caption) ? __('[Untitled]') : $caption;
             $html = "<a class='lightbox' href='$url' title='$caption'>$imgTag</a>";
         }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
