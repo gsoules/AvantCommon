@@ -9,7 +9,7 @@ class AvantCommon
 
         foreach ($values as $value)
         {
-            if (!empty(trim($value['text'])))
+            if (strlen(trim($value['text'])) > 0)
             {
                 return true;
             }
