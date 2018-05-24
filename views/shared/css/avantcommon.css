@@ -84,11 +84,6 @@
     color: var(--preview-link-hover-color);
 }
 
-.item-preview.cover-image img,
-.item-preview.cover-image .item-img {
-    width: auto;
-}
-
 .item-preview .element-text {
     line-height: 18px;
     margin:4px 0;
@@ -111,6 +106,12 @@
     max-height: 155px;
     max-width: 100%;
     padding: 2px;
+}
+
+.item-preview.cover-image img,
+.item-preview.cover-image .item-img {
+    width: auto;
+    max-height: none;
 }
 
 .item-preview li {
