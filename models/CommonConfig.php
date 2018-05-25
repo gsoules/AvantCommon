@@ -3,6 +3,7 @@
 define('CONFIG_LABEL_IDENTIFIER', __('Identifier Element'));
 define('CONFIG_LABEL_IDENTIFIER_ALIAS', __('Identifier Alias'));
 define('CONFIG_LABEL_IDENTIFIER_PREFIX', __('Identifier Prefix'));
+define('CONFIG_LABEL_LIGHTBOX', __('Enable Lightbox'));
 define('CONFIG_LABEL_PRIVATE_ELEMENTS', __('Private Elements'));
 define('CONFIG_LABEL_UNUSED_ELEMENTS', __('Unused Elements'));
 define('CONFIG_LABEL_YEAR_START', __('Start Year'));
@@ -13,6 +14,7 @@ class CommonConfig extends ConfigOptions
     const OPTION_IDENTIFIER = 'avantcommon_identifier';
     const OPTION_IDENTIFIER_ALIAS = 'avantcommon_identifier_alias';
     const OPTION_IDENTIFIER_PREFIX = 'avantcommon_identifier_prefix';
+    const OPTION_LIGHTBOX = 'avantcommon_lightbox';
     const OPTION_PRIVATE_ELEMENTS = 'avantcommon_private_elements';
     const OPTION_UNUSED_ELEMENTS = 'avantcommon_unsused_elements';
     const OPTION_YEAR_START = 'avantcommon_year_start';
@@ -123,6 +125,8 @@ class CommonConfig extends ConfigOptions
         self::saveOptionDataForPrivateElements();
         self::saveOptionDataForUnusedElements();
         self::saveOptionDataForYearStartEnd();
+
+        set_option(self::OPTION_LIGHTBOX, intval($_POST[self::OPTION_LIGHTBOX]));
     }
 
     public static function saveOptionDataForIdentifier()

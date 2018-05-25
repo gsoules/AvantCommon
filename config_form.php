@@ -89,3 +89,12 @@ $endYearOption = CommonConfig::getOptionTextForYearEnd();
     </div>
 </div>
 
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo CONFIG_LABEL_LIGHTBOX ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __('Enable the Lightbox feature for displaying images.'); ?></p>
+        <?php echo $view->formCheckbox(CommonConfig::OPTION_LIGHTBOX, true, array('checked' => (boolean)get_option(CommonConfig::OPTION_LIGHTBOX))); ?>
+    </div>
+</div>

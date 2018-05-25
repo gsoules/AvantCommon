@@ -103,7 +103,10 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookPublicFooter($args)
     {
-        echo get_view()->partial('avantcommon-script.php');
+        if (get_option(CommonConfig::OPTION_LIGHTBOX))
+        {
+            echo get_view()->partial('avantcommon-script.php');
+        }
     }
 
     public function hookPublicHead($args)
