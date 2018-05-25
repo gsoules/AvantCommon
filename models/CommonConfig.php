@@ -115,13 +115,23 @@ class CommonConfig extends ConfigOptions
         return $text;
     }
 
+    public static function saveConfiguration()
+    {
+        self::saveOptionDataForIdentifier();
+        self::saveOptionDataForIdentifierAlias();
+        self::saveOptionDataForIdentifierPrefix();
+        self::saveOptionDataForPrivateElements();
+        self::saveOptionDataForUnusedElements();
+        self::saveOptionDataForYearStartEnd();
+    }
+
     public static function saveOptionDataForIdentifier()
     {
         $identifierElementName = $_POST[self::OPTION_IDENTIFIER];
         $elementId = ItemMetadata::getElementIdForElementName($identifierElementName);
         if ($elementId == 0)
         {
-            throw new Omeka_Validate_Exception(__('Identifier Element') . ': ' . __('"%s" is not an element.', $identifierElementName));
+            throw new Omeka_Validate_Exception(CONFIG_LABEL_IDENTIFIER . ': ' . __('"%s" is not an element.', $identifierElementName));
         }
         set_option(self::OPTION_IDENTIFIER, $elementId);
     }
@@ -142,16 +152,6 @@ class CommonConfig extends ConfigOptions
     public static function saveOptionDataForIdentifierPrefix()
     {
         set_option(self::OPTION_IDENTIFIER_PREFIX, $_POST[self::OPTION_IDENTIFIER_PREFIX]);
-    }
-
-    public static function saveConfiguration()
-    {
-        self::saveOptionDataForIdentifier();
-        self::saveOptionDataForIdentifierAlias();
-        self::saveOptionDataForIdentifierPrefix();
-        self::saveOptionDataForPrivateElements();
-        self::saveOptionDataForUnusedElements();
-        self::saveOptionDataForYearStartEnd();
     }
 
     public static function saveOptionDataForPrivateElements()
