@@ -8,6 +8,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         'config_form',
         'initialize',
         'install',
+        'public_footer',
         'public_head'
     );
 
@@ -61,6 +62,17 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         return $elements;
     }
 
+    protected function head()
+    {
+        //if (plugin_is_active('AvantSearch') || plugin_is_active('AvantRelationships'))
+        {
+            queue_css_file('magnific-popup');
+            queue_js_file('jquery.magnific-popup.min');
+        }
+
+        queue_css_file('avantcommon');
+    }
+
     public function hookAdminHead($args)
     {
         queue_css_file('avantcommon-admin');
@@ -89,19 +101,13 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         CommonConfig::setDefaultOptionValues();
     }
 
+    public function hookPublicFooter($args)
+    {
+        echo get_view()->partial('avantcommon-script.php');
+    }
+
     public function hookPublicHead($args)
     {
         $this->head();
-    }
-
-    protected function head()
-    {
-        //if (plugin_is_active('AvantSearch') || plugin_is_active('AvantRelationships'))
-        {
-            queue_css_file('magnific-popup');
-            queue_js_file('jquery.magnific-popup.min');
-        }
-
-        queue_css_file('avantcommon');
     }
 }
