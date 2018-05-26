@@ -61,7 +61,7 @@ class ItemPreview
         {
             $caption = ItemMetadata::getItemTitle($this->item);
             $caption = empty($caption) ? __('[Untitled]') : $caption;
-            $html = "<a class='lightbox' href='$url' title='$caption'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$url' title='$caption' id='{$this->item->id}'>$imgTag</a>";
         }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
         $html = "<div class=\"$class\">$html</div>";
@@ -141,7 +141,7 @@ class ItemPreview
             $title = '';
         }
 
-        $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'target' => '_blank')));
+        $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'id' => '', 'target' => '_blank')));
         return $html;
     }
 

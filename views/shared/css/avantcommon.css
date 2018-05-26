@@ -141,6 +141,15 @@
 }
 
 .mfp-title {
-    color: #F3F3F3;
+    color: #ccc;
     font-weight: bold;
+}
+
+.mfp-title .lightbox-link {
+    color: #F3F3F3;
+    text-decoration: underline;
+}
+
+.mfp-title a:hover {
+    color: #FFF;
 }
