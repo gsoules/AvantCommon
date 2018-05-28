@@ -103,8 +103,8 @@ Copyright
 * Copyright George Soules, 2016-2017.
 * See [LICENSE](https://github.com/gsoules/AvantRelationships/blob/master/LICENSE) for more information.
 
-[AvantAdmin]:(https://github.com/gsoules/AvantAdmin)
-[AvantCustom]:(https://github.com/gsoules/AvantCustom)
-[AvantElements]:(https://github.com/gsoules/AvantElements)
-[AvantRelationships]:(https://github.com/gsoules/AvantRelationships)
-[AvantSearch]:(https://github.com/gsoules/AvantSearch)
+[AvantAdmin]:https://github.com/gsoules/AvantAdmin
+[AvantCustom]:https://github.com/gsoules/AvantCustom
+[AvantElements]:https://github.com/gsoules/AvantElements
+[AvantRelationships]:https://github.com/gsoules/AvantRelationships
+[AvantSearch]:https://github.com/gsoules/AvantSearch
