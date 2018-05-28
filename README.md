@@ -30,7 +30,7 @@ feature described below).
 1. Rename the folder to AvantCommon.
 1. Activate the plugin from the Admin → Settings → Plugins page.
 
-## Lightbox feature
+### Lightbox feature
 
 The AvantCommon plugin provides support for the Lightbox feature that is used by [AvantSearch]
 and [AvantRelationships]
@@ -76,7 +76,7 @@ search for items within a date range.
 
 ## Warning
 
-Use this plugin at your own risk.
+Use this software at your own risk.
 
 ##  License
 
