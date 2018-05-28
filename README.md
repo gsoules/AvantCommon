@@ -29,44 +29,51 @@ feature described below).
 1. Unzip the AvantCommon-master file into your Omeka installation's plugin directory.
 1. Rename the folder to AvantCommon.
 1. Activate the plugin from the Admin → Settings → Plugins page.
-1. Enable the Lightbox feature (optional) as explained below.
 
-#### Enabling the Lightbox feature
+## Lightbox feature
 
-The AvantCommon plugin provides support for the Lightbox feature that is used by AvantSearch and AvantRelationships.
-When enabled, the Lightbox feature lets you click on a thumbnail to see it's original-size image appear in a popup. You
-can then click the large image in the popup to see the next image on the page (and continue clicking to see the others).
-You can also use the popup's left and right arrows to set the other imageson the page. You can close the popup by
-clicking on the X in the upper right corner of the popup, or by clicking on the page outside the popup, or by using the Esc key.
+The AvantCommon plugin provides support for the Lightbox feature that is used by AvantSearch and AvantRelationships
+on pages that display thumbnails. When enabled, the Lightbox feature lets you click on a thumbnail to see it's
+original-size image in a popup lightbox. You can then click the large image in the lightbox to see the next image on
+the page (and continue clicking to see the others).
 
-To enable the Lightbox feature, add the following line of code just above the closing `</body>` tag in your theme's `footer.php` file.
+##### The Lightbox feature lets you:
+* See other images on the page by:
+    * Clicking on the current image to see the next image
+    * Clicking the left and right arrows to see the previous or next image
+* Go to the item for the image being displayed by clicking on the title link in the the bottom left corner.
+If the title is the filename of an image or other file attached to the item being viewed, the title will have no hyperlink.
+* Close the lightbox these three ways:
+    * Click on the X in the upper right corner
+    * Click anywhere on the page outside the lightbox
+    * Press the Esc key
 
-```
-<?php echo $this->partial('/avantcommon-script.php'); ?>
-```
-
- If you don't enable the Lightbox feature, clicking a thumbnail will cause the original image to open in a separate browser tab.
+To enable the Lightbox feature, go to the AvantCommon configuration page and check the box for Enable Lightbox.
+If you don't enable the Lightbox feature, clicking a thumbnail will cause the original image to open in a separate browser tab.
 
 ## Usage
 
-AvantCommon has the following configuration options. The values of these options will determine how item previews are displayed.
-An item preview is the item's thumbnail image with it's identifier above and it's title below.
+AvantCommon has the following configuration options.
 
 Option | Description
 --------|------------
-Identifier&nbsp;Element |  The element used to uniquely identify an Item. Often this is the Dublin Core 'Identifier' element, but if your installation uses a different element for this purpose, specify it here. For example: `Item Type Metadata, Object ID`. Note that the Identifier Element is what you'll using when establishing relationships using the AvantRelationships plugin.
-Identifier Alias | The element used as an alias for the item Identifier. Leave this blank if you want the Identifier Element's value to display as an item's identifier. However, if your installation uses a different element for the public facing identifier value, specify that element here. For example, if you use a `Catalogue #` element to store composite catalogue number such as `2018.123.001`, you could specify that element here. For example: `Item Type Metadata, Catalogue #`
-Identifier Prefix | The prefix is text that will appear before the identifier or alias. You can leave it blank or provide a value. For example: `Item` or `Catalogue #'.
-Private Elements | xxx
-Unused&nbsp;Elements | yyy
-Start Year | sss
-End Year | eee
+Identifier&nbsp;Element |  The element used to uniquely identify an Item. Often this is the Dublin Core 'Identifier' element, but if your installation uses a different element for this purpose, specify it here. For example: `Object ID`. Note that the Identifier Element is what you'll using when establishing relationships using the AvantRelationships plugin.
+Identifier Alias | The element used as an alias for the item Identifier. Leave this blank if you want the Identifier Element's value to display as an item's identifier. However, if your installation uses a different element for the public facing identifier value, specify that element here. For example, if you use a `Catalogue #` element to store composite catalogue number such as `2018.123.001`, you could specify that element here. For example: `Catalogue #`
+Identifier Prefix | The prefix is text that will appear before the identifier or alias. You can leave it blank or provide a value. For example: `Item` or `Catalogue #`.
+Private Elements | Elements that public users should not be able to see or search. Specify each element name on its on row.
+Unused&nbsp;Elements | Elements that your installation is not currently using and that should not appear on the admin Edit page. Specify each element name on its on row.
+Start Year | The name of the element used to store a four digit year indicating the start of an item's date range.
+End Year | The name of the element used to store a four digit year indicating the end of an item's date range.
+Enable Lightbox | Check the box to display thumbnails using the Lightbox feature described above. This works with the thumbnails generated by AvantSearch and AvantRelationships. When this option is unchecked, clicking on a thumbnail displays the larger image in a separate browser tab.
 
-*Explain that Private and Unused elements eliminate the need to use the HideElements plugin.*
+##### Notes
+* Start Year and End Year must both be provided or both left blank.
+* The Private Elements and Unused Elements options can be used instead of or in conjunction with the
+ [Hide Elements](https://github.com/zerocrates/HideElements) plugin.
 
 ## Warning
 
-Use it at your own risk.
+Use this plugin at your own risk.
 
 ##  License
 
