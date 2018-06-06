@@ -77,7 +77,8 @@ search for items within a date range.
 ---
 #### Private Elements Option
 This option lets you specify a list of element names, one per row, that:
-* Don't appear to public users on Show pages (they will appear to a logged in user in gray italics to indicate they are private)
+* Don't appear to public users on Show pages (they will appear to a logged in user -- see AvantTheme on how their labels
+can be styled to indicate private)
 * Don't appear to public users in the Fields dropdown on the Advanced Search page (they will appear to a logged in user)
 * Should not be searchable via a keyword search
 

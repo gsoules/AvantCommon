@@ -16,12 +16,6 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         'display_elements'
     );
 
-    public function __construct()
-    {
-        parent::__construct();
-        AvantCommon::initializePrivateElementFilters($this->_filters);
-    }
-
     public function __call($filterName, $args)
     {
         // Handle filter requests for filterPrivateElement.
