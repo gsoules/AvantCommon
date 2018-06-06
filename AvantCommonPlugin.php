@@ -16,13 +16,34 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         'display_elements'
     );
 
+    public function __construct()
+    {
+        parent::__construct();
+        AvantCommon::initializePrivateElementFilters($this->_filters);
+    }
+
+    public function __call($filterName, $args)
+    {
+        // Handle filter requests for filterPrivateElement.
+        $result = null;
+        $item = $args[1]['record'];
+        $text = $args[0];
+
+        if (strpos($filterName, 'filterPrivateElement') === 0)
+        {
+            $result = $this->filterPrivateElement($text);
+        }
+
+        return $result;
+    }
+
     public function filterDisplayElements($elementsBySet)
     {
         // Omeka calls this Display Elements filter to give plugins an opportunity to remove elements from the set
         // of elements that appear on the Show pages. This code hides unused elements from both the admin and public
         // Show pages. It also hides private elements from the public Show page.
 
-        $isAdminTheme = is_admin_theme();
+        $hidePrivate = empty(current_user());
         $privateElementsData = CommonConfig::getOptionDataForPrivateElements();
         $unusedElementsData = CommonConfig::getOptionDataForUnusedElements();
 
@@ -31,8 +52,8 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
             foreach ($elementSet as $elementName => $element)
             {
                 $elementId = $element->id;
-                $hide = array_key_exists($elementId, $unusedElementsData);
-                $hide = $hide || (!$isAdminTheme && array_key_exists($elementId, $privateElementsData));
+                $hideUnused = array_key_exists($elementId, $unusedElementsData);
+                $hide = $hideUnused || ($hidePrivate && array_key_exists($elementId, $privateElementsData));
                 if ($hide)
                 {
                     unset($elementsBySet[$elementSetName][$elementName]);
@@ -60,6 +81,19 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         }
 
         return $elements;
+    }
+
+    public function filterPrivateElement($text)
+    {
+        if (empty(current_user()))
+        {
+            // No user is logged in. Don't filter private elements because they will be hidden by filterDisplayElements().
+            return $text;
+        }
+
+        // Display this private element to a logged in user, but add a class to change the text styling to indicate private.
+        $text = html_entity_decode($text);
+        return "<span class='private-element'>$text</span>";
     }
 
     protected function head()

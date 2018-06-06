@@ -53,6 +53,20 @@ class AvantCommon
         return $text;
     }
 
+    public static function initializePrivateElementFilters(&$filters)
+    {
+        $privateElementsData = CommonConfig::getOptionDataForPrivateElements();
+        foreach ($privateElementsData as $elementName)
+        {
+            $elementSetName = ItemMetadata::getElementSetNameForElementName($elementName);
+            if (!empty($elementSetName))
+            {
+                // Set up a call to be made when this element is displayed on a Show page.
+                $filters['filterPrivateElement' . $elementName] = array('Display', 'Item', $elementSetName, $elementName);
+            }
+        }
+    }
+
     public static function isAjaxRequest()
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
