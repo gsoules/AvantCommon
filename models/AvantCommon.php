@@ -2,6 +2,20 @@
 
 class AvantCommon
 {
+    public static function batchEditing()
+    {
+        // Determine if the user has pressed the Index Records button on the admin Settings > Search page
+        // or if they are doing batch editing via the Omeka admin interface. Note that the Bulk Editor plugin
+        // operates directly on the database and does not save via Omeka's normal item update logic. Thus it
+        // is not side-affected by AvantElements
+        $batchEditing =
+            isset($_POST['submit_index_records']) ||
+            isset($_POST['batch_edit_hash']) ||
+            isset($_POST['submit-batch-edit']);
+
+        return $batchEditing;
+    }
+
     public static function elementHasPostedValue($elementId)
     {
         // Get the values from all of this element's input fields. Return true if any have a value.
