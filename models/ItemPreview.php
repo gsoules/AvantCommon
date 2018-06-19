@@ -44,16 +44,18 @@ class ItemPreview
     public function emitItemThumbnail($useCoverImage = true)
     {
         $getThumbnail = true;
-        $url = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
+        $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
-        if (empty($url))
+        if (empty($thumbnailUrl))
         {
-            $url = self::getFallbackImageUrl($this->item);
+            $thumbnailUrl = self::getFallbackImageUrl($this->item);
         }
 
-        $imgTag = "<img src='$url'>";
-        $url = self::getImageUrl($this->item, true);
-        if (empty($url))
+        $imgTag = "<img src='$thumbnailUrl'>";
+
+        $getThumbnail = false;
+        $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
+        if (empty($originalImageUrl))
         {
             $html = $imgTag;
         }
@@ -61,7 +63,7 @@ class ItemPreview
         {
             $caption = ItemMetadata::getItemTitle($this->item);
             $caption = empty($caption) ? __('[Untitled]') : $caption;
-            $html = "<a class='lightbox' href='$url' title='$caption' id='{$this->item->id}'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$caption' id='{$this->item->id}'>$imgTag</a>";
         }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
         $html = "<div class=\"$class\">$html</div>";
