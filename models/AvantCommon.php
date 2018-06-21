@@ -2,19 +2,6 @@
 
 class AvantCommon
 {
-    public static function batchEditing()
-    {
-        // Determine if the user has pressed the Index Records button on the admin Settings > Search page
-        // or if they are doing batch editing via the Omeka admin interface. Note that the Bulk Editor plugin
-        // operates directly on the database and does not save via Omeka's normal item update logic. Thus it
-        // is not side-affected by AvantElements
-        $batchEditing =
-            isset($_POST['submit_index_records']) ||
-            isset($_POST['batch_edit_hash']) ||
-            isset($_POST['submit-batch-edit']);
-
-        return $batchEditing;
-    }
 
     public static function elementHasPostedValue($elementId)
     {
@@ -75,5 +62,14 @@ class AvantCommon
     public static function setPostTextForElementId($elementId, $text)
     {
         $_POST['Elements'][$elementId][0]['text'] = $text;
+    }
+
+    public static function userClickedSaveChanges()
+    {
+        // Determine if the admin clicked the Save Changes button. This check is done to distinguish from the cases
+        // where an item is saved as part of another operation such as a batch edit or a reindex of search records.
+        // When the user clicks the Save Changes button, the page posts to submit the Edit form to the server. The
+        // other cases are usually peformed as part of a server-side background job that operates on multiple items.
+        return isset($_POST['submit']) && $_POST['submit'] == 'Save Changes';
     }
 }
