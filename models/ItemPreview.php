@@ -11,14 +11,18 @@ class ItemPreview
     public function emitItemHeader()
     {
         $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
-        if ($this->item->public == 0)
-            $identifier .= '*';
 
-        $prefx = ItemMetadata::getIdentifierPrefix();
+        $prefix = ItemMetadata::getIdentifierPrefix();
+
         $url = url("items/show/{$this->item->id}");
 
         $html = '<div class="item-preview-header">';
-        $html .= "<a class='item-preview-identifier' href=\"$url\">{$prefx}{$identifier}</a>";
+        if ($this->item->public == 0)
+        {
+            // Indicate that this item is private.
+            $html .= '* ';
+        }
+        $html .= "<a class='item-preview-identifier' href=\"$url\">{$prefix}{$identifier}</a>";
         $html .= '</div>';
         return $html;
     }
