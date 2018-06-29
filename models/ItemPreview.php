@@ -8,6 +8,21 @@ class ItemPreview
         $this->item = $item;
     }
 
+    protected static function getSharedImages($item)
+    {
+        $imagesElementText = ItemMetadata::getElementTextForElementName($item, 'Images');
+        $images = array();
+        if (strlen($imagesElementText) > 0)
+        {
+            $images = explode('|', $imagesElementText);
+            if (count($images) == 1)
+            {
+                $images[] = $images[0];
+            }
+        }
+        return $images;
+    }
+
     public function emitItemHeader()
     {
         $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
@@ -55,10 +70,20 @@ class ItemPreview
             $thumbnailUrl = self::getFallbackImageUrl($this->item);
         }
 
-        $imgTag = "<img src='$thumbnailUrl'>";
-
         $getThumbnail = false;
         $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
+
+        //////////////
+        $sharedImages = self::getSharedImages($this->item);
+        if (!empty($sharedImages))
+        {
+            $thumbnailUrl = $sharedImages[0];
+            $originalImageUrl = $sharedImages[1];
+        }
+        /////////////
+
+        $imgTag = "<img src='$thumbnailUrl'>";
+
         if (empty($originalImageUrl))
         {
             $html = $imgTag;
@@ -128,7 +153,7 @@ class ItemPreview
         return $url;
     }
 
-    public static function getFileHtml($file, $isThumbnail)
+    public static function getFileHtml($item, $file, $isThumbnail)
     {
         $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
         $isImageFile = substr($file->mime_type, 0, 6) == 'image/';
@@ -148,6 +173,17 @@ class ItemPreview
         }
 
         $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'id' => '', 'target' => '_blank')));
+
+        /////////////
+        $sharedImages = self::getSharedImages($item);
+        if (!empty($sharedImages))
+        {
+            $src = $sharedImages[1];
+            $href = $src;
+            $html = '<div class="item-file image-jpeg"><a class="lightbox" href="' . $href . '" title="5801.jpg" id="" target="_blank"><img class="full" src="' . $src. '" alt="5801.jpg" title="5801.jpg"></a></div>';
+        }
+        /////////////
+
         return $html;
     }
 
