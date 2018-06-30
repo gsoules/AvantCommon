@@ -8,29 +8,6 @@ class ItemPreview
         $this->item = $item;
     }
 
-    protected static function getExtenalImages($item)
-    {
-        $externalImageIds = json_decode(get_option('avantcommon_external_images'), true);
-
-        $thumbnailUrl = '';
-        $imageUrl = '';
-
-        if (count($externalImageIds) == 2)
-        {
-            $thumbnailUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[0], false);
-            $imageUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[1], false);
-        }
-
-        $images = array();
-        if (!empty($thumbnailUrl && !empty($imageUrl)))
-        {
-            $images['thumbnail'] = $thumbnailUrl;
-            $images['image'] = $imageUrl;
-        }
-
-        return $images;
-    }
-
     public function emitItemHeader()
     {
         $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
@@ -135,6 +112,29 @@ class ItemPreview
         return $coverImageItem ? $coverImageItem : null;
     }
 
+    protected static function getExtenalImages($item)
+    {
+        // Determine if external URLs are specified for this item's thumbnail and image.
+        // If both are specified, return them. Otherwise return neither.
+
+        $images = array();
+        $externalImageIds = json_decode(get_option('avantcommon_external_images'), true);
+
+        if (count($externalImageIds) == 2)
+        {
+            $thumbnailUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[0], false);
+            $imageUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[1], false);
+
+            if (!empty($thumbnailUrl && !empty($imageUrl)))
+            {
+                $images['thumbnail'] = $thumbnailUrl;
+                $images['image'] = $imageUrl;
+            }
+        }
+
+        return $images;
+    }
+
     public static function getFallbackImageUrl($item)
     {
         $defaultFallbackImageFileName = 'fallback-file.png';
@@ -164,24 +164,26 @@ class ItemPreview
         $externalImages = array();
         if (empty($file))
         {
+            // There is no file attached to this item. See if the item specifies the URL for an external image.
             $externalImages = self::getExtenalImages($item);
             if (empty($externalImages))
             {
-                // There no local or external file for this item.
+                // There no attached or external file for this item.
                 return '';
             }
         }
 
-        $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
-        $isImageFile = empty($file) || substr($file->mime_type, 0, 6) == 'image/';
-
-        if ($isImageFile)
+        // Determine the file type. External URLs are always treated as images.
+        $isImage = empty($file) || substr($file->mime_type, 0, 6) == 'image/';
+        if ($isImage)
         {
+            // Include the image in the lightbox by simply attaching the 'lightbox' class to its enclosing <a> tag.
             $class = 'lightbox';
             $title = empty($file) ? $externalImages['image'] : basename($file->filename);
         }
         else
         {
+            // The file is not an image. See if it's a PDF, and if not, just call it a document (e.g. a text file).
             $isPdfFile = substr($file->mime_type, 0, 15) == 'application/pdf';
             $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
             if ($isThumbnail)
@@ -191,15 +193,20 @@ class ItemPreview
 
         if (empty($file))
         {
-            $src = $externalImages['image'];
-            $href = $src;
+            // Emit HTML to display an external image. Note that this method should never get called to display
+            // the thumbnail for an external image on a Show page because when external images are used, no thumbs
+            // are displayed (thumbs only appear when the item has more than one image). Thumbnails for external images
+            // that appear in search results are emitted by emitItemThumbnail.
+            $url = $externalImages['image'];
             $html = "<div class='item-file image-jpeg'>";
-            $html .= "<a id='' class='lightbox' href='$href' title='$title' target='_blank'>";
-            $html .= "<img class='full' src='$src' alt='$title' title='$title'>";
+            $html .= "<a id='' class='lightbox' href='$url' title='$title' target='_blank'>";
+            $html .= "<img class='full' src='$url' alt='$title' title='$title'>";
             $html .= "</a></div>";
         }
         else
         {
+            // Emit HTML to display an attached image.
+            $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
             $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'id' => '', 'target' => '_blank')));
         }
 
