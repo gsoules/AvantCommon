@@ -8,18 +8,26 @@ class ItemPreview
         $this->item = $item;
     }
 
-    protected static function getSharedImages($item)
+    protected static function getExtenalImages($item)
     {
-        $imagesElementText = ItemMetadata::getElementTextForElementName($item, 'Images');
-        $images = array();
-        if (strlen($imagesElementText) > 0)
+        $externalImageIds = json_decode(get_option('avantcommon_external_images'), true);
+
+        $thumbnailUrl = '';
+        $imageUrl = '';
+
+        if (count($externalImageIds) == 2)
         {
-            $images = explode('|', $imagesElementText);
-            if (count($images) == 1)
-            {
-                $images[] = $images[0];
-            }
+            $thumbnailUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[0], false);
+            $imageUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[1], false);
         }
+
+        $images = array();
+        if (!empty($thumbnailUrl && !empty($imageUrl)))
+        {
+            $images['thumbnail'] = $thumbnailUrl;
+            $images['image'] = $imageUrl;
+        }
+
         return $images;
     }
 
@@ -65,24 +73,22 @@ class ItemPreview
         $getThumbnail = true;
         $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
+        $externalImages = self::getExtenalImages($this->item);
+
         if (empty($thumbnailUrl))
         {
-            $thumbnailUrl = self::getFallbackImageUrl($this->item);
+            $thumbnailUrl = empty($externalImages) ? self::getFallbackImageUrl($this->item) : $externalImages['thumbnail'];
         }
 
         $getThumbnail = false;
         $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
-        //////////////
-        $sharedImages = self::getSharedImages($this->item);
-        if (!empty($sharedImages))
-        {
-            $thumbnailUrl = $sharedImages[0];
-            $originalImageUrl = $sharedImages[1];
-        }
-        /////////////
-
         $imgTag = "<img src='$thumbnailUrl'>";
+
+        if (empty($originalImageUrl) && !empty($externalImages))
+        {
+            $originalImageUrl = $externalImages['image'];
+        }
 
         if (empty($originalImageUrl))
         {
@@ -155,13 +161,24 @@ class ItemPreview
 
     public static function getFileHtml($item, $file, $isThumbnail)
     {
+        $externalImages = array();
+        if (empty($file))
+        {
+            $externalImages = self::getExtenalImages($item);
+            if (empty($externalImages))
+            {
+                // There no local or external file for this item.
+                return '';
+            }
+        }
+
         $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
-        $isImageFile = substr($file->mime_type, 0, 6) == 'image/';
+        $isImageFile = empty($file) || substr($file->mime_type, 0, 6) == 'image/';
 
         if ($isImageFile)
         {
             $class = 'lightbox';
-            $title = basename($file->filename);
+            $title = empty($file) ? $externalImages['image'] : basename($file->filename);
         }
         else
         {
@@ -172,17 +189,19 @@ class ItemPreview
             $title = '';
         }
 
-        $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'id' => '', 'target' => '_blank')));
-
-        /////////////
-        $sharedImages = self::getSharedImages($item);
-        if (!empty($sharedImages))
+        if (empty($file))
         {
-            $src = $sharedImages[1];
+            $src = $externalImages['image'];
             $href = $src;
-            $html = '<div class="item-file image-jpeg"><a class="lightbox" href="' . $href . '" title="5801.jpg" id="" target="_blank"><img class="full" src="' . $src. '" alt="5801.jpg" title="5801.jpg"></a></div>';
+            $html = "<div class='item-file image-jpeg'>";
+            $html .= "<a id='' class='lightbox' href='$href' title='$title' target='_blank'>";
+            $html .= "<img class='full' src='$src' alt='$title' title='$title'>";
+            $html .= "</a></div>";
         }
-        /////////////
+        else
+        {
+            $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'id' => '', 'target' => '_blank')));
+        }
 
         return $html;
     }
