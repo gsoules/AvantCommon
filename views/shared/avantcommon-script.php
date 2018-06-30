@@ -11,12 +11,18 @@ jQuery(document).ready(function()
                 titleSrc: function (item) {
                     var title = item.el.attr('title');
                     var id = item.el.attr('id');
-                    if (id.length > 0)
+                    var href = item.el.attr('href');
+                    var hasItemLink = id.length > 0;
+                    var fileName = hasItemLink ? '' : title;
+                    var imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window"></a>' + fileName;
+                    var itemLink = '';
+                    if (hasItemLink)
                     {
-                        var url = '<?php echo $path; ?>'  + id;
-                        title = '<a class="lightbox-link" href="' + url + '">' + title + '</a>';
+                        var itemPath = '<?php echo $path; ?>'  + id;
+                        itemLink = '<a class="lightbox-link" href="' + itemPath + '" title="View item">' + title + '</a>';
                     }
-                    return title;
+                    caption = imageLink + itemLink;
+                    return caption;
                 }
             }
         }

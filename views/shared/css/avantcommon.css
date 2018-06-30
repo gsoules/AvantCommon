@@ -126,6 +126,14 @@
     font-style: italic;
 }
 
+.lightbox-image-link::before {
+    color: #a6c4e3;
+    content: "\f002";
+    font-family: "FontAwesome";
+    font-size: 16px;
+    margin-right: 8px;
+}
+
 /* Magnific popup */
 .mfp-close {
     color: #b50000 !important;
