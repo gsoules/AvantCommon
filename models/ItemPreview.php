@@ -47,34 +47,43 @@ class ItemPreview
 
     public function emitItemThumbnail($useCoverImage = true)
     {
+        $originalImageUrl = '';
+
         $getThumbnail = true;
         $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
-        $externalImages = self::getExtenalImages($this->item);
-
         if (empty($thumbnailUrl))
         {
-            $thumbnailUrl = empty($externalImages) ? self::getFallbackImageUrl($this->item) : $externalImages['thumbnail'];
+            // This item has no thumbnail presumably because the item has no image.
+            $externalImages = self::getExtenalImages($this->item);
+            if (empty($externalImages))
+            {
+                $thumbnailUrl = self::getFallbackImageUrl($this->item);
+            }
+            else
+            {
+                $thumbnailUrl = $externalImages['thumbnail'];
+                $originalImageUrl = $externalImages['image'];
+            }
         }
-
-        $getThumbnail = false;
-        $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
-
-        $imgTag = "<img src='$thumbnailUrl'>";
-
-        if (empty($originalImageUrl) && !empty($externalImages))
+        else
         {
-            $originalImageUrl = $externalImages['image'];
+            $getThumbnail = false;
+            $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
         }
+
+        // Emit the HTML for the actual thumbnail, an external thumbnail, or a fallback thumbnail image.
+        $imgTag = "<img src='$thumbnailUrl'>";
 
         if (empty($originalImageUrl))
         {
-            // This thumbnail is a fallback (placeholder) image because the item has no image attached to it.
-            // Emit HTML for the thumbnail only without wrapping it in an <a> tag (so it won't be clickable).
+            // This item has not attached or external image.
+            // Use the thumbnail HTML without wrapping it in an <a> tag (so the images won't be clickable).
             $html = $imgTag;
         }
         else
         {
+            // The item has a thumbnail and large image (either both attached or both external).
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
             $caption = ItemMetadata::getItemTitle($this->item);
             $caption = empty($caption) ? __('[Untitled]') : $caption;
