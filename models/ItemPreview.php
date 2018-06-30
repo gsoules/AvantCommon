@@ -69,14 +69,23 @@ class ItemPreview
 
         if (empty($originalImageUrl))
         {
+            // This thumbnail is a fallback (placeholder) image because the item has no image attached to it.
+            // Emit HTML for the thumbnail only without wrapping it in an <a> tag (so it won't be clickable).
             $html = $imgTag;
         }
         else
         {
+            // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
             $caption = ItemMetadata::getItemTitle($this->item);
             $caption = empty($caption) ? __('[Untitled]') : $caption;
+
+            // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
+            // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
+            // expand into a link to the item.
             $html = "<a class='lightbox' href='$originalImageUrl' title='$caption' id='{$this->item->id}'>$imgTag</a>";
         }
+
+        // Give another plugin a chance to add to the class for installation-specific custom styling.
         $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
         $html = "<div class=\"$class\">$html</div>";
 
@@ -177,7 +186,7 @@ class ItemPreview
         $isImage = empty($file) || substr($file->mime_type, 0, 6) == 'image/';
         if ($isImage)
         {
-            // Include the image in the lightbox by simply attaching the 'lightbox' class to its enclosing <a> tag.
+            // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $class = 'lightbox';
             $title = empty($file) ? $externalImages['image'] : basename($file->filename);
         }
