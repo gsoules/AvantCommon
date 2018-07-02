@@ -2,6 +2,23 @@
 
 class ItemMetadata
 {
+    public static function emitSharedItemAssets($item)
+    {
+        // Return this sharable item's assets, namely the URL for its thumbnail and image.
+        $info = array();
+        $info['contributor'] = get_option('site_title');
+
+        $itemFiles = $item->Files;
+        if (count($itemFiles) > 0)
+        {
+            $file = $itemFiles[0];
+            $info['thumbnail'] = $file->getWebPath('thumbnail');
+            $info['image'] = $file->getWebPath('original');
+        }
+
+        return json_encode($info);
+    }
+
     public static function getAllElementTextsForElementName($item, $elementName)
     {
         $elementSetName = self::getElementSetNameForElementName($elementName);
@@ -162,7 +179,7 @@ class ItemMetadata
         return self::getElementTextFromElementId($item, self::getTitleElementId(), $asHtml);
     }
 
-    public static function getSharedItemInfo($item)
+    public static function getSharedItemAssets($item)
     {
         $info = array();
         $sharedItemElementId = json_decode(get_option('avantcommon_shared_item'), true);
@@ -185,7 +202,7 @@ class ItemMetadata
         if ($partsCount == 1)
         {
             $url = $parts[0];
-            $data = self::curl_get_contents("$url?share=1");
+            $data = self::requestAssetsFromSharedItem("$url?share=1");
             if (empty($data))
             {
                 $info['error'] = true;
@@ -213,7 +230,17 @@ class ItemMetadata
         return $info;
     }
 
-    protected static function curl_get_contents($url)
+    public static function getTitleElementId()
+    {
+        return self::getElementIdForElementName(self::getTitleElementName());
+    }
+
+    public static function getTitleElementName()
+    {
+        return 'Title';
+    }
+
+    protected static function requestAssetsFromSharedItem($url)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -228,16 +255,6 @@ class ItemMetadata
         curl_close($ch);
 
         return $responseCode == 200 ? $data : '';
-    }
-
-    public static function getTitleElementId()
-    {
-        return self::getElementIdForElementName(self::getTitleElementName());
-    }
-
-    public static function getTitleElementName()
-    {
-        return 'Title';
     }
 
     public static function updateElementText($item, $elementId, $text)

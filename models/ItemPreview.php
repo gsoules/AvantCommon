@@ -55,7 +55,7 @@ class ItemPreview
         if (empty($thumbnailUrl))
         {
             // This item has no thumbnail presumably because the item has no image.
-            $sharedItemInfo = ItemMetadata::getSharedItemInfo($this->item);
+            $sharedItemInfo = ItemMetadata::getSharedItemAssets($this->item);
             if (!isset($sharedItemInfo['image']))
             {
                 $thumbnailUrl = self::getFallbackImageUrl($this->item);
@@ -156,12 +156,12 @@ class ItemPreview
 
     public static function getFileHtml($item, $file, $isThumbnail)
     {
-        $sharedItemInfo = array();
+        $sharedItemAssets = array();
         if (empty($file))
         {
             // There is no file attached to this item. See if the item specifies the URL for the image of a shared item.
-            $sharedItemInfo = ItemMetadata::getSharedItemInfo($item);
-            if (!isset($sharedItemInfo['image']))
+            $sharedItemAssets = ItemMetadata::getSharedItemAssets($item);
+            if (!isset($sharedItemAssets['image']))
             {
                 // There is no shared image for this item.
                 return '';
@@ -174,7 +174,7 @@ class ItemPreview
         {
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $class = 'lightbox';
-            $title = empty($file) ? $sharedItemInfo['image'] : basename($file->filename);
+            $title = empty($file) ? $sharedItemAssets['image'] : basename($file->filename);
         }
         else
         {
@@ -192,7 +192,7 @@ class ItemPreview
             // the thumbnail for an external image on a Show page because when external images are used, no thumbs
             // are displayed (thumbs only appear when the item has more than one image). Thumbnails for external images
             // that appear in search results are emitted by emitItemThumbnail.
-            $url = $sharedItemInfo['image'];
+            $url = $sharedItemAssets['image'];
             $html = "<div class='item-file image-jpeg'>";
             $html .= "<a id='' class='lightbox' href='$url' title='$title' target='_blank'>";
             $html .= "<img class='full' src='$url' alt='$title' title='$title'>";
