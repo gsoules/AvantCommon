@@ -55,15 +55,15 @@ class ItemPreview
         if (empty($thumbnailUrl))
         {
             // This item has no thumbnail presumably because the item has no image.
-            $externalImages = self::getExtenalImages($this->item);
-            if (empty($externalImages))
+            $sharedItemInfo = self::getSharedItemInfo($this->item);
+            if (!isset($sharedItemInfo['image']))
             {
                 $thumbnailUrl = self::getFallbackImageUrl($this->item);
             }
             else
             {
-                $thumbnailUrl = $externalImages['thumbnail'];
-                $originalImageUrl = $externalImages['image'];
+                $thumbnailUrl = $sharedItemInfo['thumbnail'];
+                $originalImageUrl = $sharedItemInfo['image'];
             }
         }
         else
@@ -130,29 +130,6 @@ class ItemPreview
         return $coverImageItem ? $coverImageItem : null;
     }
 
-    protected static function getExtenalImages($item)
-    {
-        // Determine if external URLs are specified for this item's thumbnail and image.
-        // If both are specified, return them. Otherwise return neither.
-
-        $images = array();
-        $externalImageIds = json_decode(get_option('avantcommon_external_images'), true);
-
-        if (count($externalImageIds) == 2)
-        {
-            $thumbnailUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[0], false);
-            $imageUrl = ItemMetadata::getElementTextFromElementId($item, $externalImageIds[1], false);
-
-            if (!empty($thumbnailUrl && !empty($imageUrl)))
-            {
-                $images['thumbnail'] = $thumbnailUrl;
-                $images['image'] = $imageUrl;
-            }
-        }
-
-        return $images;
-    }
-
     public static function getFallbackImageUrl($item)
     {
         $defaultFallbackImageFileName = 'fallback-file.png';
@@ -179,14 +156,14 @@ class ItemPreview
 
     public static function getFileHtml($item, $file, $isThumbnail)
     {
-        $externalImages = array();
+        $sharedItemInfo = array();
         if (empty($file))
         {
-            // There is no file attached to this item. See if the item specifies the URL for an external image.
-            $externalImages = self::getExtenalImages($item);
-            if (empty($externalImages))
+            // There is no file attached to this item. See if the item specifies the URL for the image of a shared item.
+            $sharedItemInfo = self::getSharedItemInfo($item);
+            if (!isset($sharedItemInfo['image']))
             {
-                // There no attached or external file for this item.
+                // There is no shared image for this item.
                 return '';
             }
         }
@@ -197,7 +174,7 @@ class ItemPreview
         {
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $class = 'lightbox';
-            $title = empty($file) ? $externalImages['image'] : basename($file->filename);
+            $title = empty($file) ? $sharedItemInfo['image'] : basename($file->filename);
         }
         else
         {
@@ -215,7 +192,7 @@ class ItemPreview
             // the thumbnail for an external image on a Show page because when external images are used, no thumbs
             // are displayed (thumbs only appear when the item has more than one image). Thumbnails for external images
             // that appear in search results are emitted by emitItemThumbnail.
-            $url = $externalImages['image'];
+            $url = $sharedItemInfo['image'];
             $html = "<div class='item-file image-jpeg'>";
             $html .= "<a id='' class='lightbox' href='$url' title='$title' target='_blank'>";
             $html .= "<img class='full' src='$url' alt='$title' title='$title'>";
@@ -283,5 +260,42 @@ class ItemPreview
             $uri = self::getFallbackImageUrl($item);
         }
         return $uri;
+    }
+
+    public static function getSharedItemInfo($item)
+    {
+        $info = array();
+        $sharedItemElementId = json_decode(get_option('avantcommon_shared_item'), true);
+        if (intval($sharedItemElementId) == 0 )
+        {
+            // This site does not include items shared from other sites.
+            return $info;
+        }
+
+        $sharedItemElementText = ItemMetadata::getElementTextFromElementId($item, $sharedItemElementId, false);
+
+        if (empty($sharedItemElementText))
+        {
+            // This item is not shared from another site.
+            return $info;
+        }
+
+        $parts = array_map('trim', explode(PHP_EOL, $sharedItemElementText));
+        $partsCount = count($parts);
+        if ($partsCount == 2 || $partsCount == 4)
+        {
+            // This item's metadata is shared from another site.
+            $info['contributor'] = $parts[0];
+            $info['item-url'] = $parts[1];
+
+            if ($partsCount == 4)
+            {
+                // This item's thumbnail and image are shared from another site.
+                $info['thumbnail'] = $parts[2];
+                $info['image'] = $parts[3];
+            }
+        }
+
+        return $info;
     }
 }
