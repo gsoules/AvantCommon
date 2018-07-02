@@ -55,7 +55,7 @@ class ItemPreview
         if (empty($thumbnailUrl))
         {
             // This item has no thumbnail presumably because the item has no image.
-            $sharedItemInfo = self::getSharedItemInfo($this->item);
+            $sharedItemInfo = ItemMetadata::getSharedItemInfo($this->item);
             if (!isset($sharedItemInfo['image']))
             {
                 $thumbnailUrl = self::getFallbackImageUrl($this->item);
@@ -160,7 +160,7 @@ class ItemPreview
         if (empty($file))
         {
             // There is no file attached to this item. See if the item specifies the URL for the image of a shared item.
-            $sharedItemInfo = self::getSharedItemInfo($item);
+            $sharedItemInfo = ItemMetadata::getSharedItemInfo($item);
             if (!isset($sharedItemInfo['image']))
             {
                 // There is no shared image for this item.
@@ -260,42 +260,5 @@ class ItemPreview
             $uri = self::getFallbackImageUrl($item);
         }
         return $uri;
-    }
-
-    public static function getSharedItemInfo($item)
-    {
-        $info = array();
-        $sharedItemElementId = json_decode(get_option('avantcommon_shared_item'), true);
-        if (intval($sharedItemElementId) == 0 )
-        {
-            // This site does not include items shared from other sites.
-            return $info;
-        }
-
-        $sharedItemElementText = ItemMetadata::getElementTextFromElementId($item, $sharedItemElementId, false);
-
-        if (empty($sharedItemElementText))
-        {
-            // This item is not shared from another site.
-            return $info;
-        }
-
-        $parts = array_map('trim', explode(PHP_EOL, $sharedItemElementText));
-        $partsCount = count($parts);
-        if ($partsCount == 2 || $partsCount == 4)
-        {
-            // This item's metadata is shared from another site.
-            $info['contributor'] = $parts[0];
-            $info['item-url'] = $parts[1];
-
-            if ($partsCount == 4)
-            {
-                // This item's thumbnail and image are shared from another site.
-                $info['thumbnail'] = $parts[2];
-                $info['image'] = $parts[3];
-            }
-        }
-
-        return $info;
     }
 }

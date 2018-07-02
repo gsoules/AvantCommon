@@ -162,6 +162,74 @@ class ItemMetadata
         return self::getElementTextFromElementId($item, self::getTitleElementId(), $asHtml);
     }
 
+    public static function getSharedItemInfo($item)
+    {
+        $info = array();
+        $sharedItemElementId = json_decode(get_option('avantcommon_shared_item'), true);
+        if (intval($sharedItemElementId) == 0 )
+        {
+            // This site does not include items shared from other sites.
+            return $info;
+        }
+
+        $sharedItemElementText = ItemMetadata::getElementTextFromElementId($item, $sharedItemElementId, false);
+
+        if (empty($sharedItemElementText))
+        {
+            // This item is not shared from another site.
+            return $info;
+        }
+
+        $parts = array_map('trim', explode(PHP_EOL, $sharedItemElementText));
+        $partsCount = count($parts);
+        if ($partsCount == 1)
+        {
+            $url = $parts[0];
+            $data = self::curl_get_contents("$url?share=1");
+            if (empty($data))
+            {
+                $info['error'] = true;
+            }
+            else
+            {
+                $info = json_decode($data, true);
+            }
+            $info['item-url'] = $url;
+        }
+        else if ($partsCount == 2 || $partsCount == 4)
+        {
+            // This item's metadata is shared from another site.
+            $info['item-url'] = $parts[0];
+            $info['contributor'] = $parts[1];
+
+            if ($partsCount == 4)
+            {
+                // This item's thumbnail and image are shared from another site.
+                $info['thumbnail'] = $parts[2];
+                $info['image'] = $parts[3];
+            }
+        }
+
+        return $info;
+    }
+
+    protected static function curl_get_contents($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $data = curl_exec($ch);
+
+        $responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE );
+
+        curl_close($ch);
+
+        return $responseCode == 200 ? $data : '';
+    }
+
     public static function getTitleElementId()
     {
         return self::getElementIdForElementName(self::getTitleElementName());

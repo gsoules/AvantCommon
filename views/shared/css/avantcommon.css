@@ -126,6 +126,44 @@
     font-style: italic;
 }
 
+.shared-item-link,
+.shared-item-link:visited {
+    font-size: 16px;
+    font-style: normal;
+    align-items: center;
+    background-color: #1a66aa;
+    border-radius: 2px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 600;
+    justify-content: center;
+    padding: .75rem 0;
+    text-decoration: none;
+    width: 98%;
+}
+
+.shared-item-link:hover,
+.shared-item-link:visited:hover {
+    background-color: #076f0c;
+    text-decoration: none;
+}
+
+.shared-item-contributor {
+    font-size: 16px;
+    font-style: italic;
+    color: #777;
+}
+
+.shared-item-error {
+    font-size: 16px;
+    font-weight: bold;
+    color: #777;
+}
+
+.shared-item-contributor div {
+    margin-top: 8px;
+}
+
 .lightbox-image-link::before {
     color: #a6c4e3;
     content: "\f002";
