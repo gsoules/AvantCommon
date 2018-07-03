@@ -2,10 +2,13 @@
 
 class ItemMetadata
 {
+    const SHARED_DATA_SIGNATURE = 'digitalarchive';
+
     public static function emitSharedItemAssets($item)
     {
         // Return this sharable item's assets, namely the URL for its thumbnail and image.
         $info = array();
+        $info['signature'] = self::SHARED_DATA_SIGNATURE;
         $info['contributor'] = get_option('site_title');
 
         $itemFiles = $item->Files;
@@ -181,12 +184,12 @@ class ItemMetadata
 
     public static function getSharedItemAssets($item)
     {
-        $info = array();
+        $assets = array();
         $sharedItemElementId = json_decode(get_option('avantcommon_shared_item'), true);
         if (intval($sharedItemElementId) == 0 )
         {
             // This site does not include items shared from other sites.
-            return $info;
+            return $assets;
         }
 
         $sharedItemElementText = ItemMetadata::getElementTextFromElementId($item, $sharedItemElementId, false);
@@ -194,40 +197,54 @@ class ItemMetadata
         if (empty($sharedItemElementText))
         {
             // This item is not shared from another site.
-            return $info;
+            return $assets;
         }
 
         $parts = array_map('trim', explode(PHP_EOL, $sharedItemElementText));
         $partsCount = count($parts);
         if ($partsCount == 1)
         {
+            // The shared element value is a single line of text, presumed to be the URL for a puglic Digital Archive item.
+
             $url = $parts[0];
-            $data = self::requestAssetsFromSharedItem("$url?share=1");
-            if (empty($data))
+            $data = self::requestAssetsFromSharedItem("$url?share=");
+
+            if (isset($data['error']))
             {
-                $info['error'] = true;
+                // The request to the URL either failed or did not return proper data.
+                $assets['error'] = true;
             }
             else
             {
-                $info = json_decode($data, true);
+                // The data appears to be good, but verify the signature to make sure it's what's expected.
+                $assets = json_decode($data, true);
+                $signature = isset($assets['signature']) ? $assets['signature'] : '';
+
+                if ($signature != self::SHARED_DATA_SIGNATURE)
+                {
+                    // The data that came back is not what was expected.
+                    $assets['error'] = true;
+                }
             }
-            $info['item-url'] = $url;
+
+            // Insert the URL from which the data came.
+            $assets['item-url'] = $url;
         }
         else if ($partsCount == 2 || $partsCount == 4)
         {
             // This item's metadata is shared from another site.
-            $info['item-url'] = $parts[0];
-            $info['contributor'] = $parts[1];
+            $assets['item-url'] = $parts[0];
+            $assets['contributor'] = $parts[1];
 
             if ($partsCount == 4)
             {
                 // This item's thumbnail and image are shared from another site.
-                $info['thumbnail'] = $parts[2];
-                $info['image'] = $parts[3];
+                $assets['thumbnail'] = $parts[2];
+                $assets['image'] = $parts[3];
             }
         }
 
-        return $info;
+        return $assets;
     }
 
     public static function getTitleElementId()
@@ -249,12 +266,18 @@ class ItemMetadata
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $data = curl_exec($ch);
-
-        $responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE );
-
+        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE );
+        $responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         curl_close($ch);
 
-        return $responseCode == 200 ? $data : '';
+        if (empty($data) || $contentType != 'application/json')
+        {
+            $data = array();
+            $data['error'] = true;
+            $data['response-code'] = $responseCode;
+        }
+
+        return $data;
     }
 
     public static function updateElementText($item, $elementId, $text)

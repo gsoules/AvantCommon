@@ -161,10 +161,16 @@ class ItemPreview
         {
             // There is no file attached to this item. See if the item specifies the URL for the image of a shared item.
             $sharedItemAssets = ItemMetadata::getSharedItemAssets($item);
-            if (!isset($sharedItemAssets['image']))
+            if (empty($sharedItemAssets))
             {
                 // There is no shared image for this item.
                 return '';
+            }
+            else if (isset($sharedItemAssets['error']))
+            {
+                $message = __('The image for this shared item is not accessible at this time.');
+                $html = "<div class='shared-item-error'>$message</div><hr/>";
+                return $html;
             }
         }
 
@@ -192,11 +198,19 @@ class ItemPreview
             // the thumbnail for an external image on a Show page because when external images are used, no thumbs
             // are displayed (thumbs only appear when the item has more than one image). Thumbnails for external images
             // that appear in search results are emitted by emitItemThumbnail.
-            $url = $sharedItemAssets['image'];
+            $imageUrl = $sharedItemAssets['image'];
             $html = "<div class='item-file image-jpeg'>";
-            $html .= "<a id='' class='lightbox' href='$url' title='$title' target='_blank'>";
-            $html .= "<img class='full' src='$url' alt='$title' title='$title'>";
+            $html .= "<a id='' class='lightbox' href='$imageUrl' title='$title' target='_blank'>";
+            $html .= "<img class='full' src='$imageUrl' alt='$title' title='$title'>";
             $html .= "</a></div>";
+
+            if (isset($sharedItemAssets['contributor']))
+            {
+                $contributor = __('Shared by ') . $sharedItemAssets['contributor'];
+                $itemUrl = $sharedItemAssets['item-url'];
+                $message = __('View Full Item');
+                $html .= "<div class='shared-item-contributor'>$contributor<div><a class='shared-item-link' href='$itemUrl'>$message</a></div></div>";
+            }
         }
         else
         {
