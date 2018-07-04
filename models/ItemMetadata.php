@@ -213,6 +213,8 @@ class ItemMetadata
             {
                 // The request to the URL either failed or did not return proper data.
                 $assets['error'] = true;
+                //$assets['response-code'] = $data['response-code'];
+                $assets['response-code'] = '[' . json_encode($data) . ']';
             }
             else
             {
@@ -230,18 +232,23 @@ class ItemMetadata
             // Insert the URL from which the data came.
             $assets['item-url'] = $url;
         }
-        else if ($partsCount == 2 || $partsCount == 4)
+        else if ($partsCount == 2 || $partsCount >= 4)
         {
             // This item's metadata is shared from another site.
             $assets['item-url'] = $parts[0];
             $assets['contributor'] = $parts[1];
 
-            if ($partsCount == 4)
+            if ($partsCount >= 4)
             {
                 // This item's thumbnail and image are shared from another site.
                 $assets['thumbnail'] = $parts[2];
                 $assets['image'] = $parts[3];
             }
+        }
+        else
+        {
+            $assets['error'] = true;
+            $assets['response-code'] = '[' . $partsCount . ']';
         }
 
         return $assets;

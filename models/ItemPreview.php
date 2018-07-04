@@ -169,6 +169,7 @@ class ItemPreview
             else if (isset($sharedItemAssets['error']))
             {
                 $message = __('The image for this shared item is not accessible at this time.');
+                $message .= $sharedItemAssets['response-code'];
                 $html = "<div class='shared-item-error'>$message</div><hr/>";
                 return $html;
             }
