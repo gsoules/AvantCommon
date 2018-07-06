@@ -126,7 +126,7 @@
     font-style: italic;
 }
 
-.shared-item-link,
+.shared-item-link:link,
 .shared-item-link:visited {
     font-size: 16px;
     font-style: normal;
@@ -152,6 +152,7 @@
     font-size: 16px;
     font-style: italic;
     color: #777;
+    margin: 6px 0 4px 0;
 }
 
 .shared-item-error {

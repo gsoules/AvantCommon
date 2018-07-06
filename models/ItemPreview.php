@@ -210,7 +210,7 @@ class ItemPreview
                 $contributor = __('Shared by ') . $sharedItemAssets['contributor'];
                 $itemUrl = $sharedItemAssets['item-url'];
                 $message = __('View Full Item');
-                $html .= "<div class='shared-item-contributor'>$contributor<div><a class='shared-item-link' href='$itemUrl'>$message</a></div></div>";
+                $html .= "<div class='shared-item-contributor'>$contributor</div><div><a class='shared-item-link' href='$itemUrl'>$message</a></div>";
             }
         }
         else
