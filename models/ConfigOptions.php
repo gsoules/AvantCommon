@@ -1,7 +1,7 @@
 <?php
 class ConfigOptions
 {
-    protected static function configurationErrorsDetected()
+    public static function configurationErrorsDetected()
     {
         // When a configuration occurs, the Configure Plugin page posts back to itself to display the error
         // after the user presses the Save button.
