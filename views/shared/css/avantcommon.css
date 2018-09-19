@@ -171,6 +171,7 @@
     font-family: "FontAwesome";
     font-size: 16px;
     margin-right: 8px;
+    float: left;
 }
 
 /* Magnific popup */
@@ -187,21 +188,37 @@
     box-shadow: none;
 }
 
+.mfp-bottom-bar {
+    padding: 8px;
+    margin-top: -67px;
+    background-color: white;
+}
+
 .mfp-counter {
-    color: #F3F3F3;
+    color: #666;
     font-size: 100%;
+    top: 8px;
+    right: 8px;
 }
 
 .mfp-title {
-    color: #ccc;
+    color: #999;
     font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    padding-right: 60px;
 }
 
 .mfp-title .lightbox-link {
-    color: #F3F3F3;
+    color: #000;
     text-decoration: underline;
+    font-weight: normal;
 }
 
 .mfp-title a:hover {
-    color: #FFF;
+    color: #666;
+}
+
+img.mfp-img {
+    padding: 40px 0 68px;
 }
