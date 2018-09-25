@@ -10,15 +10,15 @@ jQuery(document).ready(function()
             image: {
                 titleSrc: function (item) {
                     var title = item.el.attr('title');
-                    var id = item.el.attr('idx');
+                    var itemId = item.el.attr('itemId');
                     var href = item.el.attr('href');
-                    var hasItemLink = id.length > 0;
+                    var hasItemLink = itemId.length > 0;
                     var fileName = hasItemLink ? '' : title;
                     var imageLink = '<div><a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window"></a>' + fileName + '</div>';
                     var itemLink = '';
                     if (hasItemLink)
                     {
-                        var itemPath = '<?php echo $path; ?>'  + id;
+                        var itemPath = '<?php echo $path; ?>'  + itemId;
                         itemLink = '<div>' + title + '</div>';
                         itemLink += '<div><span><a class="lightbox-link" href="' + itemPath + '" title="View item"><?php echo $itemLinkText; ?></a></span></div>';
                     }
