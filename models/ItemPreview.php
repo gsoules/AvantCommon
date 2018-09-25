@@ -85,13 +85,13 @@ class ItemPreview
         {
             // The item has a thumbnail and large image (either both attached or both external).
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
-            $caption = ItemMetadata::getItemTitle($this->item);
-            $caption = empty($caption) ? __('[Untitled]') : $caption;
+            $title = ItemMetadata::getItemTitle($this->item);
+            $title = empty($title) ? __('[Untitled]') : $title;
 
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$caption' itemId='{$this->item->id}'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$title' itemId='{$this->item->id}'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
@@ -181,7 +181,7 @@ class ItemPreview
         {
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $class = 'lightbox';
-            $title = empty($file) ? $sharedItemAssets['image'] : basename($file->filename);
+            $title = ItemMetadata::getItemTitle($item);
         }
         else
         {
@@ -193,6 +193,9 @@ class ItemPreview
             $title = '';
         }
 
+        // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
+        $itemId = (string)$item->id;
+
         if (empty($file))
         {
             // Emit HTML to display an external image. Note that this method should never get called to display
@@ -201,7 +204,7 @@ class ItemPreview
             // that appear in search results are emitted by emitItemThumbnail.
             $imageUrl = $sharedItemAssets['image'];
             $html = "<div class='item-file image-jpeg'>";
-            $html .= "<a itemId='' class='lightbox' href='$imageUrl' title='$title' target='_blank'>";
+            $html .= "<a itemId='$itemId' class='lightbox' href='$imageUrl' title='$title' target='_blank'>";
             $html .= "<img class='full' src='$imageUrl' alt='$title' title='$title'>";
             $html .= "</a></div>";
 
@@ -215,9 +218,8 @@ class ItemPreview
         }
         else
         {
-            // Emit HTML to display an attached image. Cast of $itemId to string works around integer restriction in globals.php tag_attributes().
+            // Emit HTML to display an attached image.
             $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
-            $itemId = (string)$item->id;
             $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'itemId' => $itemId, 'target' => '_blank')));
         }
 
