@@ -10,7 +10,7 @@ jQuery(document).ready(function()
             image: {
                 titleSrc: function (item) {
                     var title = item.el.attr('title');
-                    var id = item.el.attr('id');
+                    var id = item.el.attr('idx');
                     var href = item.el.attr('href');
                     var hasItemLink = id.length > 0;
                     var fileName = hasItemLink ? '' : title;
@@ -20,7 +20,7 @@ jQuery(document).ready(function()
                     {
                         var itemPath = '<?php echo $path; ?>'  + id;
                         itemLink = '<div>' + title + '</div>';
-                        itemLink += '<div><a class="lightbox-link" href="' + itemPath + '" title="View item">View this item</a></div>';
+                        itemLink += '<div><span><a class="lightbox-link" href="' + itemPath + '" title="View item"><?php echo $itemLinkText; ?></a></span></div>';
                     }
                     caption = imageLink + itemLink;
                     return caption;               }

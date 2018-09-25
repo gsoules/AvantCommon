@@ -170,8 +170,13 @@
     content: "\f002";
     font-family: "FontAwesome";
     font-size: 16px;
-    margin-right: 8px;
     float: left;
+    margin-right: 8px;
+}
+
+/* Adjust for width of magnifying glass icon on lightbox-image-link so both title and "View this Item" link are centered. */
+div.mfp-title div span {
+    padding-left:24px;
 }
 
 /* Magnific popup */

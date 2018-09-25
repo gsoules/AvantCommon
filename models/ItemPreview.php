@@ -77,7 +77,7 @@ class ItemPreview
 
         if (empty($originalImageUrl))
         {
-            // This item has not attached or external image.
+            // This item has no attached or external image.
             // Use the thumbnail HTML without wrapping it in an <a> tag (so the images won't be clickable).
             $html = $imgTag;
         }
@@ -91,7 +91,7 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$caption' id='{$this->item->id}'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$caption' idx='{$this->item->id}'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
@@ -201,7 +201,7 @@ class ItemPreview
             // that appear in search results are emitted by emitItemThumbnail.
             $imageUrl = $sharedItemAssets['image'];
             $html = "<div class='item-file image-jpeg'>";
-            $html .= "<a id='' class='lightbox' href='$imageUrl' title='$title' target='_blank'>";
+            $html .= "<a idx='' class='lightbox' href='$imageUrl' title='$title' target='_blank'>";
             $html .= "<img class='full' src='$imageUrl' alt='$title' title='$title'>";
             $html .= "</a></div>";
 
@@ -215,9 +215,10 @@ class ItemPreview
         }
         else
         {
-            // Emit HTML to display an attached image.
+            // Emit HTML to display an attached image. Cast of $idx to string works around integer restriction in globals.php tag_attributes().
             $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
-            $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'id' => '', 'target' => '_blank')));
+            $idx = (string)$item->id;
+            $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'idx' => $idx, 'target' => '_blank')));
         }
 
         return $html;
