@@ -169,20 +169,6 @@
     margin-top: 8px;
 }
 
-.lightbox-image-link::before {
-    color: #a6c4e3;
-    content: "\f002";
-    font-family: "FontAwesome";
-    font-size: 16px;
-    float: left;
-    margin-right: 8px;
-}
-
-/* Adjust for width of magnifying glass icon on lightbox-image-link so both title and "View this Item" link are centered. */
-div.mfp-title div span {
-    padding-left:24px;
-}
-
 /* Magnific popup */
 .mfp-close {
     color: #b50000 !important;
@@ -223,6 +209,13 @@ div.mfp-title div span {
     text-decoration: underline;
     font-weight: normal;
 }
+
+.mfp-title .lightbox-image-link {
+    color:#999;
+    font-weight: normal;
+    font-size:13px;
+}
+
 
 .mfp-title a:hover {
     color: #666;

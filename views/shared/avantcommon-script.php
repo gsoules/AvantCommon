@@ -13,8 +13,9 @@ jQuery(document).ready(function()
                     var itemId = item.el.attr('itemId');
                     var href = item.el.attr('href');
                     var hasItemLink = itemId.length > 0;
-                    var fileName = hasItemLink ? '' : title;
-                    var imageLink = '<div><a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window"></a>' + fileName + '</div>';
+                    var fileName = href.substring(href.lastIndexOf('/') + 1);
+                    fileName = fileName.replace(/_/g, ' ');
+                    var imageLink = '<div><a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a></div>';
                     var itemLink = '';
                     if (hasItemLink)
                     {
@@ -22,8 +23,9 @@ jQuery(document).ready(function()
                         itemLink = '<div>' + title + '</div>';
                         itemLink += '<div><span><a class="lightbox-link" href="' + itemPath + '" title="View item"><?php echo $itemLinkText; ?></a></span></div>';
                     }
-                    caption = imageLink + itemLink;
-                    return caption;               }
+                    caption = itemLink + imageLink;
+                    return caption;
+                }
             }
         }
     );
