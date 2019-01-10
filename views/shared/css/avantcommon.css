@@ -108,6 +108,10 @@
     padding: 2px;
 }
 
+.item-preview-multiple {
+    border: 1px dashed #777 !important;
+}
+
 .item-preview.cover-image img,
 .item-preview.cover-image .item-img {
     width: auto;

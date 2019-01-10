@@ -73,7 +73,11 @@ class ItemPreview
         }
 
         // Emit the HTML for the actual thumbnail, an external thumbnail, or a fallback thumbnail image.
-        $imgTag = "<img src='$thumbnailUrl'>";
+        // If the thumbnail's item has more than one image, style it differently to give the user a clue
+        // that this image is just one of a set.
+        $itemFiles = $this->item->Files;
+        $class = count($itemFiles) > 1 ? "class='item-preview-multiple'" : "";
+        $imgTag = "<img $class src='$thumbnailUrl'>";
 
         if (empty($originalImageUrl))
         {
