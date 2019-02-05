@@ -5,6 +5,7 @@ define('CONFIG_LABEL_IDENTIFIER_ALIAS', __('Identifier Alias'));
 define('CONFIG_LABEL_IDENTIFIER_PREFIX', __('Identifier Prefix'));
 define('CONFIG_LABEL_LIGHTBOX', __('Enable Lightbox'));
 define('CONFIG_LABEL_PRIVATE_ELEMENTS', __('Private Elements'));
+define('CONFIG_LABEL_REQUEST_IMAGE_URL', __('Request Image URL'));
 define('CONFIG_LABEL_UNUSED_ELEMENTS', __('Unused Elements'));
 define('CONFIG_LABEL_YEAR_START', __('Start Year'));
 define('CONFIG_LABEL_YEAR_END', __('End Year'));
@@ -16,6 +17,7 @@ class CommonConfig extends ConfigOptions
     const OPTION_IDENTIFIER_PREFIX = 'avantcommon_identifier_prefix';
     const OPTION_LIGHTBOX = 'avantcommon_lightbox';
     const OPTION_PRIVATE_ELEMENTS = 'avantcommon_private_elements';
+    const OPTION_REQUEST_IMAGE_URL = 'avantcommon_request_image_url';
     const OPTION_UNUSED_ELEMENTS = 'avantcommon_unsused_elements';
     const OPTION_YEAR_START = 'avantcommon_year_start';
     const OPTION_YEAR_END = 'avantcommon_year_end';
@@ -33,6 +35,11 @@ class CommonConfig extends ConfigOptions
     public static function getOptionDataForPrivateElements()
     {
         return self::getOptionListData(self::OPTION_PRIVATE_ELEMENTS);
+    }
+
+    public static function getOptionDataForRequestImageUrl()
+    {
+        return get_option(self::OPTION_REQUEST_IMAGE_URL);
     }
 
     public static function getOptionDataForUnusedElements()
@@ -86,6 +93,11 @@ class CommonConfig extends ConfigOptions
         return self::getOptionListText(self::OPTION_PRIVATE_ELEMENTS);
     }
 
+    public static function getOptionTextForRequestImageUrl()
+    {
+        return get_option(self::OPTION_REQUEST_IMAGE_URL);
+    }
+
     public static function getOptionTextForUnusedElements()
     {
         return self::getOptionListText(self::OPTION_UNUSED_ELEMENTS);
@@ -123,6 +135,7 @@ class CommonConfig extends ConfigOptions
         self::saveOptionDataForIdentifierAlias();
         self::saveOptionDataForIdentifierPrefix();
         self::saveOptionDataForPrivateElements();
+        self::saveOptionDataForRequestImageUrl();
         self::saveOptionDataForUnusedElements();
         self::saveOptionDataForYearStartEnd();
 
@@ -161,6 +174,11 @@ class CommonConfig extends ConfigOptions
     public static function saveOptionDataForPrivateElements()
     {
         self::saveOptionListData(self::OPTION_PRIVATE_ELEMENTS, CONFIG_LABEL_PRIVATE_ELEMENTS);
+    }
+
+    public static function saveOptionDataForRequestImageUrl()
+    {
+        set_option(self::OPTION_REQUEST_IMAGE_URL, $_POST[self::OPTION_REQUEST_IMAGE_URL]);
     }
 
     public static function saveOptionDataForUnusedElements()

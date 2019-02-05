@@ -200,7 +200,7 @@
     color: #999;
     font-weight: bold;
     text-align: center;
-    line-height: 20px;
+    line-height: 22px;
     padding-right: 60px;
 }
 
@@ -215,7 +215,6 @@
     font-weight: normal;
     font-size:13px;
 }
-
 
 .mfp-title a:hover {
     color: #666;

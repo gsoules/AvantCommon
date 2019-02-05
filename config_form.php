@@ -8,6 +8,8 @@ $identifierPrefix = CommonConfig::getOptionTextForIdentifierPrefix();
 $privateElementsOption = CommonConfig::getOptionTextForPrivateElements();
 $privateElementOptionRows = max(2, count(explode(PHP_EOL, $privateElementsOption)));
 
+$requestImageUrl = CommonConfig::getOptionTextForRequestImageUrl();
+
 $unusedElementsOption = CommonConfig::getOptionTextForUnusedElements();
 $unusedElementsOptionRows = max(2, count(explode(PHP_EOL, $unusedElementsOption)));
 
@@ -96,5 +98,15 @@ $endYearOption = CommonConfig::getOptionTextForYearEnd();
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __('Enable the Lightbox feature for displaying images.'); ?></p>
         <?php echo $view->formCheckbox(CommonConfig::OPTION_LIGHTBOX, true, array('checked' => (boolean)get_option(CommonConfig::OPTION_LIGHTBOX))); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo CONFIG_LABEL_REQUEST_IMAGE_URL; ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("The URL of the web page to display when a user requests an image."); ?></p>
+        <?php echo $view->formText(CommonConfig::OPTION_REQUEST_IMAGE_URL, $requestImageUrl); ?>
     </div>
 </div>

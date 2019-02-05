@@ -133,7 +133,15 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
     {
         if (get_option(CommonConfig::OPTION_LIGHTBOX))
         {
-            echo get_view()->partial('avantcommon-script.php', array('path' => url("items/show/"), 'itemLinkText' => __('View this Item')));
+            $requestImageUrl = get_option(CommonConfig::OPTION_REQUEST_IMAGE_URL);
+
+            echo get_view()->partial(
+                'avantcommon-script.php',
+                array('path' => url("items/show/"),
+                'itemLinkText' => __('View this Item'),
+                'requestImageText' => __('Request this Image'),
+                'requestImageUrl' => $requestImageUrl
+                ));
         }
     }
 
