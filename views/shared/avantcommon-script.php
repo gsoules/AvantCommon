@@ -14,14 +14,14 @@ jQuery(document).ready(function()
                     var itemNumber = item.el.attr('data-itemNumber');
                     var href = item.el.attr('href');
                     var hasItemLink = itemId.length > 0;
-                    var fileName = href.substring(href.lastIndexOf('/') + 1);
-                    fileName = fileName.replace(/_/g, ' ');
+                    var rawFileName = href.substring(href.lastIndexOf('/') + 1);
+                    var fileName = rawFileName.replace(/_/g, ' ');
                     var requestImageUrl = '<?php echo $requestImageUrl; ?>';
                     var imageLink = '';
                     if (requestImageUrl.length >  0)
                     {
                         var requestImageText = '<?php echo $requestImageText; ?>';
-                        requestImageUrl += '?id=' + itemId + '&item=' + itemNumber + '&file=' + fileName;
+                        requestImageUrl += '?id=' + itemId + '&item=' + itemNumber + '&file=' + rawFileName;
                         imageLink = '<a class="lightbox-link" href="' + requestImageUrl + ' "target="_blank">' + requestImageText + ' ' + fileName + '</a>';
                     }
                     else
