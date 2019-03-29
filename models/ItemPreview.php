@@ -72,12 +72,14 @@ class ItemPreview
 
         if ($this->useElasticsearch)
         {
+            $thumbnailUrl = $this->item['_source']['thumb'];
+            $itemFiles = $this->item['_source']['files'];
         }
         else
         {
+            $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
+            $itemFiles = count($this->item->Files);
         }
-
-        $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
         if (empty($thumbnailUrl))
         {
@@ -96,14 +98,21 @@ class ItemPreview
         else
         {
             $getThumbnail = false;
-            $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
+
+            if ($this->useElasticsearch)
+            {
+                $originalImageUrl = $this->item['_source']['image'];
+            }
+            else
+            {
+                $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
+            }
         }
 
         // Emit the HTML for the actual thumbnail, an external thumbnail, or a fallback thumbnail image.
         // If the thumbnail's item has more than one image, style it differently to give the user a clue
         // that this image is just one of a set.
-        $itemFiles = $this->item->Files;
-        $class = count($itemFiles) > 1 ? "class='item-preview-multiple'" : "";
+        $class = $itemFiles > 1 ? "class='item-preview-multiple'" : "";
         $imgTag = "<img $class src='$thumbnailUrl'>";
 
         if (empty($originalImageUrl))
@@ -116,18 +125,41 @@ class ItemPreview
         {
             // The item has a thumbnail and large image (either both attached or both external).
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
-            $title = ItemMetadata::getItemTitle($this->item);
+            if ($this->useElasticsearch)
+            {
+                $title = $this->item['_source']['element']['title'];
+                if (is_array($title))
+                {
+                    $title = $title[0];
+                }
+                $itemNumber = $this->item['_source']['element']['identifier'];
+                $itemId = $this->item['_source']['itemid'];
+            }
+            else
+            {
+                $title = ItemMetadata::getItemTitle($this->item);
+                $itemNumber = ItemMetadata::getItemIdentifier($this->item);
+                $itemId = $this->item->id;
+            }
             $title = empty($title) ? __('[Untitled]') : $title;
 
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $itemNumber = ItemMetadata::getItemIdentifier($this->item);
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$title' itemId='{$this->item->id}' data-itemNumber='$itemNumber'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$title' itemId='$itemId' data-itemNumber='$itemNumber'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
-        $class = apply_filters('item_thumbnail_class', 'item-img', array('item' => $this->item));
+        if ($this->useElasticsearch)
+        {
+            $itemType = $this->item['_source']['element']['type'];
+        }
+        else
+        {
+            $itemType = ItemMetadata::getElementTextForElementName($this->item, 'Type');
+        }
+        $class = apply_filters('item_thumbnail_class', 'item-img', array('itemType' => $itemType));
+
         $html = "<div class=\"$class\">$html</div>";
 
         return $html;
