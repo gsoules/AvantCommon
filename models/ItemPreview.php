@@ -2,26 +2,46 @@
 class ItemPreview
 {
     protected $item;
+    protected $useElasticsearch;
 
-    public function __construct($item)
+    public function __construct($item, $useElasticsearch = false)
     {
         $this->item = $item;
+        $this->useElasticsearch = $useElasticsearch;
     }
 
     public function emitItemHeader()
     {
-        $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
+        if ($this->useElasticsearch)
+        {
+            $identifier = $this->item['_source']['element']['identifier'];
+        }
+        else
+        {
+            $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
+        }
 
         $prefix = ItemMetadata::getIdentifierPrefix();
 
-        $url = url("items/show/{$this->item->id}");
+        if ($this->useElasticsearch)
+        {
+            $url = $this->item['_source']['url'];
+            $public =  $this->item['_source']['public'];
+        }
+        else
+        {
+            $url = url("items/show/{$this->item->id}");
+            $public = $this->item->public;
+        }
 
         $html = '<div class="item-preview-header">';
-        if ($this->item->public == 0)
+
+        if ($public == 0)
         {
             // Indicate that this item is private.
             $html .= '* ';
         }
+
         $html .= "<a class='item-preview-identifier' href=\"$url\">{$prefix}{$identifier}</a>";
         $html .= '</div>';
         return $html;
@@ -48,8 +68,15 @@ class ItemPreview
     public function emitItemThumbnail($useCoverImage = true)
     {
         $originalImageUrl = '';
-
         $getThumbnail = true;
+
+        if ($this->useElasticsearch)
+        {
+        }
+        else
+        {
+        }
+
         $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
 
         if (empty($thumbnailUrl))
