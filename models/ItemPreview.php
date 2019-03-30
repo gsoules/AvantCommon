@@ -92,15 +92,22 @@ class ItemPreview
         if (empty($thumbnailUrl))
         {
             // This item has no thumbnail presumably because the item has no image.
-            $sharedItemInfo = ItemMetadata::getSharedItemAssets($this->item);
-            if (!isset($sharedItemInfo['image']))
+            if ($this->useElasticsearch)
             {
-                $thumbnailUrl = self::getFallbackImageUrl($this->item);
+                $thumbnailUrl = self::getFallbackImageUrl($this->item, true);
             }
             else
             {
-                $thumbnailUrl = $sharedItemInfo['thumbnail'];
-                $originalImageUrl = $sharedItemInfo['image'];
+                $sharedItemInfo = ItemMetadata::getSharedItemAssets($this->item);
+                if (!isset($sharedItemInfo['image']))
+                {
+                    $thumbnailUrl = self::getFallbackImageUrl($this->item, false);
+                }
+                else
+                {
+                    $thumbnailUrl = $sharedItemInfo['thumbnail'];
+                    $originalImageUrl = $sharedItemInfo['image'];
+                }
             }
         }
         else
@@ -202,17 +209,38 @@ class ItemPreview
         return $coverImageItem ? $coverImageItem : null;
     }
 
-    public static function getFallbackImageUrl($item)
+    public static function getFallbackImageUrl($item, $useElasticsearch = false)
     {
         $defaultFallbackImageFileName = 'fallback-file.png';
 
         if (is_admin_theme() || $item == null)
+        {
             $fallbackImageFilename = '';
+        }
         else
-            $fallbackImageFilename = apply_filters('fallback_image_name', $defaultFallbackImageFileName, array('item' => $item));
+        {
+            if ($useElasticsearch)
+            {
+                $typeName = isset($item['_source']['element']['type']) ? $item['_source']['element']['type'] : '';
+                $subject = isset($item['_source']['element']['subject']) ? $item['_source']['element']['subject'] : '';
+                if (is_array($subject))
+                {
+                    $subject = $subject[0];
+                }
+            }
+            else
+            {
+                $typeName = ItemMetadata::getElementTextForElementName($item, 'Type');
+                $subject = ItemMetadata::getElementTextForElementName($item, 'Subject');
+            }
+
+            $fallbackImageFilename = apply_filters('fallback_image_name', $defaultFallbackImageFileName, array('typeName' => $typeName, 'subject' => $subject));
+        }
 
         if (empty($fallbackImageFilename))
+        {
             $fallbackImageFilename = $defaultFallbackImageFileName;
+        }
 
         try
         {
