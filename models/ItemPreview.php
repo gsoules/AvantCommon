@@ -2,12 +2,14 @@
 class ItemPreview
 {
     protected $item;
+    protected $showComingledResults;
     protected $useElasticsearch;
 
-    public function __construct($item, $useElasticsearch = false)
+    public function __construct($item, $useElasticsearch = false, $showComingledResults = false)
     {
         $this->item = $item;
         $this->useElasticsearch = $useElasticsearch;
+        $this->showComingledResults = $showComingledResults;
     }
 
     public function emitItemHeader()
@@ -15,6 +17,12 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $identifier = $this->item['_source']['element']['identifier'];
+
+            if ($this->showComingledResults)
+            {
+                $ownerId = $this->item['_source']['ownerid'];
+                $identifier = $ownerId . '-' . $identifier;
+            }
         }
         else
         {
