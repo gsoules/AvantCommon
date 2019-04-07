@@ -25,6 +25,16 @@ class ConfigOptions
         }
     }
 
+    protected static function errorIfEmpty($value, $optionName, $optionLabel)
+    {
+        if (empty($value))
+        {
+            $message = __("A value is required.");
+            $exceptionText = empty($optionLabel) ? $message : "$optionLabel: $message";
+            throw new Omeka_Validate_Exception($exceptionText);
+        }
+    }
+
     protected static function errorIfNotElement($elementId, $optionLabel, $elementName)
     {
         self::errorIf($elementId == 0, $optionLabel, __("'%s' is not an element.", $elementName));
@@ -99,14 +109,34 @@ class ConfigOptions
         return $text;
     }
 
-    protected static function getRawData($option)
+    protected static function getOptionText($optionName)
     {
-        $rawData = json_decode(get_option($option), true);
+        if (self::configurationErrorsDetected())
+        {
+            $text = $_POST[$optionName];
+        }
+        else
+        {
+            $text = get_option($optionName);
+        }
+        return $text;
+    }
+
+    protected static function getRawData($optionName)
+    {
+        $rawData = json_decode(get_option($optionName), true);
         if (empty($rawData))
         {
             $rawData = array();
         }
         return $rawData;
+    }
+
+    public static function saveOptionText($optionName, $optionLabel)
+    {
+        $value = self::getOptionText($optionName);
+        self::errorIfEmpty($value, $optionName, $optionLabel);
+        set_option($optionName, $value);
     }
 
     protected static function saveOptionListData($optionName, $optionLabel)
