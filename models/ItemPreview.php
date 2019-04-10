@@ -350,7 +350,7 @@ class ItemPreview
         return $url;
     }
 
-    protected static function getItemFileUrl($item, $thumbnail = false)
+    public static function getItemFileUrl($item, $thumbnail = false)
     {
         $url = '';
         $file = $item->getFile(0);
