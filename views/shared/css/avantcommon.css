@@ -191,27 +191,9 @@
 
 .mfp-counter {
     color: #666;
-    font-size: 100%;
-    top: 8px;
-    right: 8px;
-}
-
-.mfp-stats-left {
-    color: #666;
-    font-size: 100%;
-    font-weight: normal;
-    top: 28px;
-    left: 8px;
-    position: absolute;
-}
-
-.mfp-stats-right {
-    color: #666;
-    font-size: 100%;
-    font-weight: normal;
-    top: 28px;
-    right: 8px;
-    position: absolute;
+    font-size: 16px;
+    top: 36px;
+    right: 12px;
 }
 
 .mfp-title {
@@ -219,7 +201,11 @@
     font-weight: bold;
     text-align: center;
     line-height: 22px;
-    padding-right: 60px;
+    padding-right: 0;
+}
+
+.mfp-title-text {
+    font-size: 20px;
 }
 
 .mfp-title .lightbox-link {

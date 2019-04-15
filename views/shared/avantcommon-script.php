@@ -31,10 +31,9 @@ jQuery(document).ready(function()
                 var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
                 var itemPath = '<?php echo $path; ?>'  + itemId;
                 var itemLinkText = '<?php echo $itemLinkText; ?>';
-                var titleText = '<div>' + title + '</div>';
+                var titleText = '<div class="mfp-title-text">' + title + '</div>';
                 var viewItemLink = '<span><a class="lightbox-link" title="Item #' + itemNumber + '" " href="' + itemPath + '">' + itemLinkText + '</a></span>';
                 var caption = '<div>' + titleText + viewItemLink + separator +  imageLink + '</div>';
-                //caption += '<div class="mfp-stats-left">Item #' + itemNumber + '</div><div class="mfp-stats-right">Image' + fileName + '</div>';
                 return caption;
             }
         }
