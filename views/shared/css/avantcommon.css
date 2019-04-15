@@ -204,8 +204,12 @@
     padding-right: 0;
 }
 
-.mfp-title-text {
+.mfp-caption-title {
     font-size: 20px;
+}
+
+.mfp-caption-links {
+    padding-top: 4px;
 }
 
 .mfp-title .lightbox-link {
