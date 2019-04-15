@@ -142,7 +142,7 @@ class ItemPreview
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
             if ($this->useElasticsearch)
             {
-                $title = isset($item['_source']['element']['title']) ? $this->item['_source']['element']['title'] : '[Untitled]';
+                $title = isset($this->item['_source']['element']['title']) ? $this->item['_source']['element']['title'] : '[Untitled]';
                 if (is_array($title))
                 {
                     $title = $title[0];
