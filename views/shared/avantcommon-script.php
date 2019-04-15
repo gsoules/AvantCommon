@@ -22,19 +22,19 @@ jQuery(document).ready(function()
                 {
                     var requestImageText = '<?php echo $requestImageText; ?>';
                     requestImageUrl += '?id=' + itemId + '&item=' + itemNumber + '&file=' + rawFileName;
-                    imageLink = '<a class="lightbox-link" href="' + requestImageUrl + ' "target="_blank">' + requestImageText + ' ' + fileName + '</a>';
+                    imageLink = '<a class="lightbox-link" href="' + requestImageUrl + ' " target="_blank" title="Image ' + fileName + '">' + requestImageText + '</a>';
                 }
                 else
                 {
                     imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a>';
                 }
-                var itemLink = '';
+                var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
                 var itemPath = '<?php echo $path; ?>'  + itemId;
                 var itemLinkText = '<?php echo $itemLinkText; ?>';
-                itemLink = '<div>' + title + '</div>';
-                itemLink += '<span><a class="lightbox-link" href="' + itemPath + '">' + itemLinkText + ' #' + itemNumber + '</a></span>';
-                var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
-                var caption = '<div>' + itemLink + separator +  imageLink + '</div>';
+                var titleText = '<div>' + title + '</div>';
+                var viewItemLink = '<span><a class="lightbox-link" title="Item #' + itemNumber + '" " href="' + itemPath + '">' + itemLinkText + '</a></span>';
+                var caption = '<div>' + titleText + viewItemLink + separator +  imageLink + '</div>';
+                //caption += '<div class="mfp-stats-left">Item #' + itemNumber + '</div><div class="mfp-stats-right">Image' + fileName + '</div>';
                 return caption;
             }
         }

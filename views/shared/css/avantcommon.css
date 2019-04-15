@@ -196,6 +196,24 @@
     right: 8px;
 }
 
+.mfp-stats-left {
+    color: #666;
+    font-size: 100%;
+    font-weight: normal;
+    top: 28px;
+    left: 8px;
+    position: absolute;
+}
+
+.mfp-stats-right {
+    color: #666;
+    font-size: 100%;
+    font-weight: normal;
+    top: 28px;
+    right: 8px;
+    position: absolute;
+}
+
 .mfp-title {
     color: #999;
     font-weight: bold;
