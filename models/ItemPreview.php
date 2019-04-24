@@ -20,8 +20,8 @@ class ItemPreview
 
             if ($this->showComingledResults)
             {
-                $ownerId = $this->item['_source']['ownerid'];
-                $identifier = $ownerId . '-' . $identifier;
+                $contributorId = $this->item['_source']['contributorid'];
+                $identifier = $contributorId . '-' . $identifier;
             }
         }
         else
