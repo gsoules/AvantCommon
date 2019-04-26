@@ -168,7 +168,14 @@ class ItemPreview
         // Give another plugin a chance to add to the class for installation-specific custom styling.
         if ($this->useElasticsearch)
         {
-            $itemType = $this->item['_source']['element']['type'];
+            if (isset($this->item['_source']['element']['type']))
+            {
+                $itemType = $this->item['_source']['element']['type'];
+            }
+            else
+            {
+                $itemType = 'UNKNOWN TYPE';
+            }
         }
         else
         {
