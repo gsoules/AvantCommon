@@ -230,3 +230,7 @@
 img.mfp-img {
     padding: 40px 0 68px;
 }
+
+.lightbox {
+    cursor: zoom-in;
+}
