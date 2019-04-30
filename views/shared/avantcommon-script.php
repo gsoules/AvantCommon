@@ -12,13 +12,14 @@ jQuery(document).ready(function()
                 var title = item.el.attr('title');
                 var itemId = item.el.attr('itemId');
                 var itemNumber = item.el.attr('data-itemNumber');
+                var isForeignItem = item.el.attr('data-foreign');
                 var href = item.el.attr('href');
                 var hasItemLink = itemId.length > 0;
                 var rawFileName = href.substring(href.lastIndexOf('/') + 1);
                 var fileName = rawFileName.replace(/_/g, ' ');
                 var requestImageUrl = '<?php echo $requestImageUrl; ?>';
                 var imageLink = '';
-                if (requestImageUrl.length >  0)
+                if (requestImageUrl.length >  0 && isForeignItem === '0')
                 {
                     var requestImageText = '<?php echo $requestImageText; ?>';
                     requestImageUrl += '?id=' + itemId + '&item=' + itemNumber + '&file=' + rawFileName;

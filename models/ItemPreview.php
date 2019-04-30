@@ -2,14 +2,14 @@
 class ItemPreview
 {
     protected $item;
-    protected $showComingledResults;
+    protected $showCommingledResults;
     protected $useElasticsearch;
 
-    public function __construct($item, $useElasticsearch = false, $showComingledResults = false)
+    public function __construct($item, $useElasticsearch = false, $showCommingledResults = false)
     {
         $this->item = $item;
         $this->useElasticsearch = $useElasticsearch;
-        $this->showComingledResults = $showComingledResults;
+        $this->showCommingledResults = $showCommingledResults;
     }
 
     public function emitItemHeader()
@@ -18,7 +18,7 @@ class ItemPreview
         {
             $identifier = $this->item['_source']['element']['identifier'];
 
-            if ($this->showComingledResults)
+            if ($this->showCommingledResults)
             {
                 $contributorId = $this->item['_source']['item']['contributor-id'];
                 $identifier = $contributorId . '-' . $identifier;
@@ -156,13 +156,19 @@ class ItemPreview
                 $itemNumber = ItemMetadata::getItemIdentifier($this->item);
                 $itemId = $this->item->id;
             }
+
+            // The title is not currently used, but let's keep this logic for now. It was previously used for the tooltip.
             $title = empty($title) ? __('[Untitled]') : $title;
+
+            // Determine if this item was contributed by this installation or by another.
+            $isForeign = $this->showCommingledResults && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
+            $isForeign = $isForeign ? '1' : '0';
 
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
             $tooltip = __('Enlarge image');
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-itemNumber='$itemNumber'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-itemNumber='$itemNumber' data-foreign='$isForeign'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
