@@ -164,11 +164,13 @@ class ItemPreview
             $isForeign = $this->showCommingledResults && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
             $isForeign = $isForeign ? '1' : '0';
 
+            $itemUrl = $this->showCommingledResults ? $this->item['_source']['url']['item'] : url("items/show/$itemId");
+
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
             $tooltip = __('Enlarge image');
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-itemNumber='$itemNumber' data-foreign='$isForeign'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' data-foreign='$isForeign'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.

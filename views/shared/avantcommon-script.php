@@ -14,7 +14,6 @@ jQuery(document).ready(function()
                 var itemNumber = item.el.attr('data-itemNumber');
                 var isForeignItem = item.el.attr('data-foreign');
                 var href = item.el.attr('href');
-                var hasItemLink = itemId.length > 0;
                 var rawFileName = href.substring(href.lastIndexOf('/') + 1);
                 var fileName = rawFileName.replace(/_/g, ' ');
                 var requestImageUrl = '<?php echo $requestImageUrl; ?>';
@@ -30,10 +29,10 @@ jQuery(document).ready(function()
                     imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a>';
                 }
                 var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
-                var itemPath = '<?php echo $path; ?>'  + itemId;
+                var itemUrl = item.el.attr('data-itemUrl');
                 var itemLinkText = '<?php echo $itemLinkText; ?>';
                 var titleText = '<div class="mfp-caption-title">' + title + '</div>';
-                var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" " href="' + itemPath + '">' + itemLinkText + '</a>';
+                var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" " href="' + itemUrl + '">' + itemLinkText + '</a>';
                 var caption = '<div>' + titleText + '<div class="mfp-caption-links">' + viewItemLink + separator +  imageLink + '</div></div>';
                 return caption;
             }
