@@ -20,7 +20,7 @@ class ItemPreview
 
             if ($this->showComingledResults)
             {
-                $contributorId = $this->item['_source']['contributorid'];
+                $contributorId = $this->item['_source']['item']['contributor-id'];
                 $identifier = $contributorId . '-' . $identifier;
             }
         }
@@ -33,8 +33,8 @@ class ItemPreview
 
         if ($this->useElasticsearch)
         {
-            $url = $this->item['_source']['url'];
-            $public =  $this->item['_source']['public'];
+            $url = $this->item['_source']['url']['item'];
+            $public =  $this->item['_source']['item']['public'];
         }
         else
         {
@@ -80,8 +80,8 @@ class ItemPreview
 
         if ($this->useElasticsearch)
         {
-            $thumbnailUrl = $this->item['_source']['thumb'];
-            $itemFiles = $this->item['_source']['files'];
+            $thumbnailUrl = $this->item['_source']['url']['thumb'];
+            $itemFiles = $this->item['_source']['item']['file-count'];
         }
         else
         {
@@ -116,7 +116,7 @@ class ItemPreview
 
             if ($this->useElasticsearch)
             {
-                $originalImageUrl = $this->item['_source']['image'];
+                $originalImageUrl = $this->item['_source']['url']['image'];
             }
             else
             {
@@ -148,7 +148,7 @@ class ItemPreview
                     $title = $title[0];
                 }
                 $itemNumber = $this->item['_source']['element']['identifier'];
-                $itemId = $this->item['_source']['itemid'];
+                $itemId = $this->item['_source']['item']['id'];
             }
             else
             {
