@@ -9,7 +9,7 @@ jQuery(document).ready(function()
         },
         image: {
             titleSrc: function (item) {
-                var title = item.el.attr('title');
+                var title = item.el.attr('data-title');
                 var itemId = item.el.attr('itemId');
                 var itemNumber = item.el.attr('data-itemNumber');
                 var isForeignItem = item.el.attr('data-foreign');
@@ -32,7 +32,7 @@ jQuery(document).ready(function()
                 var itemUrl = item.el.attr('data-itemUrl');
                 var itemLinkText = '<?php echo $itemLinkText; ?>';
                 var titleText = '<div class="mfp-caption-title">' + title + '</div>';
-                var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" " href="' + itemUrl + '">' + itemLinkText + '</a>';
+                var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '">' + itemLinkText + '</a>';
                 var caption = '<div>' + titleText + '<div class="mfp-caption-links">' + viewItemLink + separator +  imageLink + '</div></div>';
                 return caption;
             }

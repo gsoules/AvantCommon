@@ -1,4 +1,8 @@
 <?php
+
+define('IMAGE_THUMB_TOOLTIP', __('Show larger image'));
+define('ITEM_LINK_TOOLTIP', __('View this item'));
+
 class ItemPreview
 {
     protected $item;
@@ -50,9 +54,25 @@ class ItemPreview
             $html .= '* ';
         }
 
-        $html .= "<a class='item-preview-identifier' href=\"$url\">{$prefix}{$identifier}</a>";
+        $tooltip = ITEM_LINK_TOOLTIP;
+        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'>{$prefix}{$identifier}</a>";
         $html .= '</div>';
         return $html;
+    }
+
+    protected static function getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign)
+    {
+        // Note that specifying an empty string for data-itemUrl causes the browser to use the current page's URL.
+        $html = "<div class='item-file image-jpeg'>";
+        $html .= "<a class='$class' href='$imageUrl' title='$tooltip' itemId='$itemId' data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='' data-foreign='$isForeign' target='_blank'>";
+        $html .= "<img class='full' src='$thumbUrl'>";
+        $html .= "</a></div>";
+        return $html;
+    }
+
+    public static function getItemLinkTooltip()
+    {
+        return ITEM_LINK_TOOLTIP;
     }
 
     public function emitItemPreview($useCoverImage = true)
@@ -157,7 +177,6 @@ class ItemPreview
                 $itemId = $this->item->id;
             }
 
-            // The title is not currently used, but let's keep this logic for now. It was previously used for the tooltip.
             $title = empty($title) ? __('[Untitled]') : $title;
 
             // Determine if this item was contributed by this installation or by another.
@@ -169,8 +188,8 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $tooltip = __('Enlarge image');
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' data-foreign='$isForeign'>$imgTag</a>";
+            $tooltip = IMAGE_THUMB_TOOLTIP;
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' data-foreign='$isForeign'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
@@ -198,10 +217,11 @@ class ItemPreview
 
     public function emitItemTitle()
     {
+        $tooltip = ITEM_LINK_TOOLTIP;
         $title = ItemMetadata::getItemTitle($this->item);
         $identifier = '';
         $url = url("items/show/{$this->item->id}");
-        $html = "<div class=\"element-text\"><a href=\"$url\">$title</a>$identifier</div>";
+        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip'>$title</a>$identifier</div>";
         return $html;
     }
 
@@ -298,6 +318,7 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $class = 'lightbox';
             $title = ItemMetadata::getItemTitle($item);
+            $tooltip = IMAGE_THUMB_TOOLTIP;
         }
         else
         {
@@ -306,6 +327,7 @@ class ItemPreview
             $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
             if ($isThumbnail)
                 $class .= '-thumb';
+            $tooltip = $file->original_filename;
             $title = '';
         }
 
@@ -319,12 +341,12 @@ class ItemPreview
             // the thumbnail for an external image on a Show page because when external images are used, no thumbs
             // are displayed (thumbs only appear when the item has more than one image). Thumbnails for external images
             // that appear in search results are emitted by emitItemThumbnail.
+            $isForeign = '1';
             $imageUrl = $sharedItemAssets['image'];
-            $html = "<div class='item-file image-jpeg'>";
-            $html .= "<a class='lightbox' itemId='$itemId'  data-itemNumber='$itemNumber' href='$imageUrl' title='$title' target='_blank'>";
-            $html .= "<img class='full' src='$imageUrl' alt='$title' title='$title'>";
-            $html .= "</a></div>";
+            $thumbUrl = $imageUrl;
+            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign);
 
+            // Determine if this item was contributed by this installation or by another.
             if (isset($sharedItemAssets['contributor']))
             {
                 $contributor = __('Shared by ') . $sharedItemAssets['contributor'];
@@ -336,8 +358,10 @@ class ItemPreview
         else
         {
             // Emit HTML to display an attached image.
-            $sizeClass = $isThumbnail ? 'thumbnail' : 'fullsize';
-            $html = file_markup($file, array('imageSize' => $sizeClass, 'linkAttributes' => array('class' => $class, 'title' => $title, 'itemId' => $itemId, 'data-itemNumber' => $itemNumber, 'target' => '_blank')));
+            $isForeign = '0';
+            $imageUrl = $file->getWebPath('original');
+            $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
+            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign);
         }
 
         return $html;
