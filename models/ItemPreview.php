@@ -16,7 +16,7 @@ class ItemPreview
         $this->showCommingledResults = $showCommingledResults;
     }
 
-    public function emitItemHeader()
+    public function emitItemHeader($openLinkInNewWindow = false)
     {
         if ($this->useElasticsearch)
         {
@@ -55,7 +55,8 @@ class ItemPreview
         }
 
         $tooltip = ITEM_LINK_TOOLTIP;
-        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'>{$prefix}{$identifier}</a>";
+        $target = $openLinkInNewWindow ? " target='_blank'" : '';
+        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix}{$identifier}</a>";
         $html .= '</div>';
         return $html;
     }
