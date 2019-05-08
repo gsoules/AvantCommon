@@ -32,7 +32,8 @@ jQuery(document).ready(function()
                 var itemUrl = item.el.attr('data-itemUrl');
                 var itemLinkText = '<?php echo $itemLinkText; ?>';
                 var titleText = '<div class="mfp-caption-title">' + title + '</div>';
-                var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '">' + itemLinkText + '</a>';
+                var target = isForeignItem === '1' ? ' target="_blank"' : '';
+                var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '"' + target + '>' + itemLinkText + '</a>';
                 var caption = '<div>' + titleText + '<div class="mfp-caption-links">' + viewItemLink + separator +  imageLink + '</div></div>';
                 return caption;
             }
