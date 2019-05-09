@@ -398,7 +398,13 @@ class ItemPreview
         if (!empty($file) && $file->hasThumbnail())
         {
             $url = $file->getWebPath($thumbnail ? 'thumbnail' : 'original');
-            if (strlen($url) > 4 && strpos(strtolower($url), '.jpg', strlen($url) - 4) === false)
+
+            $jpegMimeTypes = array(
+                'image/jpg',
+                'image/jpeg'
+            );
+
+            if (!in_array($file->mime_type, $jpegMimeTypes))
             {
                 // The original image is not a jpg (it's probably a pdf) so return its derivative image instead.
                 $url = $file->getWebPath($thumbnail ? 'thumbnail' : 'fullsize');
