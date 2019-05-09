@@ -64,6 +64,15 @@ class AvantCommon
         $_POST['Elements'][$elementId][0]['text'] = $text;
     }
 
+    public static function supportedImageMimeTypes()
+    {
+        return array(
+            'image/jpg',
+            'image/jpeg',
+            'image/png'
+        );
+    }
+
     public static function userClickedSaveChanges()
     {
         // Determine if the admin clicked the Save Changes button. This check is done to distinguish from the cases

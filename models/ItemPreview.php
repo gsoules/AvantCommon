@@ -399,12 +399,9 @@ class ItemPreview
         {
             $url = $file->getWebPath($thumbnail ? 'thumbnail' : 'original');
 
-            $jpegMimeTypes = array(
-                'image/jpg',
-                'image/jpeg'
-            );
+            $supportedImageMimeTypes = AvantCommon::supportedImageMimeTypes();
 
-            if (!in_array($file->mime_type, $jpegMimeTypes))
+            if (!in_array($file->mime_type, $supportedImageMimeTypes))
             {
                 // The original image is not a jpg (it's probably a pdf) so return its derivative image instead.
                 $url = $file->getWebPath($thumbnail ? 'thumbnail' : 'fullsize');
