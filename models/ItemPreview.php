@@ -101,7 +101,7 @@ class ItemPreview
 
         if ($this->useElasticsearch)
         {
-            $thumbnailUrl = $this->item['_source']['url']['thumb'];
+            $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
             $itemFiles = $this->item['_source']['item']['file-count'];
         }
         else
@@ -137,7 +137,7 @@ class ItemPreview
 
             if ($this->useElasticsearch)
             {
-                $originalImageUrl = $this->item['_source']['url']['image'];
+                $originalImageUrl = isset($this->item['_source']['url']['image']) ? $this->item['_source']['url']['image'] : '';
             }
             else
             {
