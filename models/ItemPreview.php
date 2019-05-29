@@ -219,9 +219,20 @@ class ItemPreview
     public function emitItemTitle()
     {
         $tooltip = ITEM_LINK_TOOLTIP;
-        $title = ItemMetadata::getItemTitle($this->item);
+
+        if ($this->useElasticsearch)
+        {
+            $title = $this->item["_source"]["element"]["title"];
+            $id = $this->item["_source"]["item"]["id"];
+        }
+        else
+        {
+            $title = ItemMetadata::getItemTitle($this->item);
+            $id = $this->item->id;
+        }
+
         $identifier = '';
-        $url = url("items/show/{$this->item->id}");
+        $url = url("items/show/$id");
         $html = "<div class=\"element-text\"><a href='$url' title='$tooltip'>$title</a>$identifier</div>";
         return $html;
     }
