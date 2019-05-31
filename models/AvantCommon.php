@@ -2,7 +2,6 @@
 
 class AvantCommon
 {
-
     public static function elementHasPostedValue($elementId)
     {
         // Get the values from all of this element's input fields. Return true if any have a value.
@@ -62,6 +61,27 @@ class AvantCommon
     public static function setPostTextForElementId($elementId, $text)
     {
         $_POST['Elements'][$elementId][0]['text'] = $text;
+    }
+
+    public static function sendEmailToAdministrator($subject, $body)
+    {
+        $siteTitle = option('site_title');
+        $from = get_option('administrator_email');
+        $mail = new Zend_Mail('UTF-8');
+        $mail->setBodyText($body);
+        $mail->setFrom($from, "$siteTitle Administrator");
+        $mail->addTo($from);
+        $mail->setSubject($subject);
+        $mail->addHeader('X-Mailer', 'PHP/' . phpversion());
+        try
+        {
+            $mail->send();
+            return true;
+        }
+        catch (Zend_Mail_Transport_Exception $e)
+        {
+            return false;
+        }
     }
 
     public static function supportedImageMimeTypes()
