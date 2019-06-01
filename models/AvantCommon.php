@@ -58,6 +58,11 @@ class AvantCommon
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 
+    public static function isSearchRequest()
+    {
+        return isset($_GET['query']) || isset($GET['advanced']);
+    }
+
     public static function setPostTextForElementId($elementId, $text)
     {
         $_POST['Elements'][$elementId][0]['text'] = $text;
