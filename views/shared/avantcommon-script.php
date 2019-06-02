@@ -41,40 +41,4 @@ jQuery(document).ready(function()
     }
     );
 });
-
-    // Logic for lazy loading of images where the <img> tag specifies the image URL in data-src instead of src.
-    // See: https://www.smashingmagazine.com/2018/01/deferring-lazy-loading-intersection-observer-api/#possible-applications
-    const images = document.querySelectorAll('[data-src]');
-    const config = {
-        rootMargin: '0px 0px 50px 0px',
-        threshold: 0
-    };
-
-    let observer = new IntersectionObserver(function (entries, self)
-    {
-        entries.forEach(entry =>
-        {
-            if (entry.isIntersecting)
-            {
-                // The image is in the viewport. Load it and stop observing it.
-                preloadImage(entry.target);
-                self.unobserve(entry.target);
-            }
-        });
-    }, config);
-
-    images.forEach(image =>
-    {
-        observer.observe(image);
-    });
-
-    function preloadImage(img)
-    {
-        const src = img.getAttribute('data-src');
-        if (!src)
-        {
-            return;
-        }
-        img.src = src;
-    }
 </script>
