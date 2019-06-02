@@ -222,7 +222,8 @@ class ItemPreview
 
         if ($this->useElasticsearch)
         {
-            $title = $this->item["_source"]["element"]["title"];
+            $element = $this->item["_source"]["element"];
+            $title = isset($element["title"]) ? $element["title"] : __('Untitled');
             $id = $this->item["_source"]["item"]["id"];
         }
         else
