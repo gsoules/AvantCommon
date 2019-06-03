@@ -1,5 +1,7 @@
 <?php
 
+define ('UNTITLED_ITEM', __('Untitled'));
+
 class AvantCommon
 {
     public static function elementHasPostedValue($elementId)

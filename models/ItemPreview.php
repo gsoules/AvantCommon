@@ -163,7 +163,7 @@ class ItemPreview
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
             if ($this->useElasticsearch)
             {
-                $title = isset($this->item['_source']['element']['title']) ? $this->item['_source']['element']['title'] : __('Untitled');
+                $title = isset($this->item['_source']['element']['title']) ? $this->item['_source']['element']['title'] : UNTITLED_ITEM;
                 if (is_array($title))
                 {
                     $title = $title[0];
@@ -178,7 +178,7 @@ class ItemPreview
                 $itemId = $this->item->id;
             }
 
-            $title = empty($title) ? __('Untitled') : $title;
+            $title = empty($title) ? UNTITLED_ITEM : $title;
 
             // Determine if this item was contributed by this installation or by another.
             $isForeign = $this->showCommingledResults && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
@@ -223,7 +223,7 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $element = $this->item["_source"]["element"];
-            $title = isset($element["title"]) ? $element["title"] : __('Untitled');
+            $title = isset($element["title"]) ? $element["title"] : UNTITLED_ITEM;
             $id = $this->item["_source"]["item"]["id"];
         }
         else
