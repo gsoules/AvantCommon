@@ -102,12 +102,12 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
-            $itemFiles = $this->item['_source']['item']['file-count'];
+            $fileCount = $this->item['_source']['file']['total'];
         }
         else
         {
             $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
-            $itemFiles = count($this->item->Files);
+            $fileCount = count($this->item->Files);
         }
 
         if (empty($thumbnailUrl))
@@ -148,7 +148,7 @@ class ItemPreview
         // Emit the HTML for the actual thumbnail, an external thumbnail, or a fallback thumbnail image.
         // If the thumbnail's item has more than one image, style it differently to give the user a clue
         // that this image is just one of a set.
-        $class = $itemFiles > 1 ? "class='item-preview-multiple'" : "";
+        $class = $fileCount > 1 ? "class='item-preview-multiple'" : "";
         $imgTag = "<img $class src='$thumbnailUrl'>";
 
         if (empty($originalImageUrl))
