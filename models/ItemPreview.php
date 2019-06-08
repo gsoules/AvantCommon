@@ -6,14 +6,14 @@ define('ITEM_LINK_TOOLTIP', __('View this item'));
 class ItemPreview
 {
     protected $item;
-    protected $showCommingledResults;
+    protected $sharedSearchingEnabled;
     protected $useElasticsearch;
 
-    public function __construct($item, $useElasticsearch = false, $showCommingledResults = false)
+    public function __construct($item, $useElasticsearch = false, $sharedSearchingEnabled = false)
     {
         $this->item = $item;
         $this->useElasticsearch = $useElasticsearch;
-        $this->showCommingledResults = $showCommingledResults;
+        $this->sharedSearchingEnabled = $sharedSearchingEnabled;
     }
 
     public function emitItemHeader($openLinkInNewWindow = false)
@@ -22,7 +22,7 @@ class ItemPreview
         {
             $identifier = $this->item['_source']['element']['identifier'];
 
-            if ($this->showCommingledResults)
+            if ($this->sharedSearchingEnabled)
             {
                 $contributorId = $this->item['_source']['item']['contributor-id'];
                 $identifier = $contributorId . '-' . $identifier;
@@ -181,10 +181,10 @@ class ItemPreview
             $title = empty($title) ? UNTITLED_ITEM : $title;
 
             // Determine if this item was contributed by this installation or by another.
-            $isForeign = $this->showCommingledResults && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
+            $isForeign = $this->sharedSearchingEnabled && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
             $isForeign = $isForeign ? '1' : '0';
 
-            $itemUrl = $this->showCommingledResults ? $this->item['_source']['url']['item'] : url("items/show/$itemId");
+            $itemUrl = $this->sharedSearchingEnabled ? $this->item['_source']['url']['item'] : url("items/show/$itemId");
 
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
