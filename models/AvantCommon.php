@@ -60,6 +60,14 @@ class AvantCommon
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 
+    public static function queryStringArg($arg, $defaultValue = '')
+    {
+        $value = isset($_GET[$arg]) ? $_GET[$arg] : $defaultValue;
+
+        // If the default value is an integer, assume that the return value should also be an integer.
+        return is_int($defaultValue) ? intval($value) : $value;
+    }
+
     public static function isSearchRequest()
     {
         return isset($_GET['query']) || isset($GET['advanced']);
