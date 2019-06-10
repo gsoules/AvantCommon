@@ -80,11 +80,11 @@ class AvantCommon
 
     public static function sendEmailToAdministrator($subject, $body)
     {
-        $siteTitle = option('site_title');
+        $contributorId = option('avantelasticsearch_es_contributor_id');
         $from = get_option('administrator_email');
         $mail = new Zend_Mail('UTF-8');
         $mail->setBodyText($body);
-        $mail->setFrom($from, "$siteTitle Administrator");
+        $mail->setFrom($from, "ES Error: $contributorId");
         $mail->addTo($from);
         $mail->setSubject($subject);
         $mail->addHeader('X-Mailer', 'PHP/' . phpversion());
