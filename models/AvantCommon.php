@@ -1,6 +1,7 @@
 <?php
 
 define ('UNTITLED_ITEM', __('Untitled'));
+define ('PRIVATE_ITEM_PREFIX', __('* '));
 
 class AvantCommon
 {
@@ -81,11 +82,13 @@ class AvantCommon
     public static function sendEmailToAdministrator($subject, $body)
     {
         $contributorId = option('avantelasticsearch_es_contributor_id');
-        $from = get_option('administrator_email');
+        $user = current_user();
+        $toEmail = get_option('administrator_email');
+        $fromEmail = $user ? $user->email : $toEmail;
         $mail = new Zend_Mail('UTF-8');
         $mail->setBodyText($body);
-        $mail->setFrom($from, "ES Error: $contributorId");
-        $mail->addTo($from);
+        $mail->setFrom($fromEmail, "Elastic Error: $contributorId");
+        $mail->addTo($toEmail);
         $mail->setSubject($subject);
         $mail->addHeader('X-Mailer', 'PHP/' . phpversion());
         try
