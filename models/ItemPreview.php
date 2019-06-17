@@ -27,21 +27,13 @@ class ItemPreview
                 $contributorId = $this->item['_source']['item']['contributor-id'];
                 $identifier = $contributorId . '-' . $identifier;
             }
-        }
-        else
-        {
-            $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
-        }
 
-        $prefix = ItemMetadata::getIdentifierPrefix();
-
-        if ($this->useElasticsearch)
-        {
             $url = $this->item['_source']['url']['item'];
             $public =  $this->item['_source']['item']['public'];
         }
         else
         {
+            $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
             $url = url("items/show/{$this->item->id}");
             $public = $this->item->public;
         }
@@ -51,12 +43,13 @@ class ItemPreview
         if ($public == 0)
         {
             // Indicate that this item is private.
-            $html .= '* ';
+            $html .= PRIVATE_ITEM_PREFIX;
         }
 
+        $prefix = ItemMetadata::getIdentifierPrefix();
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
-        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix}{$identifier}</a>";
+        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
         $html .= '</div>';
         return $html;
     }
@@ -94,10 +87,22 @@ class ItemPreview
         return $html;
     }
 
+    public function emitItemPreviewForGrid()
+    {
+        $html = "<li>";
+        $html .= "<div>";
+        $html .= $this->emitItemThumbnail(true);
+        $html .= $this->emitItemTitle();
+        $html .= "</div>";
+        $html .= "</li>";
+        return $html;
+    }
+
     public function emitItemThumbnail($useCoverImage = true)
     {
         $originalImageUrl = '';
         $getThumbnail = true;
+        $isFallbackImage = false;
 
         if ($this->useElasticsearch)
         {
@@ -115,14 +120,16 @@ class ItemPreview
             // This item has no thumbnail presumably because the item has no image.
             if ($this->useElasticsearch)
             {
-                $thumbnailUrl = self::getFallbackImageUrl($this->item, true);
+                $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
+                $isFallbackImage = true;
             }
             else
             {
                 $sharedItemInfo = ItemMetadata::getSharedItemAssets($this->item);
                 if (!isset($sharedItemInfo['image']))
                 {
-                    $thumbnailUrl = self::getFallbackImageUrl($this->item, false);
+                    $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
+                    $isFallbackImage = true;
                 }
                 else
                 {
@@ -211,6 +218,11 @@ class ItemPreview
         }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('itemType' => $itemType));
 
+        if ($isFallbackImage)
+        {
+            $class .= ' fallback-image';
+        }
+
         $html = "<div class=\"$class\">$html</div>";
 
         return $html;
@@ -218,23 +230,21 @@ class ItemPreview
 
     public function emitItemTitle()
     {
-        $tooltip = ITEM_LINK_TOOLTIP;
-
         if ($this->useElasticsearch)
         {
             $element = $this->item["_source"]["element"];
             $title = isset($element["title"]) ? $element["title"] : UNTITLED_ITEM;
-            $id = $this->item["_source"]["item"]["id"];
+            $url = $this->item['_source']['url']['item'];
         }
         else
         {
             $title = ItemMetadata::getItemTitle($this->item);
             $id = $this->item->id;
+            $url = url("items/show/$id");
         }
 
-        $identifier = '';
-        $url = url("items/show/$id");
-        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip'>$title</a>$identifier</div>";
+        $tooltip = ITEM_LINK_TOOLTIP;
+        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip'>$title</a></div>";
         return $html;
     }
 
