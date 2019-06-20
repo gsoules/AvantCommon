@@ -128,7 +128,7 @@
 }
 
 .private-element {
-    color: #aaa;
+    color: #aaa !important;
     font-style: italic;
 }
 
