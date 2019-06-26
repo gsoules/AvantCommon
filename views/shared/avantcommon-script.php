@@ -1,4 +1,5 @@
 <script type="text/javascript">
+var REQUEST_IMAGE_URL = '<?php echo $requestImageUrl; ?>';
 var REQUEST_IMAGE_TEXT = '<?php echo $requestImageText; ?>';
 var ITEM_LINK_TEXT = '<?php echo $itemLinkText; ?>';
 

@@ -7,24 +7,24 @@ function constructLightboxCaption(item)
     var href = item.el.attr('href');
     var rawFileName = href.substring(href.lastIndexOf('/') + 1);
     var fileName = rawFileName.replace(/_/g, ' ');
-    var requestImageUrl = '<?php echo $requestImageUrl; ?>';
+    var requestImageUrl = REQUEST_IMAGE_URL;
+    var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
+    var itemUrl = item.el.attr('data-itemUrl');
+    var titleText = '<div class="mfp-caption-title">' + title + '</div>';
+    var target = isForeignItem === '1' ? ' target="_blank"' : '';
+    var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '"' + target + '>' + ITEM_LINK_TEXT + '</a>';
     var imageLink = '';
+
     if (requestImageUrl.length >  0 && isForeignItem === '0')
     {
-        var requestImageText = '<?php echo $requestImageText; ?>';
         requestImageUrl += '?id=' + itemId + '&item=' + itemNumber + '&file=' + rawFileName;
-        imageLink = '<a class="lightbox-link" href="' + requestImageUrl + ' " target="_blank" title="Image ' + fileName + '">' + requestImageText + '</a>';
+        imageLink = '<a class="lightbox-link" href="' + requestImageUrl + ' " target="_blank" title="Image ' + fileName + '">' + REQUEST_IMAGE_TEXT + '</a>';
     }
     else
     {
         imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a>';
     }
-    var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
-    var itemUrl = item.el.attr('data-itemUrl');
-    var itemLinkText = '<?php echo $itemLinkText; ?>';
-    var titleText = '<div class="mfp-caption-title">' + title + '</div>';
-    var target = isForeignItem === '1' ? ' target="_blank"' : '';
-    var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '"' + target + '>' + itemLinkText + '</a>';
+
     var caption = '<div>' + titleText + '<div class="mfp-caption-links">' + viewItemLink + separator +  imageLink + '</div></div>';
     return caption;
 }
