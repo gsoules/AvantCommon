@@ -20,7 +20,7 @@ class ItemPreview
     {
         if ($this->useElasticsearch)
         {
-            $identifier = $this->item['_source']['element']['identifier'];
+            $identifier = $this->item['_source']['element']['identifier'][0];
 
             if ($this->sharedSearchingEnabled)
             {
@@ -170,12 +170,12 @@ class ItemPreview
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
             if ($this->useElasticsearch)
             {
-                $title = isset($this->item['_source']['element']['title']) ? $this->item['_source']['element']['title'] : UNTITLED_ITEM;
+                $title = isset($this->item['_source']['element']['title']) ? $this->item['_source']['element']['title'][0] : UNTITLED_ITEM;
                 if (is_array($title))
                 {
                     $title = $title[0];
                 }
-                $itemNumber = $this->item['_source']['element']['identifier'];
+                $itemNumber = $this->item['_source']['element']['identifier'][0];
                 $itemId = $this->item['_source']['item']['id'];
             }
             else
@@ -205,7 +205,7 @@ class ItemPreview
         {
             if (isset($this->item['_source']['element']['type']))
             {
-                $itemType = $this->item['_source']['element']['type'];
+                $itemType = $this->item['_source']['element']['type'][0];
             }
             else
             {
@@ -280,8 +280,8 @@ class ItemPreview
         {
             if ($useElasticsearch)
             {
-                $typeName = isset($item['_source']['element']['type']) ? $item['_source']['element']['type'] : '';
-                $subject = isset($item['_source']['element']['subject']) ? $item['_source']['element']['subject'] : '';
+                $typeName = isset($item['_source']['element']['type']) ? $item['_source']['element']['type'][0] : '';
+                $subject = isset($item['_source']['element']['subject']) ? $item['_source']['element']['subject'][0] : '';
                 if (is_array($subject))
                 {
                     $subject = $subject[0];
