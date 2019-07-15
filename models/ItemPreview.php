@@ -87,12 +87,12 @@ class ItemPreview
         return $html;
     }
 
-    public function emitItemPreviewForGrid()
+    public function emitItemPreviewForGrid($sharedSearchingEnabled)
     {
         $html = "<li>";
         $html .= "<div>";
         $html .= $this->emitItemThumbnail(true);
-        $html .= $this->emitItemTitle();
+        $html .= $this->emitItemTitle($sharedSearchingEnabled);
         $html .= "</div>";
         $html .= "</li>";
         return $html;
@@ -228,7 +228,7 @@ class ItemPreview
         return $html;
     }
 
-    public function emitItemTitle()
+    public function emitItemTitle($openInNewWindow = false)
     {
         if ($this->useElasticsearch)
         {
@@ -244,7 +244,8 @@ class ItemPreview
         }
 
         $tooltip = ITEM_LINK_TOOLTIP;
-        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip'>$title</a></div>";
+        $target = $openInNewWindow ? " target='blank'" : '';
+        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip' $target>$title</a></div>";
         return $html;
     }
 
