@@ -89,10 +89,12 @@ class ItemPreview
 
     public function emitItemPreviewForGrid($sharedSearchingEnabled)
     {
+        $contributorId = $sharedSearchingEnabled ? ' <span class="contributor-id">&bull; ' . $this->item['_source']['item']['contributor-id'] . '</span>' : '';
+
         $html = "<li>";
         $html .= "<div>";
         $html .= $this->emitItemThumbnail(true);
-        $html .= $this->emitItemTitle($sharedSearchingEnabled);
+        $html .= $this->emitItemTitle($sharedSearchingEnabled, $contributorId);
         $html .= "</div>";
         $html .= "</li>";
         return $html;
@@ -228,7 +230,7 @@ class ItemPreview
         return $html;
     }
 
-    public function emitItemTitle($openInNewWindow = false)
+    public function emitItemTitle($openInNewWindow = false, $contributorId = '')
     {
         if ($this->useElasticsearch)
         {
@@ -245,7 +247,7 @@ class ItemPreview
 
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openInNewWindow ? " target='blank'" : '';
-        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip' $target>$title</a></div>";
+        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip' $target>$title</a>$contributorId</div>";
         return $html;
     }
 

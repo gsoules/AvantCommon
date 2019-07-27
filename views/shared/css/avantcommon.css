@@ -127,6 +127,11 @@
     margin:0 14px 12px 0;
 }
 
+.item-preview .contributor-id {
+    color: #9b9b9b;
+    font-weight: normal;
+}
+
 .private-element {
     color: #aaa !important;
     font-style: italic;
