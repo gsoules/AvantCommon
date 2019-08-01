@@ -121,10 +121,17 @@
 }
 
 .item-preview li {
-    width:165px;
+    width:170px;
     display:inline-block;
     vertical-align:top;
     margin:0 14px 12px 0;
+}
+
+@media screen and (max-width: 414px) {
+    /* Allow two images to appear side-by-side on a phone when in Grid View. */
+    .item-preview.grid-view li {
+        width:120px;
+    }
 }
 
 .item-preview .contributor-id {
