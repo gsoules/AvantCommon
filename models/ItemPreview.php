@@ -89,14 +89,12 @@ class ItemPreview
 
     public function emitItemPreviewForGrid($sharedSearchingEnabled)
     {
-        $contributorId = $sharedSearchingEnabled ? ' <span class="contributor-id">&bull; ' . $this->item['_source']['item']['contributor-id'] . '</span>' : '';
+        $contributorId = $sharedSearchingEnabled ? ' <span class="contributor-id">' . $this->item['_source']['item']['contributor'] . '</span>' : '';
 
-        $html = "<li>";
-        $html .= "<div>";
+        $html = "<div class='grid-view-cell'>";
         $html .= $this->emitItemThumbnail(true);
         $html .= $this->emitItemTitle($sharedSearchingEnabled, $contributorId);
         $html .= "</div>";
-        $html .= "</li>";
         return $html;
     }
 
