@@ -93,7 +93,7 @@ class ItemPreview
 
         $html = "<div class='grid-view-cell'>";
         $html .= $this->emitItemThumbnail(true);
-        $html .= $this->emitItemTitle($sharedSearchingEnabled, $contributorId);
+        $html .= $this->emitItemTitle(true, $contributorId);
         $html .= "</div>";
         return $html;
     }
