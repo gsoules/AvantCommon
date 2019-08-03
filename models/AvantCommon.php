@@ -69,6 +69,17 @@ class AvantCommon
         return is_int($defaultValue) ? intval($value) : $value;
     }
 
+    public static function queryStringArgOrCookie($arg, $cookie, $defaultValue = '')
+    {
+        $value = self::queryStringArg($arg);
+
+        if (empty($value))
+            $value = isset($_COOKIE[$cookie]) ? intval($_COOKIE[$cookie]) : 0;
+
+        // If the default value is an integer, assume that the return value should also be an integer.
+        return is_int($defaultValue) ? intval($value) : $value;
+    }
+
     public static function isSearchRequest()
     {
         return isset($_GET['query']) || isset($GET['advanced']);
