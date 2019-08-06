@@ -73,8 +73,11 @@ class AvantCommon
     {
         $value = self::queryStringArg($arg);
 
-        if (empty($value))
-            $value = isset($_COOKIE[$cookie]) ? intval($_COOKIE[$cookie]) : 0;
+        if ($value != 0 && empty($value))
+        {
+            // There is no value on the query string so see if there is a cookie value.
+            $value = isset($_COOKIE[$cookie]) ? intval($_COOKIE[$cookie]) : $defaultValue;
+        }
 
         // If the default value is an integer, assume that the return value should also be an integer.
         return is_int($defaultValue) ? intval($value) : $value;
