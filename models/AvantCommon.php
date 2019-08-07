@@ -73,7 +73,7 @@ class AvantCommon
     {
         $value = self::queryStringArg($arg);
 
-        if ($value != 0 && empty($value))
+        if (strlen(trim($value)) == 0)
         {
             // There is no value on the query string so see if there is a cookie value.
             $value = isset($_COOKIE[$cookie]) ? intval($_COOKIE[$cookie]) : $defaultValue;
