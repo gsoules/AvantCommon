@@ -133,4 +133,17 @@ class AvantCommon
         // other cases are usually peformed as part of a server-side background job that operates on multiple items.
         return isset($_POST['submit']) && ($_POST['submit'] == 'Save Changes' || $_POST['submit'] == 'Add Item');
     }
+
+    public static function userIsAdmin()
+    {
+        $user = current_user();
+
+        if (empty($user))
+            return false;
+
+        if ($user->role == 'researcher')
+            return false;
+
+        return true;
+    }
 }
