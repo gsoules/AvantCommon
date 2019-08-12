@@ -236,3 +236,10 @@ img.mfp-img {
 .lightbox {
     cursor: zoom-in;
 }
+
+.dropbox-link::after {
+    content: "\f16b";
+    font-family: "FontAwesome";
+    font-size: 16px;
+    color: #0062ff;
+}
