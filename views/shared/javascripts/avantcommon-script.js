@@ -12,7 +12,7 @@ function constructLightboxCaption(item)
     var itemUrl = item.el.attr('data-itemUrl');
     var titleText = '<div class="mfp-caption-title">' + title + '</div>';
     var target = isForeignItem === '1' ? ' target="_blank"' : '';
-    var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '"' + target + '>' + ITEM_LINK_TEXT + '</a>';
+    var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '"' + target + '>' + ITEM_LINK_TEXT + ' ' + itemNumber + '</a>';
     var imageLink = '';
 
     if (requestImageUrl.length >  0 && isForeignItem === '0')
