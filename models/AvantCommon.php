@@ -99,9 +99,10 @@ class AvantCommon
         $user = current_user();
         $toEmail = get_option('administrator_email');
         $fromEmail = $user ? $user->email : $toEmail;
+        $userName = $user ? $user->name : 'anonymous';
         $mail = new Zend_Mail('UTF-8');
         $mail->setBodyText($body);
-        $mail->setFrom($fromEmail, "Elastic Error: $contributorId");
+        $mail->setFrom($fromEmail, "ES Error: $contributorId ($userName)");
         $mail->addTo($toEmail);
         $mail->setSubject($subject);
         $mail->addHeader('X-Mailer', 'PHP/' . phpversion());
