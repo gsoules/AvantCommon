@@ -93,7 +93,7 @@ class AvantCommon
         $_POST['Elements'][$elementId][0]['text'] = $text;
     }
 
-    public static function sendEmailToAdministrator($subject, $body)
+    public static function sendEmailToAdministrator($title, $subject, $body)
     {
         $contributorId = option('avantelasticsearch_es_contributor_id');
         $user = current_user();
@@ -102,7 +102,7 @@ class AvantCommon
         $userName = $user ? $user->name : 'anonymous';
         $mail = new Zend_Mail('UTF-8');
         $mail->setBodyText($body);
-        $mail->setFrom($fromEmail, "ES Error: $contributorId ($userName)");
+        $mail->setFrom($fromEmail, "$title: $contributorId ($userName)");
         $mail->addTo($toEmail);
         $mail->setSubject($subject);
         $mail->addHeader('X-Mailer', 'PHP/' . phpversion());
