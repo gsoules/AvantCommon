@@ -237,9 +237,13 @@ img.mfp-img {
     cursor: zoom-in;
 }
 
-.dropbox-link::after {
-    content: "\f16b";
+.cloud-storage-link::after {
+    content: "\f07c";
     font-family: "FontAwesome";
     font-size: 16px;
-    color: #0062ff;
+    color: #1b7ec9;
+}
+
+.cloud-storage-link:hover::after {
+    color: #1c96e8;
 }
