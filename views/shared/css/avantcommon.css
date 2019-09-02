@@ -114,8 +114,13 @@
     border: 1px dashed #777 !important;
 }
 
+.item-preview-cover {
+    border-radius: 10px;
+}
+
 .item-preview.cover-image img,
 .item-preview.cover-image .item-img {
+    border-radius: 10px;
     width: auto;
     max-height: none;
 }

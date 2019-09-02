@@ -20,14 +20,7 @@ class ItemPreview
     {
         if ($this->useElasticsearch)
         {
-            $identifier = $this->item['_source']['element']['identifier'][0];
-
-            if ($this->sharedSearchingEnabled)
-            {
-                $contributorId = $this->item['_source']['item']['contributor-id'];
-                $identifier = $contributorId . '-' . $identifier;
-            }
-
+            $identifier = $this->item['_source']['common']['identifier'][0];
             $url = $this->item['_source']['url']['item'];
             $public =  $this->item['_source']['item']['public'];
         }
@@ -92,6 +85,7 @@ class ItemPreview
         $contributorId = $sharedSearchingEnabled ? ' <span class="contributor-id">' . $this->item['_source']['item']['contributor'] . '</span>' : '';
 
         $html = "<div class='grid-view-cell'>";
+        $html .= $this->emitItemHeader(true);
         $html .= $this->emitItemThumbnail(true);
         $html .= $this->emitItemTitle(true, $contributorId);
         $html .= "</div>";
@@ -103,16 +97,20 @@ class ItemPreview
         $originalImageUrl = '';
         $getThumbnail = true;
         $isFallbackImage = false;
+        $isCoverImage = false;
 
         if ($this->useElasticsearch)
         {
             $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
             $fileCount = $this->item['_source']['file']['total'];
+            $isCoverImage = isset($this->item['_source']['url']['cover']) ?  $this->item['_source']['url']['cover'] : false;
         }
         else
         {
             $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
             $fileCount = count($this->item->Files);
+            $isCoverImage = !empty(self::getCoverImageIdentifier($this->item->id));
+
         }
 
         if (empty($thumbnailUrl))
@@ -153,9 +151,18 @@ class ItemPreview
         }
 
         // Emit the HTML for the actual thumbnail, an external thumbnail, or a fallback thumbnail image.
-        // If the thumbnail's item has more than one image, style it differently to give the user a clue
-        // that this image is just one of a set.
-        $class = $fileCount > 1 ? "class='item-preview-multiple'" : "";
+        $class = '';
+        if ($fileCount > 1)
+        {
+            // Style this item to indicate that it has more than one file attached to it.
+            $class = "class='item-preview-multiple'";
+        }
+        else if ($isCoverImage)
+        {
+            // Style this item to indicate that its cover image belongs to another item.
+            $class = "class='item-preview-cover'";
+        }
+
         $imgTag = "<img $class src='$thumbnailUrl'>";
 
         if (empty($originalImageUrl))
