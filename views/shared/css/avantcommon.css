@@ -262,6 +262,10 @@ img.mfp-img {
     color: #1c96e8;
 }
 
+#recently-viewed-items {
+    padding-right: 70px
+}
+
 #recently-viewed-items-title {
     font-weight: bold;
     font-size:16px;
@@ -298,4 +302,8 @@ img.mfp-img {
 #recently-viewed-clear {
     font-size: 12px;
     margin-top:6px;
+}
+
+.admin-links {
+    margin-bottom: 12px;
 }
