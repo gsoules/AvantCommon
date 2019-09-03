@@ -8,14 +8,25 @@ jQuery(document).ready(function ()
     function addActionRemoveListeners()
     {
         var removeX = jQuery('.recently-viewed-item-removed');
+        var removeAll = jQuery('#recently-viewed-clear-x');
 
         removeX.click(function ()
         {
             var itemId = jQuery(this).attr('data-item-id');
-            var itemToRemove = jQuery('#recent-' + itemId);
-            itemToRemove.remove();
             removeItemFromCookie(itemId);
         });
+
+        removeAll.click(function ()
+        {
+            Cookies.set(ITEMS_COOKIE, '', {expires: 14});
+            reloadPage();
+        });
+    }
+
+    function reloadPage()
+    {
+        // Reload the page to regenerate the recently viewed items list.
+        window.location.href = document.location.href;
     }
 
     function removeItemFromCookie(itemId)
@@ -34,6 +45,8 @@ jQuery(document).ready(function ()
         newItemIds = newItemIds.join(',');
 
         Cookies.set(ITEMS_COOKIE, newItemIds, {expires: 14});
+
+        reloadPage();
     }
 
     function retrieveRecentItemIds()
