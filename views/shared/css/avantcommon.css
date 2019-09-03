@@ -61,7 +61,16 @@
 
 .action-button {
     padding: 3px 5px 3px 5px;
+    margin-top: 6px;
     margin-bottom: 6px;
+}
+
+#relationship-type-code {
+    margin-right: 6px;
+}
+
+#related-item-identifier {
+    margin: 6px 0 6px 0;
 }
 
 .item-preview {
@@ -251,4 +260,28 @@ img.mfp-img {
 
 .cloud-storage-link:hover::after {
     color: #1c96e8;
+}
+
+#recently-viewed-items {
+}
+
+#recently-viewed-items-title {
+    font-weight: bold;
+    font-size:16px;
+    color: #555;
+}
+
+.recently-viewed-item {
+    font-size: 12px;
+    margin-top:8px;
+}
+
+#recently-viewed-all {
+    font-weight: bold;
+    margin-top:8px;
+}
+
+.recently-viewed-item-removed {
+    color:#777;
+    cursor: pointer;
 }

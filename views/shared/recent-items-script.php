@@ -3,17 +3,49 @@ jQuery(document).ready(function ()
 {
     var itemId = '<?php echo $itemId; ?>';
     const ITEMS_COOKIE = 'ITEMS';
+    const MAX_RECENT_ITEMS = 16;
+
+    function addActionRemoveListeners()
+    {
+        var removeX = jQuery('.recently-viewed-item-removed');
+
+        removeX.click(function ()
+        {
+            var itemId = jQuery(this).attr('data-item-id');
+            var itemToRemove = jQuery('#recent-' + itemId);
+            itemToRemove.remove();
+            removeItemFromCookie(itemId);
+        });
+    }
+
+    function removeItemFromCookie(itemId)
+    {
+        var oldItemIds = retrieveRecentItemIds();
+        var newItemIds = [];
+        for (id of oldItemIds)
+        {
+            if (itemId === id)
+            {
+                // Remove the item bu not adding it to the new list.
+                continue;
+            }
+            newItemIds.push(id);
+        }
+        newItemIds = newItemIds.join(',');
+
+        Cookies.set(ITEMS_COOKIE, newItemIds, {expires: 14});
+    }
 
     function retrieveRecentItemIds()
     {
         var value = Cookies.get(ITEMS_COOKIE);
-        var ids = [];
+        var itemIds = [];
         if (value !== undefined)
         {
-            ids = value.split(',');
+            itemIds = value.split(',');
         }
 
-        return ids;
+        return itemIds;
     }
 
     function saveRecentItemId()
@@ -41,7 +73,7 @@ jQuery(document).ready(function ()
                 count += 1;
 
                 // Only show the last dozen Ids.
-                if (count >= 12)
+                if (count >= MAX_RECENT_ITEMS)
                     break;
             }
             newItemIds = newItemIds.join(',');
@@ -51,5 +83,6 @@ jQuery(document).ready(function ()
     }
 
     saveRecentItemId();
+    addActionRemoveListeners();
 });
 </script>

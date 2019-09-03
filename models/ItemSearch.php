@@ -19,10 +19,10 @@ class ItemSearch
         return $sql;
     }
 
-    public static function getAdvancedSearchUrl($elementId, $value)
+    public static function getAdvancedSearchUrl($elementId, $value, $condition = 'is exactly')
     {
         $params['advanced'][0]['element_id'] = $elementId;
-        $params['advanced'][0]['type'] = 'is exactly';
+        $params['advanced'][0]['type'] = $condition;
         $params['advanced'][0]['terms'] = $value;
         $queryString = http_build_query($params);
 
