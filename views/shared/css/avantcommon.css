@@ -305,5 +305,13 @@ img.mfp-img {
 }
 
 .admin-links {
-    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.gallery-links {
+    margin-left: 12px;
+}
+
+.show-page-links {
+    margin-bottom: 24px;
 }
