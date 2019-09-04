@@ -251,15 +251,13 @@ img.mfp-img {
     cursor: zoom-in;
 }
 
-.cloud-storage-link::after {
-    content: "\f07c";
-    font-family: "FontAwesome";
-    font-size: 16px;
-    color: #1b7ec9;
+.cloud-storage-link:visited,
+.cloud-storage-link:link {
+    color: #1569a2 !important;
 }
 
-.cloud-storage-link:hover::after {
-    color: #1c96e8;
+.cloud-storage-link:hover {
+    color: #639abd !important;
 }
 
 #recently-viewed-items {
@@ -301,6 +299,7 @@ img.mfp-img {
 
 #recently-viewed-clear {
     font-size: 12px;
+    font-weight: bold;
     margin-top:6px;
 }
 
