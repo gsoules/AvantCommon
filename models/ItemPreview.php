@@ -1,6 +1,6 @@
 <?php
 
-define('IMAGE_THUMB_TOOLTIP', __('Show larger image'));
+define('IMAGE_THUMB_TOOLTIP', __('Show larger image of '));
 define('ITEM_LINK_TOOLTIP', __('View this item'));
 
 class ItemPreview
@@ -47,13 +47,18 @@ class ItemPreview
         return $html;
     }
 
-    protected static function getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign)
+    protected static function getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index)
     {
         // Note that specifying an empty string for data-itemUrl causes the browser to use the current page's URL.
         $html = "<div class='item-file image-jpeg'>";
         $html .= "<a class='$class' href='$imageUrl' title='$tooltip' itemId='$itemId' data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='' data-foreign='$isForeign' target='_blank'>";
         $html .= "<img class='full' src='$thumbUrl'>";
-        $html .= "</a></div>";
+        $html .= "</a>";
+
+        if ($index > 0)
+            $html .= "<div class='item-file-index'>$index</div>";
+
+        $html .= "</div>";
         return $html;
     }
 
@@ -203,7 +208,8 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $tooltip = IMAGE_THUMB_TOOLTIP;
+            $fileName = basename($originalImageUrl);
+            $tooltip = IMAGE_THUMB_TOOLTIP . $fileName;
             $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' data-foreign='$isForeign'>$imgTag</a>";
         }
 
@@ -321,7 +327,7 @@ class ItemPreview
         return $url;
     }
 
-    public static function getFileHtml($item, $file, $isThumbnail)
+    public static function getFileHtml($item, $file, $isThumbnail, $index = 0)
     {
         $sharedItemAssets = array();
         if (empty($file))
@@ -349,7 +355,6 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $class = 'lightbox';
             $title = ItemMetadata::getItemTitle($item);
-            $tooltip = IMAGE_THUMB_TOOLTIP;
         }
         else
         {
@@ -358,13 +363,13 @@ class ItemPreview
             $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
             if ($isThumbnail)
                 $class .= '-thumb';
-            $tooltip = $file->original_filename;
             $title = '';
         }
 
         // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
         $itemId = (string)$item->id;
         $itemNumber = ItemMetadata::getItemIdentifier($item);
+        $tooltip = IMAGE_THUMB_TOOLTIP;
 
         if (empty($file))
         {
@@ -375,7 +380,7 @@ class ItemPreview
             $isForeign = '1';
             $imageUrl = $sharedItemAssets['image'];
             $thumbUrl = $imageUrl;
-            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign);
+            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index);
 
             // Determine if this item was contributed by this installation or by another.
             if (isset($sharedItemAssets['contributor']))
@@ -392,7 +397,8 @@ class ItemPreview
             $isForeign = '0';
             $imageUrl = $file->getWebPath('original');
             $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
-            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign);
+            $tooltip .= basename($imageUrl);
+            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index);
         }
 
         return $html;
