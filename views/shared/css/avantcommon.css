@@ -260,49 +260,6 @@ img.mfp-img {
     color: #639abd !important;
 }
 
-#recently-viewed-items {
-    padding-right: 70px
-}
-
-#recently-viewed-items-title {
-    font-weight: bold;
-    font-size:16px;
-    color: #555;
-}
-
-.recently-viewed-item {
-    font-size: 12px;
-    margin-top:8px;
-}
-
-#recently-viewed-all {
-    font-weight: bold;
-    font-size: 12px;
-    margin-top:8px;
-    padding-top:8px;
-    border-top: 1px solid #ccc;
-}
-
-.recently-viewed-item-removed {
-    color:#777;
-    cursor: pointer;
-}
-
-.recently-viewed-item-removed:hover,
-#recently-viewed-clear-x:hover {
-    color:red;
-}
-
-#recently-viewed-clear-x {
-    cursor: pointer;
-}
-
-#recently-viewed-clear {
-    font-size: 12px;
-    font-weight: bold;
-    margin-top:6px;
-}
-
 .admin-links {
     font-size: 14px;
 }
