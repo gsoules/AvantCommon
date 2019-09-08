@@ -6,37 +6,7 @@ function removeAllItemsFromCookie()
     Cookies.set(ITEMS_COOKIE, '', {expires: 14});
 }
 
-function removeItemFromCookie(itemId)
-{
-    var oldItemIds = retrieveRecentItemIds();
-    var newItemIds = [];
-    for (id of oldItemIds)
-    {
-        if (itemId === id)
-        {
-            // Remove the item bu not adding it to the new list.
-            continue;
-        }
-        newItemIds.push(id);
-    }
-    newItemIds = newItemIds.join(',');
-
-    Cookies.set(ITEMS_COOKIE, newItemIds, {expires: 14});
-}
-
-function retrieveRecentItemIds()
-{
-    var value = Cookies.get(ITEMS_COOKIE);
-    var itemIds = [];
-    if (value !== undefined)
-    {
-        itemIds = value.split(',');
-    }
-
-    return itemIds;
-}
-
-function saveRecentItemId(itemId)
+function addRecentlyVisitedItem(itemId)
 {
     var oldItemIds = retrieveRecentItemIds();
     var newItemIds = '';
@@ -68,4 +38,34 @@ function saveRecentItemId(itemId)
     }
 
     Cookies.set(ITEMS_COOKIE, newItemIds, {expires: 14});
+}
+
+function removeRecentlyVisitedItem(itemId)
+{
+    var oldItemIds = retrieveRecentItemIds();
+    var newItemIds = [];
+    for (id of oldItemIds)
+    {
+        if (itemId === id)
+        {
+            // Remove the item bu not adding it to the new list.
+            continue;
+        }
+        newItemIds.push(id);
+    }
+    newItemIds = newItemIds.join(',');
+
+    Cookies.set(ITEMS_COOKIE, newItemIds, {expires: 14});
+}
+
+function retrieveRecentItemIds()
+{
+    var value = Cookies.get(ITEMS_COOKIE);
+    var itemIds = [];
+    if (value !== undefined)
+    {
+        itemIds = value.split(',');
+    }
+
+    return itemIds;
 }

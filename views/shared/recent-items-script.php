@@ -2,6 +2,6 @@
 jQuery(document).ready(function ()
 {
     var itemId = '<?php echo $itemId; ?>';
-    saveRecentItemId(itemId);
+    addRecentlyVisitedItem(itemId);
 });
 </script>
