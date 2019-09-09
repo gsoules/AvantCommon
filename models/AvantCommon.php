@@ -20,7 +20,7 @@ class AvantCommon
         return false;
     }
 
-    public static function emitAdminLinksHtml($itemId, $class, $newWindow, $newItem, $suffix = '')
+    public static function emitAdminLinksHtml($itemId, $class, $newWindow, $suffix = '')
     {
         $html = '';
         $target = $newWindow ? ' target="_blank"' : '';
@@ -30,8 +30,6 @@ class AvantCommon
         $html .= '<a href="' . admin_url('/avant/show/' . $itemId) . '"' . $target . '>' . __('View') . '</a> ';
         $html .= ' | <a href="' . admin_url('/items/edit/' . $itemId) . '"' . $target . '>' . __('Edit') . '</a>';
         $html .= ' | <a href="' . admin_url('/avant/relationships/' . $itemId) . '"' . $target . '>' . __('Rels') . '</a>';
-        if ($newItem)
-            $html .= ' | <a href="' . admin_url('/items/add/') . '"' . $target . '>' . __('New') . '</a>';
         $html .= $suffix;
         $html .= '</div>';
 
