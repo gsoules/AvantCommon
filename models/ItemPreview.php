@@ -20,14 +20,16 @@ class ItemPreview
     {
         if ($this->useElasticsearch)
         {
+            $itemId = $this->item['_source']['item']['id'];
             $identifier = $this->item['_source']['common']['identifier'][0];
             $url = $this->item['_source']['url']['item'];
             $public =  $this->item['_source']['item']['public'];
         }
         else
         {
+            $itemId = $this->item->id;
             $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
-            $url = url("items/show/{$this->item->id}");
+            $url = url("items/show/$itemId");
             $public = $this->item->public;
         }
 
@@ -43,6 +45,7 @@ class ItemPreview
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
         $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
+        $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItems());
         $html .= '</div>';
         return $html;
     }
@@ -257,7 +260,7 @@ class ItemPreview
         }
 
         $tooltip = ITEM_LINK_TOOLTIP;
-        $target = $openInNewWindow ? " target='blank'" : '';
+        $target = $openInNewWindow ? " target='_blank'" : '';
         $html = "<div class=\"element-text\"><a href='$url' title='$tooltip' $target>$title</a>$contributorId</div>";
         return $html;
     }
