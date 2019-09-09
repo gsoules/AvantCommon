@@ -265,6 +265,10 @@ img.mfp-img {
 }
 
 .show-page-links {
-    margin-top: 18px;
+    margin-top: 8px;
+}
+
+.dashboard-message {
     margin-left: 8px;
+    margin-bottom: 12px;
 }
