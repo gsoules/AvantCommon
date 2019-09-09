@@ -20,22 +20,6 @@ class AvantCommon
         return false;
     }
 
-    public static function emitAdminLinksHtml($itemId, $class, $newWindow, $suffix = '')
-    {
-        $html = '';
-        $target = $newWindow ? ' target="_blank"' : '';
-        $class .= ' ' . 'admin-links';
-
-        $html .= "<div class='$class'>";
-        $html .= '<a href="' . admin_url('/avant/show/' . $itemId) . '"' . $target . '>' . __('View') . '</a> ';
-        $html .= ' | <a href="' . admin_url('/items/edit/' . $itemId) . '"' . $target . '>' . __('Edit') . '</a>';
-        $html .= ' | <a href="' . admin_url('/avant/relationships/' . $itemId) . '"' . $target . '>' . __('Rels') . '</a>';
-        $html .= $suffix;
-        $html .= '</div>';
-
-        return $html;
-    }
-
     public static function getPostedValues($elementId)
     {
         $texts = array();
@@ -70,41 +54,6 @@ class AvantCommon
             $text = empty($values) ? '' : current($values)['text'];
         }
         return $text;
-    }
-
-    public static function getRecentlyViewedItems($excludeIdentifier = '')
-    {
-        $cookieValue = isset($_COOKIE['ITEMS']) ? $_COOKIE['ITEMS'] : '';
-        $recentItemIds = empty($cookieValue) ? array() : explode(',', $cookieValue);
-
-        $recentlyViewedItems = array();
-
-        foreach ($recentItemIds as $recentItemId)
-        {
-            if (intval($recentItemId) == 0)
-            {
-                // This should never happen, but check in case the cookie is somehow corrupted.
-                continue;
-            }
-
-            $recentItem = ItemMetadata::getItemFromId($recentItemId);
-
-            if (empty($recentItem))
-            {
-                // Ignore any items that no longer exist.
-                continue;
-            }
-
-            $recentIdentifier = ItemMetadata::getItemIdentifier($recentItem);
-            if ($recentIdentifier == $excludeIdentifier)
-            {
-                continue;
-            }
-
-            $recentlyViewedItems[$recentItemId] = $recentIdentifier;
-        }
-
-        return $recentlyViewedItems;
     }
 
     public static function isAjaxRequest()
