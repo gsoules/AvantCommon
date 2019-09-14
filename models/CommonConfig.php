@@ -7,8 +7,6 @@ define('CONFIG_LABEL_LIGHTBOX', __('Enable Lightbox'));
 define('CONFIG_LABEL_PRIVATE_ELEMENTS', __('Private Elements'));
 define('CONFIG_LABEL_REQUEST_IMAGE_URL', __('Request Image URL'));
 define('CONFIG_LABEL_UNUSED_ELEMENTS', __('Unused Elements'));
-define('CONFIG_LABEL_YEAR_START', __('Start Year'));
-define('CONFIG_LABEL_YEAR_END', __('End Year'));
 
 class CommonConfig extends ConfigOptions
 {
@@ -19,8 +17,6 @@ class CommonConfig extends ConfigOptions
     const OPTION_PRIVATE_ELEMENTS = 'avantcommon_private_elements';
     const OPTION_REQUEST_IMAGE_URL = 'avantcommon_request_image_url';
     const OPTION_UNUSED_ELEMENTS = 'avantcommon_unsused_elements';
-    const OPTION_YEAR_START = 'avantcommon_year_start';
-    const OPTION_YEAR_END = 'avantcommon_year_end';
 
     public static function getOptionDataForIdentifier()
     {
@@ -45,16 +41,6 @@ class CommonConfig extends ConfigOptions
     public static function getOptionDataForUnusedElements()
     {
         return self::getOptionListData(self::OPTION_UNUSED_ELEMENTS);
-    }
-
-    public static function getOptionDataForYearEnd()
-    {
-        return get_option(self::OPTION_YEAR_END);
-    }
-
-    public static function getOptionDataForYearStart()
-    {
-        return get_option(self::OPTION_YEAR_START);
     }
 
     public static function getOptionTextForIdentifier()
@@ -103,32 +89,6 @@ class CommonConfig extends ConfigOptions
         return self::getOptionListText(self::OPTION_UNUSED_ELEMENTS);
     }
 
-    public static function getOptionTextForYearEnd()
-    {
-        if (self::configurationErrorsDetected())
-        {
-            $text = $_POST[self::OPTION_YEAR_END];
-        }
-        else
-        {
-            $text = ItemMetadata::getElementNameFromId(get_option(self::OPTION_YEAR_END));
-        }
-        return $text;
-    }
-
-    public static function getOptionTextForYearStart()
-    {
-        if (self::configurationErrorsDetected())
-        {
-            $text = $_POST[self::OPTION_YEAR_START];
-        }
-        else
-        {
-            $text = ItemMetadata::getElementNameFromId(get_option(self::OPTION_YEAR_START));
-        }
-        return $text;
-    }
-
     public static function saveConfiguration()
     {
         self::saveOptionDataForIdentifier();
@@ -137,7 +97,6 @@ class CommonConfig extends ConfigOptions
         self::saveOptionDataForPrivateElements();
         self::saveOptionDataForRequestImageUrl();
         self::saveOptionDataForUnusedElements();
-        self::saveOptionDataForYearStartEnd();
 
         set_option(self::OPTION_LIGHTBOX, intval($_POST[self::OPTION_LIGHTBOX]));
     }
@@ -186,34 +145,6 @@ class CommonConfig extends ConfigOptions
         self::saveOptionListData(self::OPTION_UNUSED_ELEMENTS, CONFIG_LABEL_UNUSED_ELEMENTS);
     }
 
-    public static function saveOptionDataForYearStartEnd()
-    {
-        $startYearElementId = 0;
-        $endYearElementId = 0;
-
-        $startYear = trim($_POST[self::OPTION_YEAR_START]);
-        if (!empty($startYear))
-        {
-            $startYearElementId = ItemMetadata::getElementIdForElementName($startYear);
-            self::errorIf($startYearElementId == 0, CONFIG_LABEL_YEAR_START, __("'%s' is not an element.", $startYear));
-        }
-
-        $endYear = trim($_POST[self::OPTION_YEAR_END]);
-        if (!empty($endYear))
-        {
-            $endYearElementId = ItemMetadata::getElementIdForElementName($endYear);
-            self::errorIf($endYearElementId == 0, CONFIG_LABEL_YEAR_END, __("'%s' is not an element.", $endYear));
-        }
-
-        $count = $startYearElementId == 0 ? 0 : 1;
-        $count += $endYearElementId == 0 ? 0 : 1;
-        self::errorIf(!($count == 0 || $count == 2), null, _('Both the Start Year and End Year must be specified or both must be blank.'));
-        self::errorIf($count == 2 && $startYearElementId == $endYearElementId, null, _('Start Yead and End Year cannot be the same element.'));
-
-        set_option(self::OPTION_YEAR_START, $startYearElementId);
-        set_option(self::OPTION_YEAR_END, $endYearElementId);
-    }
-
     public static function setDefaultOptionValues()
     {
         $identifierElementId = ItemMetadata::getElementIdForElementName('Identifier');
@@ -221,7 +152,5 @@ class CommonConfig extends ConfigOptions
 
         set_option(self::OPTION_IDENTIFIER_ALIAS, 0);
         set_option(self::OPTION_IDENTIFIER_PREFIX, __('Item '));
-        set_option(self::OPTION_YEAR_START, 0);
-        set_option(self::OPTION_YEAR_END, 0);
     }
 }

@@ -12,9 +12,6 @@ $requestImageUrl = CommonConfig::getOptionTextForRequestImageUrl();
 
 $unusedElementsOption = CommonConfig::getOptionTextForUnusedElements();
 $unusedElementsOptionRows = max(2, count(explode(PHP_EOL, $unusedElementsOption)));
-
-$startYearOption = CommonConfig::getOptionTextForYearStart();
-$endYearOption = CommonConfig::getOptionTextForYearEnd();
 ?>
 
 <div class="plugin-help learn-more">
@@ -68,26 +65,6 @@ $endYearOption = CommonConfig::getOptionTextForYearEnd();
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("Elements that are not being used by this installation."); ?></p>
         <?php echo $view->formTextarea(CommonConfig::OPTION_UNUSED_ELEMENTS, $unusedElementsOption, array('rows' => $unusedElementsOptionRows)); ?>
-    </div>
-</div>
-
-<div class="field">
-    <div class="two columns alpha">
-        <label><?php echo CONFIG_LABEL_YEAR_START; ?></label>
-    </div>
-    <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The element used to store the Start year."); ?></p>
-        <?php echo $view->formText(CommonConfig::OPTION_YEAR_START, $startYearOption); ?>
-    </div>
-</div>
-
-<div class="field">
-    <div class="two columns alpha">
-        <label><?php echo CONFIG_LABEL_YEAR_END; ?></label>
-</div>
-    <div class="inputs five columns omega">
-        <p class="explanation"><?php echo __("The element used to store the End year."); ?></p>
-        <?php echo $view->formText(CommonConfig::OPTION_YEAR_END, $endYearOption); ?>
     </div>
 </div>
 
