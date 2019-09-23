@@ -85,7 +85,10 @@ class AvantCommon
 
     public static function isSearchRequest()
     {
-        return isset($_GET['query']) || isset($GET['advanced']);
+        $isQuery = isset($_GET['query']);
+        $isKeywords = isset($_GET['keywords']);
+        $isAdvanced = isset($_GET['advanced']);
+        return $isQuery || $isKeywords || $isAdvanced;
     }
 
     public static function setPostTextForElementId($elementId, $text)

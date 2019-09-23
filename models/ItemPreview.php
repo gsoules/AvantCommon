@@ -45,7 +45,7 @@ class ItemPreview
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
         $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
-        $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItems());
+        $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItemIds());
         $html .= '</div>';
         return $html;
     }
