@@ -88,6 +88,17 @@ class ItemPreview
         return $html;
     }
 
+    public function emitItemPreviewAsRow($attributes)
+    {
+        $html = "<div{$attributes}>";
+        $html .= $this->emitItemHeader();
+        $html .= "<div>";
+        $html .= $this->emitItemTitle();
+        $html .= "</div>";
+        $html .= "</div>";
+        return $html;
+    }
+
     public function emitItemPreviewForGrid($sharedSearchingEnabled)
     {
         $contributorId = $sharedSearchingEnabled ? ' <span class="contributor-id">' . $this->item['_source']['item']['contributor'] . '</span>' : '';
