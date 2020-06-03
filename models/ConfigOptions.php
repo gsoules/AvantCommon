@@ -135,6 +135,7 @@ class ConfigOptions
     public static function saveOptionText($optionName, $optionLabel)
     {
         $value = self::getOptionText($optionName);
+        $value = trim($value);
         self::errorIfEmpty($value, $optionName, $optionLabel);
         set_option($optionName, $value);
     }
