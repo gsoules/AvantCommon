@@ -21,7 +21,7 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $itemId = $this->item['_source']['item']['id'];
-            $identifier = $this->item['_source']['common']['identifier'][0];
+            $identifier = $this->item['_source']['core-fields']['identifier'][0];
             $url = $this->item['_source']['url']['item'];
             $public =  $this->item['_source']['item']['public'];
         }
@@ -196,12 +196,12 @@ class ItemPreview
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
             if ($this->useElasticsearch)
             {
-                $title = isset($this->item['_source']['common']['title']) ? $this->item['_source']['common']['title'][0] : UNTITLED_ITEM;
+                $title = isset($this->item['_source']['core-fields']['title']) ? $this->item['_source']['core-fields']['title'][0] : UNTITLED_ITEM;
                 if (is_array($title))
                 {
                     $title = $title[0];
                 }
-                $itemNumber = $this->item['_source']['common']['identifier'][0];
+                $itemNumber = $this->item['_source']['core-fields']['identifier'][0];
                 $itemId = $this->item['_source']['item']['id'];
             }
             else
@@ -230,9 +230,9 @@ class ItemPreview
         // Give another plugin a chance to add to the class for installation-specific custom styling.
         if ($this->useElasticsearch)
         {
-            if (isset($this->item['_source']['common']['type']))
+            if (isset($this->item['_source']['core-fields']['type']))
             {
-                $itemType = $this->item['_source']['common']['type'][0];
+                $itemType = $this->item['_source']['core-fields']['type'][0];
             }
             else
             {
@@ -259,7 +259,7 @@ class ItemPreview
     {
         if ($this->useElasticsearch)
         {
-            $element = $this->item['_source']['common'];
+            $element = $this->item['_source']['core-fields'];
             $title = isset($element["title"]) ? $element["title"][0] : UNTITLED_ITEM;
             $url = $this->item['_source']['url']['item'];
         }
@@ -308,8 +308,8 @@ class ItemPreview
         {
             if ($useElasticsearch)
             {
-                $typeName = isset($item['_source']['common']['type']) ? $item['_source']['common']['type'][0] : '';
-                $subject = isset($item['_source']['common']['subject']) ? $item['_source']['common']['subject'][0] : '';
+                $typeName = isset($item['_source']['core-fields']['type']) ? $item['_source']['core-fields']['type'][0] : '';
+                $subject = isset($item['_source']['core-fields']['subject']) ? $item['_source']['core-fields']['subject'][0] : '';
                 if (is_array($subject))
                 {
                     $subject = $subject[0];
