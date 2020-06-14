@@ -140,20 +140,6 @@ class ItemPreview
                 $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
                 $isFallbackImage = true;
             }
-            else
-            {
-                $sharedItemInfo = ItemMetadata::getSharedItemAssets($this->item);
-                if (!isset($sharedItemInfo['image']))
-                {
-                    $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
-                    $isFallbackImage = true;
-                }
-                else
-                {
-                    $thumbnailUrl = $sharedItemInfo['thumbnail'];
-                    $originalImageUrl = $sharedItemInfo['image'];
-                }
-            }
         }
         else
         {
@@ -343,23 +329,9 @@ class ItemPreview
 
     public static function getFileHtml($item, $file, $isThumbnail, $index = 0)
     {
-        $sharedItemAssets = array();
         if (empty($file))
         {
-            // There is no file attached to this item. See if the item specifies the URL for the image of a shared item.
-            $sharedItemAssets = ItemMetadata::getSharedItemAssets($item);
-            if (empty($sharedItemAssets))
-            {
-                // There is no shared image for this item.
-                return '';
-            }
-            else if (isset($sharedItemAssets['error']))
-            {
-                $message = __('The image for this shared item is not accessible at this time.');
-                $message .= $sharedItemAssets['response-code'];
-                $html = "<div class='shared-item-error'>$message</div><hr/>";
-                return $html;
-            }
+            return '';
         }
 
         // Determine the file type. External URLs are always treated as images.
@@ -385,35 +357,12 @@ class ItemPreview
         $itemNumber = ItemMetadata::getItemIdentifier($item);
         $tooltip = IMAGE_THUMB_TOOLTIP;
 
-        if (empty($file))
-        {
-            // Emit HTML to display an external image. Note that this method should never get called to display
-            // the thumbnail for an external image on a Show page because when external images are used, no thumbs
-            // are displayed (thumbs only appear when the item has more than one image). Thumbnails for external images
-            // that appear in search results are emitted by emitItemThumbnail.
-            $isForeign = '1';
-            $imageUrl = $sharedItemAssets['image'];
-            $thumbUrl = $imageUrl;
-            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index);
-
-            // Determine if this item was contributed by this installation or by another.
-            if (isset($sharedItemAssets['contributor']))
-            {
-                $contributor = __('Shared by ') . $sharedItemAssets['contributor'];
-                $itemUrl = $sharedItemAssets['item-url'];
-                $message = __('View Full Item');
-                $html .= "<div class='shared-item-contributor'>$contributor</div><div><a class='shared-item-link' href='$itemUrl'>$message</a></div>";
-            }
-        }
-        else
-        {
-            // Emit HTML to display an attached image.
-            $isForeign = '0';
-            $imageUrl = $file->getWebPath('original');
-            $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
-            $tooltip .= basename($imageUrl);
-            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index);
-        }
+        // Emit HTML to display an attached image.
+        $isForeign = '0';
+        $imageUrl = $file->getWebPath('original');
+        $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
+        $tooltip .= basename($imageUrl);
+        $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index);
 
         return $html;
     }
