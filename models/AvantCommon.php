@@ -150,4 +150,10 @@ class AvantCommon
 
         return true;
     }
+
+    public static function userIsSuper()
+    {
+        $user = current_user();
+        return ($user->role == 'super');
+    }
 }
