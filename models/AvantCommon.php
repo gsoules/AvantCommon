@@ -154,6 +154,6 @@ class AvantCommon
     public static function userIsSuper()
     {
         $user = current_user();
-        return ($user->role == 'super');
+        return ($user && $user->role == 'super');
     }
 }
