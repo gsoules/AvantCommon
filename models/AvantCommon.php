@@ -20,6 +20,15 @@ class AvantCommon
         return false;
     }
 
+    public static function escapeQuotes($text)
+    {
+        // Returns a string with backslashes added before characters that need to be escaped.
+        // The characters are: single quote ('), double quote ("), backslash (\), NUL (the NUL byte).
+        // Use this method for string that will get inserted into SQL queries so that quotes within
+        // the string don't create syntax errors in the query.
+        return addslashes($text);
+    }
+
     public static function getPostedValues($elementId)
     {
         $texts = array();
