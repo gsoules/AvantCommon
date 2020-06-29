@@ -11,22 +11,30 @@ function constructLightboxCaption(item)
     var itemUrl = item.el.attr('data-itemUrl');
     var titleText = '<div class="mfp-caption-title">' + title + '</div>';
     var target = isForeignItem === '1' ? ' target="_blank"' : '';
-    var viewItemLink = '<a class="lightbox-link" title="Item #' + itemNumber + '" href="' + itemUrl + '"' + target + '>' + ITEM_LINK_TEXT + ' ' + itemNumber + '</a>';
+    var viewItemLink = '<a class="lightbox-link" title="View the metadata for this item" href="' + itemUrl + '"' + target + '>' + ITEM_LINK_TEXT + '</a>';
     var imageLink = '';
 
+    imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View this image in a separate window">' + fileName + '</a>';
+    var requestLink = '';
     if (requestImageUrl.length >  0 && isForeignItem === '0')
     {
         requestImageUrl += '?id=' + itemId + '&item=' + itemNumber + '&file=' + rawFileName;
-        imageLink = '<a class="lightbox-link" href="' + requestImageUrl + ' " target="_blank" title="Image ' + fileName + '">' + REQUEST_IMAGE_TEXT + '</a>';
-    }
-    else
-    {
-        imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a>';
+        requestLink = '<a class="lightbox-link" href="' + requestImageUrl + ' " target="_blank" title="Make a request for this image">' + REQUEST_IMAGE_TEXT + '</a>';
     }
 
-    var caption = '<div>' + titleText + '<ul class="mfp-caption-links-container"><li class="mfp-caption-links">';
-    caption += viewItemLink + '</li><li class="mfp-caption-links">' + imageLink;
-    caption += '</li><li class="mfp-caption-close"><a href="javascript:closeLightbox()" title="Close">x</a></li></ul></div>';
+    var caption = '<div>' + titleText + '<ul class="mfp-caption-fields">';
+
+    caption += '<li class="mfp-caption-text-field mfp-caption-optional-field">Item #' + itemNumber + '</li>';
+
+    caption += '<li class="mfp-caption-button-field">' + viewItemLink + '</li>';
+
+    if (requestLink)
+        caption += '<li class="mfp-caption-link-field ">' + requestLink + '</li>';
+
+    caption += '<li class="mfp-caption-link-field mfp-caption-optional-field">' + imageLink + '</li>';
+    caption += '<li class="mfp-caption-close"><a href="javascript:closeLightbox()" title="Close">&times;</a></li>';
+
+    caption += '</ul>' + '</div>';
     return caption;
 }
 

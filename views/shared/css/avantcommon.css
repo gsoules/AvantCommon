@@ -183,7 +183,7 @@
 /* Magnific popup */
 
 .mfp-content {
-    height: 95%;
+    max-height: 95%;
 }
 
 .mfp-close {
@@ -191,11 +191,11 @@
 }
 
 .mfp-figure  {
-    height: 100%;
+    /*max-height: 95%;*/
 }
 
 .mfp-figure figure {
-    height: 100%;
+    /*max-height: 95%;*/
 }
 
 :root {
@@ -203,16 +203,16 @@
 }
 
 img.mfp-img {
-    max-height: calc(100% - var(--lightbox-bottom-bar-height)) !important;
+    max-height: 80vh !important;
     padding: 0 0;
 }
 
 .mfp-figure figure figcaption {
-    height: var(--lightbox-bottom-bar-height);
+    /*height: var(--lightbox-bottom-bar-height);*/
 }
 
 .mfp-bottom-bar {
-    height: var(--lightbox-bottom-bar-height);
+    /*height: var(--lightbox-bottom-bar-height);*/
     top: inherit;
     padding: 8px 4px;
     margin-top: 0;
@@ -220,7 +220,7 @@ img.mfp-img {
 }
 
 .mfp-title {
-    color: #999;
+    color: #555;
     font-weight: bold;
     text-align: center;
     line-height: 22px;
@@ -235,35 +235,63 @@ img.mfp-img {
     font-size: 3vw;
 }
 
-.mfp-caption-links-container {
+.mfp-caption-fields {
     display: flex;
     justify-content: center;
     list-style: none;
     margin: 0;
     padding: 0;
+    font-weight: normal;
+    font-size: 2.75vw;
 }
 
-.mfp-caption-links {
-    font-size: 2.75vw;
-    background: #3062a5;
-    opacity: 0.80;
-    color: white;
+.mfp-caption-button-field,
+.mfp-caption-link-field,
+.mfp-caption-text-field {
     padding: 2px 12px;
     margin: 8px 8px 2px 8px;
+}
+
+.mfp-caption-optional-field {
+    display: none; /* Display when screen is wide enough */
+}
+
+.mfp-caption-button-field {
+    background: #3062a5;
+    opacity: 0.80;
     z-index: 1000;
-    border: #588caf solid 2px;
+    border: #588caf solid 0px;
     border-radius: 15px;
     text-align: center;
 }
 
-.mfp-caption-links a {
-    color: #fff !important;
-    font-weight: normal;
+.mfp-caption-button-field a:link,
+.mfp-caption-button-field a:visited {
+    color: #fff;
+    font-weight: bold;
     text-decoration: none;
 }
 
+.mfp-caption-button-field a:hover {
+    color: #ccc;
+}
+
+.mfp-caption-link-field a:link,
+.mfp-caption-link-field a:visited {
+    color: #333;
+    font-weight: normal;
+    text-decoration: underline !important;
+}
+.mfp-caption-link-field a:hover {
+    color: #999;
+}
+
+.mfp-caption-text-field {
+    color: #333;
+}
+
 .mfp-caption-close {
-    font-size: 24px;
+    font-size: 32px;
     padding: 2px 2px;
     margin: 8px 8px 2px 8px;
     z-index: 1000;
@@ -282,13 +310,8 @@ img.mfp-img {
     display: none; /* Display when screen is wide enough */
     color: #666;
     font-size: 16px;
-    top: 48px;
+    top: 42px;
     right: 12px;
-}
-
-.mfp-title .lightbox-image-link {
-    color:#999;
-    font-weight: normal;
 }
 
 .lightbox {
@@ -317,18 +340,20 @@ img.mfp-img {
     margin-bottom: 12px;
 }
 
-@media screen and (min-width: 600px) {
-    .mfp-counter {
-        display: block;
-    }
-}
-
 @media screen and (min-width: 760px) {
     .mfp-caption-title {
         font-size: 20px;
     }
 
-    .mfp-caption-links {
+    .mfp-caption-fields {
         font-size: 16px;
+    }
+
+    .mfp-caption-optional-field {
+        display: block;
+    }
+
+    .mfp-counter {
+        display: block;
     }
 }
