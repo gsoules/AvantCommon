@@ -8,7 +8,6 @@ function constructLightboxCaption(item)
     var rawFileName = href.substring(href.lastIndexOf('/') + 1);
     var fileName = rawFileName.replace(/_/g, ' ');
     var requestImageUrl = REQUEST_IMAGE_URL;
-    var separator = '&nbsp;&nbsp;&#8212;&nbsp;&nbsp;';
     var itemUrl = item.el.attr('data-itemUrl');
     var titleText = '<div class="mfp-caption-title">' + title + '</div>';
     var target = isForeignItem === '1' ? ' target="_blank"' : '';
@@ -25,6 +24,13 @@ function constructLightboxCaption(item)
         imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a>';
     }
 
-    var caption = '<div>' + titleText + '<ul class="mfp-caption-links-container"><li class="mfp-caption-links">' + viewItemLink + '</li><li class="mfp-caption-links">' + imageLink + '</li></ul></div>';
+    var caption = '<div>' + titleText + '<ul class="mfp-caption-links-container"><li class="mfp-caption-links">';
+    caption += viewItemLink + '</li><li class="mfp-caption-links">' + imageLink;
+    caption += '</li><li class="mfp-caption-close"><a href="javascript:closeLightbox()" title="Close">x</a></li></ul></div>';
     return caption;
+}
+
+function closeLightbox()
+{
+    jQuery.magnificPopup.close();
 }
