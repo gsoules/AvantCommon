@@ -25,6 +25,6 @@ function constructLightboxCaption(item)
         imageLink = '<a class="lightbox-image-link" href="' + href + '" target="_blank" title="View image in a separate window">' + fileName + '</a>';
     }
 
-    var caption = '<div>' + titleText + '<div class="mfp-caption-links">' + viewItemLink + separator +  imageLink + '</div></div>';
+    var caption = '<div>' + titleText + '<ul class="mfp-caption-links-container"><li class="mfp-caption-links">' + viewItemLink + '</li><li class="mfp-caption-links">' + imageLink + '</li></ul></div>';
     return caption;
 }
