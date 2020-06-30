@@ -116,7 +116,6 @@ class ItemPreview
         $originalImageUrl = '';
         $getThumbnail = true;
         $isFallbackImage = false;
-        $isCoverImage = false;
 
         if ($this->useElasticsearch)
         {
@@ -135,11 +134,8 @@ class ItemPreview
         if (empty($thumbnailUrl))
         {
             // This item has no thumbnail presumably because the item has no image.
-            if ($this->useElasticsearch)
-            {
-                $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
-                $isFallbackImage = true;
-            }
+            $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
+            $isFallbackImage = true;
         }
         else
         {
