@@ -44,7 +44,11 @@ class ItemPreview
         $prefix = ItemMetadata::getIdentifierPrefix();
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
-        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
+        if (!$this->sharedSearchingEnabled)
+        {
+            // Only show the identifier for when viewing the local site since site-wide identifiers are not very useful.
+            $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
+        }
         $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItemIds());
         $html .= '</div>';
         return $html;
