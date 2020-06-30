@@ -199,6 +199,9 @@ class ItemPreview
 
             $title = empty($title) ? UNTITLED_ITEM : $title;
 
+            // Escape single quotes since the title ends up getting into Javascript via the data-title attribute.
+            $title = str_replace("'", '&#39;', $title);
+
             // Determine if this item was contributed by this installation or by another.
             $isForeign = $this->sharedSearchingEnabled && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
             $isForeign = $isForeign ? '1' : '0';
@@ -360,6 +363,10 @@ class ItemPreview
         // Emit HTML to display an attached image.
         $isForeign = '0';
         $imageUrl = $file->getWebPath('original');
+
+        // Convert any backslashes to forward slashes for subsequent logic that expects all forward slashes.
+        $imageUrl = str_replace("\\", "/", $imageUrl);
+
         $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
         $tooltip .= basename($imageUrl);
         $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $title, $tooltip, $isForeign, $index);
