@@ -137,7 +137,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
             echo get_view()->partial(
                 'avantcommon-script.php',
                 array(
-                'itemLinkText' => __('View Item'),
+                'itemLinkText' => __('View&nbsp;Item'),
                 'requestImageText' => __('Request Image'),
                 'requestImageUrl' => $requestImageUrl
                 ));
