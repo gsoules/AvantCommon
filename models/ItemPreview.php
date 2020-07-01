@@ -1,6 +1,7 @@
 <?php
 
 define('IMAGE_THUMB_TOOLTIP', __('Show larger image of '));
+define('PDF_THUMB_TOOLTIP', __('Read this PDF file '));
 define('ITEM_LINK_TOOLTIP', __('View this item'));
 
 class ItemPreview
@@ -21,7 +22,9 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $itemId = $this->item['_source']['item']['id'];
+            $contributorId = $this->item['_source']['item']['contributor-id'];
             $identifier = $this->item['_source']['core-fields']['identifier'][0];
+            $identifier = "$contributorId-$identifier";
             $url = $this->item['_source']['url']['item'];
             $public =  $this->item['_source']['item']['public'];
         }
@@ -44,12 +47,13 @@ class ItemPreview
         $prefix = ItemMetadata::getIdentifierPrefix();
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
-        if (!$this->sharedSearchingEnabled)
+        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
+        $isLocalItem = $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
+        if ($isLocalItem)
         {
-            // Only show the identifier for when viewing the local site since site-wide identifiers are not very useful.
-            $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
+            // Only show identifier when viewing the local site since identifiers are not unique across sites.
+            $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItemIds());
         }
-        $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItemIds());
         $html .= '</div>';
         return $html;
     }
@@ -342,6 +346,7 @@ class ItemPreview
         if ($isImage)
         {
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
+            $isPdfFile = false;
             $class = 'lightbox';
             $title = ItemMetadata::getItemTitle($item);
         }
@@ -358,7 +363,7 @@ class ItemPreview
         // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
         $itemId = (string)$item->id;
         $itemNumber = ItemMetadata::getItemIdentifier($item);
-        $tooltip = IMAGE_THUMB_TOOLTIP;
+        $tooltip = $isPdfFile ? PDF_THUMB_TOOLTIP : IMAGE_THUMB_TOOLTIP;
 
         // Emit HTML to display an attached image.
         $isForeign = '0';
