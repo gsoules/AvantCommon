@@ -1,5 +1,12 @@
 # AvantCommon
 
+---
+```
+This documentation is for Release v2.1.0. The unreleased code is under development and
+should be used for reference purposes only.
+```
+---
+
 This plugin supports and is required by the following plugins:
  
 * [AvantAdmin]
