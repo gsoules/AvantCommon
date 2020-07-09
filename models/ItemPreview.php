@@ -52,7 +52,7 @@ class ItemPreview
         if ($isLocalItem)
         {
             // Only show identifier when viewing the local site since identifiers are not unique across sites.
-            $html .= AvantAdmin::emitFlagItemAsRecent($itemId, AvantAdmin::getRecentlyViewedItemIds());
+            $html .= AvantCommon::emitFlagItemAsRecent($itemId, AvantCommon::getRecentlyViewedItemIds());
         }
         $html .= '</div>';
         return $html;
