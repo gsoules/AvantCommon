@@ -366,11 +366,6 @@ class AvantCommon
         return $response;
     }
 
-    public static function setPostTextForElementId($elementId, $text)
-    {
-        $_POST['Elements'][$elementId][0]['text'] = $text;
-    }
-
     public static function sendEmailToAdministrator($title, $subject, $body)
     {
         $contributorId = option('avantelasticsearch_es_contributor_id');
