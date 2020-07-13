@@ -182,6 +182,25 @@ class AvantCommon
         return addslashes($text);
     }
 
+    public static function fetchItemForRemoteRequest($itemId)
+    {
+        // This method fetches an item directly from the DB instead of using the normal Omeka methods because
+        // those will return null if the item is not public and no user is logged in. Only use this method to
+        // support remote requests where the logic needs to access public and non-public items, but because
+        // the request is remote, there is no logged-in user.
+        try
+        {
+            $db = get_db();
+            $select = $db->select()->from($db->Items)->where('id = ?', $itemId);
+            $item = $db->getTable('Item')->fetchObject($select);
+        }
+        catch (Exception $e)
+        {
+            $item = null;
+        }
+        return $item;
+    }
+
     public static function getPostedValues($elementId)
     {
         $texts = array();
