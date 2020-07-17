@@ -122,21 +122,23 @@ class ItemPreview
     public function emitItemThumbnail($useCoverImage = true)
     {
         $originalImageUrl = '';
+        $pdfUrl = '';
         $getThumbnail = true;
         $isFallbackImage = false;
 
         if ($this->useElasticsearch)
         {
+            $source = $this->item['_source'];
             $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
             $fileCount = $this->item['_source']['file']['total'];
             $isCoverImage = isset($this->item['_source']['url']['cover']) ?  $this->item['_source']['url']['cover'] : false;
         }
         else
         {
+            $source = null;
             $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
             $fileCount = count($this->item->Files);
             $isCoverImage = !empty(self::getCoverImageIdentifier($this->item->id));
-
         }
 
         if (empty($thumbnailUrl))
@@ -151,7 +153,9 @@ class ItemPreview
 
             if ($this->useElasticsearch)
             {
-                $originalImageUrl = isset($this->item['_source']['url']['image']) ? $this->item['_source']['url']['image'] : '';
+                if (isset($source['pdf']['file-url'][0]))
+                    $pdfUrl = $source['pdf']['file-url'][0];
+                $originalImageUrl = isset($source['url']['image']) ? $this->item['_source']['url']['image'] : '';
             }
             else
             {
@@ -184,15 +188,18 @@ class ItemPreview
         {
             // The item has a thumbnail and large image (either both attached or both external).
             // Get text for the caption that will appear at lower-right when the large image appears in the lightbox.
+            $contributor = '';
             if ($this->useElasticsearch)
             {
-                $title = isset($this->item['_source']['core-fields']['title']) ? $this->item['_source']['core-fields']['title'][0] : UNTITLED_ITEM;
+                $source = $this->item['_source'];
+                $title = isset($source['core-fields']['title']) ? $source['core-fields']['title'][0] : UNTITLED_ITEM;
                 if (is_array($title))
                 {
                     $title = $title[0];
                 }
-                $itemNumber = $this->item['_source']['core-fields']['identifier'][0];
-                $itemId = $this->item['_source']['item']['id'];
+                $itemNumber = $source['core-fields']['identifier'][0];
+                $itemId = $source['item']['id'];
+                $contributor = $this->sharedSearchingEnabled ? $source['item']['contributor'] : '';
             }
             else
             {
@@ -207,25 +214,27 @@ class ItemPreview
             $title = str_replace("'", '&#39;', $title);
 
             // Determine if this item was contributed by this installation or by another.
-            $isForeign = $this->sharedSearchingEnabled && $this->item['_source']['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
+            $isForeign = $this->sharedSearchingEnabled && $source['item']['contributor-id'] != ElasticsearchConfig::getOptionValueForContributorId();
             $isForeign = $isForeign ? '1' : '0';
 
-            $itemUrl = $this->sharedSearchingEnabled ? $this->item['_source']['url']['item'] : url("items/show/$itemId");
+            $itemUrl = $this->sharedSearchingEnabled ? $source['url']['item'] : url("items/show/$itemId");
 
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
             $fileName = basename($originalImageUrl);
             $tooltip = IMAGE_THUMB_TOOLTIP . $fileName;
-            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' data-foreign='$isForeign'>$imgTag</a>";
+            $html = "<a class='lightbox' href='$originalImageUrl' title='$tooltip' itemId='$itemId' ";
+            $html .= "data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' ";
+            $html .= "data-foreign='$isForeign' data-contributor='$contributor' data-pdf='$pdfUrl'>$imgTag</a>";
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
         if ($this->useElasticsearch)
         {
-            if (isset($this->item['_source']['core-fields']['type']))
+            if (isset($source['core-fields']['type']))
             {
-                $itemType = $this->item['_source']['core-fields']['type'][0];
+                $itemType = $source['core-fields']['type'][0];
             }
             else
             {
@@ -252,7 +261,8 @@ class ItemPreview
     {
         if ($this->useElasticsearch)
         {
-            $element = $this->item['_source']['core-fields'];
+            $source = $this->item['_source'];
+            $element = $source['core-fields'];
             $title = isset($element["title"]) ? $element["title"][0] : UNTITLED_ITEM;
             $url = $this->item['_source']['url']['item'];
         }

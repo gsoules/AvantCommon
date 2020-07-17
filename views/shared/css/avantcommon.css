@@ -208,7 +208,7 @@ figcaption {
 .mfp-bottom-bar {
     top: inherit;
     padding: 8px 4px;
-    margin-top: 0;
+    margin-top: 4px;
     background-color: white;
     box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.6) inset;
 }
@@ -227,6 +227,11 @@ figcaption {
 
 .mfp-caption-title {
     font-size: 5vw;
+}
+
+.mfp-caption-contributor {
+    font-weight: normal;
+    color: #777;
 }
 
 .mfp-caption-fields {
