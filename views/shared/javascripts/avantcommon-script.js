@@ -24,6 +24,7 @@ function constructLightboxCaption(item)
         let rawPdfFileName = pdfUrl.substring(pdfUrl.lastIndexOf('/') + 1);
         let pdfFileName = rawPdfFileName.replace(/_/g, ' ');
         pdfLink = '<a class="lightbox-image-link" href="' + pdfUrl + '" target="_blank" title="View this PDF file">' + pdfFileName + '</a>';
+        viewPdfLink = '<a class="lightbox-link" title="View PDF file ' +  pdfFileName + '" href="' + pdfUrl + '" target="_blank">' + 'View PDF' + '</a>';
     }
 
     rawFileName = href.substring(href.lastIndexOf('/') + 1);
@@ -47,7 +48,7 @@ function constructLightboxCaption(item)
         caption += '<li class="mfp-caption-link-field ">' + requestLink + '</li>';
 
     if (pdfUrl)
-        caption += '<li class="mfp-caption-button-field">' + pdfLink + '</li>';
+        caption += '<li class="mfp-caption-button-field">' + viewPdfLink + '</li>';
     else
         caption += '<li class="mfp-caption-link-field mfp-caption-optional-field">' + imageLink + '</li>';
 
