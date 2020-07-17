@@ -266,14 +266,14 @@ figcaption {
 
 .mfp-caption-button-field a:link,
 .mfp-caption-button-field a:visited {
-    color: #fff;
+    color: #ddd;
     font-weight: bold;
     text-decoration: none;
     padding: 8px 16px;
 }
 
 .mfp-caption-button-field a:hover {
-    color: #d2e3ff;
+    color: white;
 }
 
 .mfp-caption-link-field a:link,
