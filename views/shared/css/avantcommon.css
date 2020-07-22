@@ -191,7 +191,7 @@
     background-color: unset;
 }
 
-.mfp-close {
+div.mfp-figure div.mfp-close {
     display: none !important;
 }
 
