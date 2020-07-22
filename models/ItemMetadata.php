@@ -122,7 +122,7 @@ class ItemMetadata
     public static function getItemFromIdentifier($identifier)
     {
         $elementId = CommonConfig::getOptionDataForIdentifier();
-        $items = get_records('Item', array('advanced' => array(array('element_id' => $elementId, 'type' => 'is exactly', 'terms' => $identifier))));
+        $items = get_records('Item', array('search' => '', 'advanced' => array(array('element_id' => $elementId, 'type' => 'is exactly', 'terms' => $identifier))));
         if (empty($items))
             return null;
         return $items[0];
