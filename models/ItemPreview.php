@@ -17,6 +17,14 @@ class ItemPreview
         $this->sharedSearchingEnabled = $sharedSearchingEnabled;
     }
 
+    protected static function emitImageLinkHtml($class, $imageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag)
+    {
+        $html = "<a class='$class' href='$imageUrl' title='$tooltip' itemId='$itemId' ";
+        $html .= "data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' ";
+        $html .= "data-foreign='$isForeign' data-contributor='$contributor' data-pdf='$pdfUrl'>$imgTag</a>";
+        return $html;
+    }
+
     public function emitItemHeader($openLinkInNewWindow = false)
     {
         if ($this->useElasticsearch)
@@ -65,7 +73,7 @@ class ItemPreview
         $contributor = '';
 
         $html = "<div class='item-file image-jpeg'>";
-        $html .= self::emitItemThumbnailHtml($class, $imageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
+        $html .= self::emitImageLinkHtml($class, $imageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
 
         if ($index > 0)
             $html .= "<div class='item-file-index'>$index</div>";
@@ -162,7 +170,7 @@ class ItemPreview
             {
                 $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
                 $file = $this->item->getFile(0);
-                $isPdfFile = substr($file->mime_type, 0, 15) == 'application/pdf';
+                $isPdfFile = $file && substr($file->mime_type, 0, 15) == 'application/pdf';
                 if ($isPdfFile)
                     $pdfUrl = $file->getWebPath('original');
             }
@@ -230,7 +238,7 @@ class ItemPreview
             $fileName = basename($originalImageUrl);
             $tooltip = IMAGE_THUMB_TOOLTIP . $fileName;
             $class = 'lightbox';
-            $html = self::emitItemThumbnailHtml($class, $originalImageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
+            $html = self::emitImageLinkHtml($class, $originalImageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
@@ -258,14 +266,6 @@ class ItemPreview
 
         $html = "<div class=\"$class\">$html</div>";
 
-        return $html;
-    }
-
-    protected static function emitItemThumbnailHtml($class, $imageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag)
-    {
-        $html = "<a class='$class' href='$imageUrl' title='$tooltip' itemId='$itemId' ";
-        $html .= "data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' ";
-        $html .= "data-foreign='$isForeign' data-contributor='$contributor' data-pdf='$pdfUrl'>$imgTag</a>";
         return $html;
     }
 
@@ -369,7 +369,6 @@ class ItemPreview
         {
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             $isPdfFile = false;
-            $pdfUrl = '';
             $class = 'lightbox';
             $title = ItemMetadata::getItemTitle($item);
         }
@@ -377,7 +376,6 @@ class ItemPreview
         {
             // The file is not an image. See if it's a PDF, and if not, just call it a document (e.g. a text file).
             $isPdfFile = substr($file->mime_type, 0, 15) == 'application/pdf';
-            $pdfUrl = '';
             $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
             if ($isThumbnail)
                 $class .= '-thumb';
@@ -396,6 +394,7 @@ class ItemPreview
         // Convert any backslashes to forward slashes for subsequent logic that expects all forward slashes.
         $imageUrl = str_replace("\\", "/", $imageUrl);
 
+        $pdfUrl = '';
         $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
         $tooltip .= basename($imageUrl);
         $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index);
