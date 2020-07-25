@@ -118,13 +118,17 @@
     border: 2px dotted #555 !important;
 }
 
-.item-preview-cover {
-    border-radius: 10px;
+div.item-img.reference a.lightbox img {
+    border: double 5px #777;
+}
+
+div.item-img.reference.fallback-image img {
+    border: double 3px #777;
 }
 
 .item-preview.cover-image img,
 .item-preview.cover-image .item-img {
-    border-radius: 10px;
+    border-radius: 5px;
     width: auto;
     max-height: none;
 }
