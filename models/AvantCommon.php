@@ -105,7 +105,7 @@ class AvantCommon
 
                 $recentItem = $info['item'];
                 $itemPreview = new ItemPreview($recentItem);
-                $thumbnail = $itemPreview->emitItemThumbnail();
+                $thumbnail = $itemPreview->emitItemThumbnail(false);
 
                 // Get the title as a link. If it's for the admin view, change to the public view.
                 $title = $itemPreview->emitItemTitle(true);

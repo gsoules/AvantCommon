@@ -30,9 +30,9 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $itemId = $this->item['_source']['item']['id'];
-            $contributorId = $this->item['_source']['item']['contributor-id'];
+            $contributorId = $this->sharedSearchingEnabled ? $this->item['_source']['item']['contributor-id'] . '-' : '';
             $identifier = $this->item['_source']['core-fields']['identifier'][0];
-            $identifier = "$contributorId-$identifier";
+            $identifier = $contributorId . $identifier;
             $url = $this->item['_source']['url']['item'];
             $public =  $this->item['_source']['item']['public'];
         }
