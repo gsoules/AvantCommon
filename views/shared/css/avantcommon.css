@@ -115,15 +115,15 @@
 }
 
 .item-preview-multiple {
-    border: 2px dotted #555 !important;
+    border: dotted 2px #333 !important;
 }
 
 div.item-img.reference a.lightbox img {
-    border: double 5px #777;
+    border: double 4px #016fca;
 }
 
 div.item-img.reference.fallback-image img {
-    border: double 3px #777;
+    border: double 4px #016fca;
 }
 
 .item-preview.cover-image img,
