@@ -11,8 +11,9 @@ class ConfigOptions
 
     public static function emitOptionNotSupported($pluginName, $hash)
     {
+        $pluginName = strtolower($pluginName);
         echo "<p class='explanation learn-more'>" . __('Option not available for this installation. ');
-        echo "<a class='avantsearch-help' href='https://github.com/gsoules/$pluginName#$hash' target='_blank'>" . __('Learn more.') . "</a>";
+        echo "<a class='avantsearch-help' href='https://digitalarchive.us/plugins/$pluginName#$hash' target='_blank'>" . __('Learn more.') . "</a>";
         echo "</p>";
     }
 
