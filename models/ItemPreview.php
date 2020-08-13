@@ -56,7 +56,7 @@ class ItemPreview
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
         $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
-        $isLocalItem = $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
+        $isLocalItem =  $this->useElasticsearch && $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
         if ($isLocalItem)
         {
             // Only show identifier when viewing the local site since identifiers are not unique across sites.
