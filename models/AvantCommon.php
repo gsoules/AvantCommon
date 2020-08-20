@@ -124,7 +124,7 @@ class AvantCommon
                 }
 
                 $removeTooltip = __('Remove item from this list (does not delete the item)');
-                $removeLink = "<a class='recent-item-remove' data-id='$recentItemId' title='$removeTooltip'>" . __('Remove') . '</a>';
+                $removeLink = "<a class='recent-item-remove' data-id='$recentItemId' data-identifier='$recentItemIdentifier' title='$removeTooltip'>" . __('Remove') . '</a>';
 
                 $html .= "<div id='row-$recentItemId' class='recent-item-row'>";
                 $html .= "<div class='recent-item-thumbnail' data-identifier='$recentItemIdentifier'>$thumbnail</div>";
