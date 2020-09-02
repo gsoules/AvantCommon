@@ -363,7 +363,7 @@ class ItemPreview
             return '';
         }
 
-        // Determine the file type. External URLs are always treated as images.
+        // Determine the file type.
         $isImage = empty($file) || substr($file->mime_type, 0, 6) == 'image/';
         if ($isImage)
         {
