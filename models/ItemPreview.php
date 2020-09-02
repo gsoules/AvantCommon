@@ -66,7 +66,7 @@ class ItemPreview
         return $html;
     }
 
-    protected static function getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index)
+    public static function getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index)
     {
         $imgTag = "<img class='full' src='$thumbUrl'>";
         $itemUrl = '';
