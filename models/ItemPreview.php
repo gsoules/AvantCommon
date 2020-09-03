@@ -429,9 +429,9 @@ class ItemPreview
             {
                 $hybrid = $hybridImageRecords[0];
                 if ($thumbnail)
-                    $url = AvantHybrid::getThumbUrl(AvantHybrid::getFileNameForThumb($hybrid));
+                    $url = AvantHybrid::getThumbUrl($hybrid);
                 else
-                    $url = AvantHybrid::getImageUrl(AvantHybrid::getFileNameForImage($hybrid));
+                    $url = AvantHybrid::getImageUrl($hybrid);
             }
         }
 
