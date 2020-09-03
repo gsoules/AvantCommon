@@ -422,6 +422,19 @@ class ItemPreview
             $url = !empty($itemImageUrl) ? $itemImageUrl : $coverImageUrl;
         }
 
+        if (empty($url) && plugin_is_active('AvantHybrid'))
+        {
+            $hybridImageRecords = AvantHybrid::getImageRecords($item->id);
+            if ($hybridImageRecords)
+            {
+                $hybrid = $hybridImageRecords[0];
+                if ($thumbnail)
+                    $url = AvantHybrid::getThumbUrl(AvantHybrid::getFileNameForThumb($hybrid));
+                else
+                    $url = AvantHybrid::getImageUrl(AvantHybrid::getFileNameForImage($hybrid));
+            }
+        }
+
         return $url;
     }
 
