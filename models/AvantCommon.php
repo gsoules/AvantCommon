@@ -201,6 +201,16 @@ class AvantCommon
         return $item;
     }
 
+    public static function getNextIdentifier()
+    {
+        $identifierElementId = ItemMetadata::getIdentifierElementId();
+        $db = get_db();
+        $sql = "SELECT MAX(CAST(text AS SIGNED)) AS next_element_id FROM `{$db->ElementTexts}` where element_id = $identifierElementId";
+        $result = $db->query($sql)->fetch();
+        $id = $result['next_element_id'] + 1;
+        return $id;
+    }
+
     public static function getPostedValues($elementId)
     {
         $texts = array();
