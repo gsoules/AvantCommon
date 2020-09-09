@@ -141,6 +141,19 @@ class ItemPreview
             $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
             $fileCount = $this->item['_source']['file']['total'];
             $isCoverImage = isset($this->item['_source']['url']['cover']) ?  $this->item['_source']['url']['cover'] : false;
+
+            if (empty($thumbnailUrl) && plugin_is_active('AvantHybrid'))
+            {
+                // Normally an item's cover image gets stored as the Elasticsearch thumbnail URL,
+                // but not when the cover item is a hybrid. In that case, we get it explicitly here.
+                $itemId = $this->item['_source']['item']['id'];
+                $coverImageIdentifier = self::getCoverImageIdentifier($itemId);
+                if ($coverImageIdentifier)
+                {
+                    $coverImageItem = ItemMetadata::getItemFromIdentifier($coverImageIdentifier);
+                    $thumbnailUrl = self::getHybridItemImageUrl($coverImageItem->id, true);
+                }
+            }
         }
         else
         {
@@ -165,6 +178,19 @@ class ItemPreview
                 if (isset($source['pdf']['file-url'][0]))
                     $pdfUrl = $source['pdf']['file-url'][0];
                 $originalImageUrl = isset($source['url']['image']) ? $this->item['_source']['url']['image'] : '';
+
+                if (empty($originalImageUrl) && plugin_is_active('AvantHybrid'))
+                {
+                    // Normally an item's cover image gets stored as the Elasticsearch thumbnail URL,
+                    // but not when the cover item is a hybrid. In that case, we get it explicitly here.
+                    $itemId = $this->item['_source']['item']['id'];
+                    $coverImageIdentifier = self::getCoverImageIdentifier($itemId);
+                    if ($coverImageIdentifier)
+                    {
+                        $coverImageItem = ItemMetadata::getItemFromIdentifier($coverImageIdentifier);
+                        $originalImageUrl = self::getHybridItemImageUrl($coverImageItem->id, false);
+                    }
+                }
             }
             else
             {
@@ -402,6 +428,28 @@ class ItemPreview
         return $html;
     }
 
+    protected static function getHybridItemImageUrl($itemId, $thumbnail)
+    {
+        $url = null;
+        if (plugin_is_active('AvantHybrid'))
+        {
+            $hybridImageRecords = AvantHybrid::getImageRecords($itemId);
+            if ($hybridImageRecords)
+            {
+                $hybrid = $hybridImageRecords[0];
+                if ($thumbnail)
+                {
+                    $url = AvantHybrid::getThumbUrl($hybrid);
+                }
+                else
+                {
+                    $url = AvantHybrid::getImageUrl($hybrid);
+                }
+            }
+        }
+        return $url;
+    }
+
     public static function getImageUrl($item, $useCoverImage, $thumbnail = false)
     {
         $coverImageIdentifier = self::getCoverImageIdentifier($item->id);
@@ -422,18 +470,8 @@ class ItemPreview
             $url = !empty($itemImageUrl) ? $itemImageUrl : $coverImageUrl;
         }
 
-        if (empty($url) && plugin_is_active('AvantHybrid'))
-        {
-            $hybridImageRecords = AvantHybrid::getImageRecords($item->id);
-            if ($hybridImageRecords)
-            {
-                $hybrid = $hybridImageRecords[0];
-                if ($thumbnail)
-                    $url = AvantHybrid::getThumbUrl($hybrid);
-                else
-                    $url = AvantHybrid::getImageUrl($hybrid);
-            }
-        }
+        if (empty($url))
+            $url = self::getHybridItemImageUrl($item->id, $thumbnail);
 
         return $url;
     }
@@ -454,6 +492,10 @@ class ItemPreview
                 $url = $file->getWebPath($thumbnail ? 'thumbnail' : 'fullsize');
             }
         }
+
+        if (empty($url))
+            $url = self::getHybridItemImageUrl($item->id, $thumbnail);
+
         return $url;
     }
 
