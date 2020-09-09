@@ -339,6 +339,11 @@ class AvantCommon
         return $findUrl;
     }
 
+    public static function importingHybridItem()
+    {
+        return plugin_is_active('AvantHybrid') && (AvantHybrid::deletingHybridItem() || AvantHybrid::savingHybridItem());
+    }
+
     public static function isAjaxRequest()
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
