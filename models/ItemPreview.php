@@ -138,20 +138,16 @@ class ItemPreview
         if ($this->useElasticsearch)
         {
             $source = $this->item['_source'];
-            $itemId = $this->item['_source']['item']['id'];
             $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
-            if (empty($thumbnailUrl))
-                $thumbnailUrl = self::getHybridItemCoverImageUrl($itemId, true);
             $fileCount = $this->item['_source']['file']['total'];
             $isCoverImage = isset($this->item['_source']['url']['cover']) ?  $this->item['_source']['url']['cover'] : false;
         }
         else
         {
             $source = null;
-            $itemId = $this->item->id;
             $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
             $fileCount = count($this->item->Files);
-            $isCoverImage = !empty(self::getCoverImageIdentifier($itemId));
+            $isCoverImage = !empty(self::getCoverImageIdentifier($this->item->id));
         }
 
         if (empty($thumbnailUrl))
@@ -169,8 +165,6 @@ class ItemPreview
                 if (isset($source['pdf']['file-url'][0]))
                     $pdfUrl = $source['pdf']['file-url'][0];
                 $originalImageUrl = isset($source['url']['image']) ? $this->item['_source']['url']['image'] : '';
-                if (empty($originalImageUrl))
-                    $originalImageUrl = self::getHybridItemCoverImageUrl($itemId, false);
             }
             else
             {
@@ -406,21 +400,6 @@ class ItemPreview
         $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index);
 
         return $html;
-    }
-
-    protected static function getHybridItemCoverImageUrl($itemId, $thumbnail)
-    {
-        $url = null;
-        if (plugin_is_active('AvantHybrid'))
-        {
-            $coverImageIdentifier = self::getCoverImageIdentifier($itemId);
-            if ($coverImageIdentifier)
-            {
-                $coverImageItem = ItemMetadata::getItemFromIdentifier($coverImageIdentifier);
-                $url = self::getHybridItemImageUrl($coverImageItem->id, false);
-            }
-        }
-        return $url;
     }
 
     protected static function getHybridItemImageUrl($itemId, $thumbnail)
