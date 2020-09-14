@@ -114,6 +114,11 @@
     padding: 2px;
 }
 
+a.lightbox img.item-preview-cover {
+    padding: 12px;
+    background-color: #c8e7ff47;
+}
+
 .item-preview-multiple {
     border: dotted 2px #333 !important;
 }
