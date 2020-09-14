@@ -371,12 +371,37 @@ class AvantCommon
         return is_int($defaultValue) ? intval($value) : $value;
     }
 
+    public static function isRemoteImageUrl($url)
+    {
+        // Determine if the URL is on this Digital Archive server.
+        if (empty($url))
+            return false;
+        return strpos($url, WEB_FILES) === false;
+    }
+
     public static function isSearchRequest()
     {
         $isQuery = isset($_GET['query']);
         $isKeywords = isset($_GET['keywords']);
         $isAdvanced = isset($_GET['advanced']);
         return $isQuery || $isKeywords || $isAdvanced;
+    }
+
+    static function remoteImageExists($url)
+    {
+        // Make a quick request to the remote server to determine if the image exits.
+        // The CURLOPT_NOBODY option excludes the body from the response so that only
+        // the HTTP headers are returned. Make sure the URL does not contain spaces
+        // because CURL will ignore the rest of the URL after the first space.
+        $url = str_replace (' ', '%20', $url);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result !== FALSE;
     }
 
     public static function requestRemoteAsset($url)

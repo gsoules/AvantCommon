@@ -150,6 +150,13 @@ class ItemPreview
             $isCoverImage = !empty(self::getCoverImageIdentifier($this->item->id));
         }
 
+        if (!empty($thumbnailUrl) && AvantCommon::isRemoteImageUrl($thumbnailUrl))
+        {
+            // Verify that the remote image exists on the remote image server.
+            if (!AvantCommon::remoteImageExists($thumbnailUrl))
+                $thumbnailUrl = null;
+        }
+
         if (empty($thumbnailUrl))
         {
             // This item has no thumbnail presumably because the item has no image.
