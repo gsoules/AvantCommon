@@ -97,7 +97,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
         queue_js_file('js.cookie-2.2.1.min');
         queue_js_file('avantcommon-script');
 
-        $version = OMEKA_VERSION . '.1';
+        $version = OMEKA_VERSION . '.2';
         queue_css_file('avantcommon', 'all', false, 'css', $version);
     }
 
