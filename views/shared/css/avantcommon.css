@@ -68,6 +68,27 @@
     margin: 6px 0 6px 0;
 }
 
+[data-tooltip] {
+    border-bottom: 1px dotted #777;
+}
+
+[data-tooltip]:after {
+    content: attr(data-tooltip);
+    display: none;
+    position: fixed;
+    color: #FFF;
+    background: #555;
+    border: 2px solid #FFF;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    z-index: 10;
+    box-shadow: 0 0 5px rgba(0,0,0,.5);
+    line-height: 1.3em;
+}
+
 .item-preview {
     list-style-type:none;
     margin-left:12px;

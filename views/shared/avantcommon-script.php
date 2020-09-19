@@ -21,4 +21,22 @@ jQuery(document).ready(function()
     }
     );
 });
+
+// From https://codereview.stackexchange.com/questions/139327/tooltip-overlay-following-the-mouse-pointer
+document.addEventListener('DOMContentLoaded', function() {
+    var cssSheet = document.styleSheets[0];
+    var hoverIndex = cssSheet.insertRule('[data-tooltip]:hover:after {}', cssSheet.cssRules.length);
+    var cssHover = cssSheet.cssRules[hoverIndex];
+    Array.from(document.querySelectorAll('[data-tooltip]')).forEach(function (item) {
+        item.addEventListener('mousemove', function (e) {
+            if (this.dataset.tooltip === '') {
+                cssHover.style.display = 'none';
+                return;
+            }
+            cssHover.style.display = 'block';
+            cssHover.style.left = (e.clientX + 8) + 'px';
+            cssHover.style.top = (e.clientY + 12) + 'px';
+        });
+    });
+});
 </script>

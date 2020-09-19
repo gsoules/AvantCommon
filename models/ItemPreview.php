@@ -1,6 +1,8 @@
 <?php
 
-define('IMAGE_THUMB_TOOLTIP', __('Show larger image of '));
+define('FALLBACK_THUMB_TOOLTIP', __('Click title to view item'));
+define('IMAGE_THUMB_TOOLTIP', __('See larger image (click title to view item)'));
+define('IMAGE_TOOLTIP', __('See larger image'));
 define('PDF_THUMB_TOOLTIP', __('Read this PDF file '));
 define('ITEM_LINK_TOOLTIP', __('View this item'));
 
@@ -19,8 +21,8 @@ class ItemPreview
 
     protected static function emitImageLinkHtml($class, $imageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag)
     {
-        $html = "<a class='$class' href='$imageUrl' title='$tooltip' itemId='$itemId' ";
-        $html .= "data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' ";
+        $html = "<a class='$class' href='$imageUrl' itemId='$itemId' alt='$title' ";
+        $html .= "data-title='$title' data-itemNumber='$itemNumber' data-itemUrl='$itemUrl' data-tooltip='$tooltip' ";
         $html .= "data-foreign='$isForeign' data-contributor='$contributor' data-pdf='$pdfUrl'>$imgTag</a>";
         return $html;
     }
@@ -55,7 +57,7 @@ class ItemPreview
         $prefix = ItemMetadata::getIdentifierPrefix();
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
-        $html .= "<a class='item-preview-identifier' href='$url' title='$tooltip'{$target}>{$prefix} {$identifier}</a>";
+        $html .= "<a class='item-preview-identifier' href='$url' data-tooltip='$tooltip'{$target}>{$prefix} {$identifier}</a>";
         $isLocalItem =  $this->useElasticsearch && $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
         if ($isLocalItem)
         {
@@ -242,8 +244,7 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $fileName = basename($originalImageUrl);
-            $tooltip = IMAGE_THUMB_TOOLTIP . $fileName;
+            $tooltip = IMAGE_THUMB_TOOLTIP;
             $class = 'lightbox';
             $html = self::emitImageLinkHtml($class, $originalImageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
         }
@@ -266,12 +267,14 @@ class ItemPreview
         }
         $class = apply_filters('item_thumbnail_class', 'item-img', array('itemType' => $itemType));
 
+        $tooltipData = '';
         if ($isFallbackImage)
         {
             $class .= ' fallback-image';
+            $tooltipData = " data-tooltip='" . FALLBACK_THUMB_TOOLTIP . "'";
         }
 
-        $html = "<div class=\"$class\">$html</div>";
+        $html = "<div class=\"$class\"$tooltipData>$html</div>";
 
         return $html;
     }
@@ -294,7 +297,7 @@ class ItemPreview
 
         $tooltip = ITEM_LINK_TOOLTIP;
         $target = $openInNewWindow ? " target='_blank'" : '';
-        $html = "<div class=\"element-text\"><a href='$url' title='$tooltip' $target>$title</a>$contributorId</div>";
+        $html = "<div class=\"element-text\"><a href='$url' data-tooltip='$tooltip' $target>$title</a>$contributorId</div>";
         return $html;
     }
 
@@ -392,7 +395,7 @@ class ItemPreview
         // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
         $itemId = (string)$item->id;
         $itemNumber = ItemMetadata::getItemIdentifier($item);
-        $tooltip = $isPdfFile ? PDF_THUMB_TOOLTIP : IMAGE_THUMB_TOOLTIP;
+        $tooltip = $isPdfFile ? PDF_THUMB_TOOLTIP : IMAGE_TOOLTIP;
 
         // Emit HTML to display an attached image.
         $isForeign = '0';
@@ -403,7 +406,6 @@ class ItemPreview
 
         $pdfUrl = '';
         $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
-        $tooltip .= basename($imageUrl);
         $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index);
 
         return $html;
