@@ -44,7 +44,7 @@ the page (and continue clicking to see the others).
 * See other images on the page by:
     * Clicking on the current lightbox image to see the next image
     * Clicking the left and right arrows to see the previous or next image
-* Go to the item for the image being displayed in the lightbox by clicking on the image title link in the the bottom left corner.
+* Go to the item for the image being displayed in the lightbox by clicking on the image title link in the bottom left corner.
 If the title is the filename of an image or other file attached to the item being viewed, the title will have no hyperlink.
 * Close the lightbox these three ways:
     * Click on the X in the upper right corner

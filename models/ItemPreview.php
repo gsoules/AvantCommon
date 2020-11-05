@@ -448,7 +448,7 @@ class ItemPreview
         }
         else
         {
-            // Use the the item's image unless its empty, in which case use the cover image even though
+            // Use the item's image unless its empty, in which case use the cover image even though
             // the request was not to use it; however, better to show the cover image than nothing.
             $url = !empty($itemImageUrl) ? $itemImageUrl : $coverImageUrl;
         }
