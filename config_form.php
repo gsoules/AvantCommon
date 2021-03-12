@@ -15,7 +15,7 @@ $unusedElementsOptionRows = max(2, count(explode(PHP_EOL, $unusedElementsOption)
 ?>
 
 <div class="plugin-help learn-more">
-    <a href="https://digitalarchive.us/plugins/avantcommon/" target="_blank">Learn about the configuration options on this page</a>
+    <a href="https://digitalarchive.us/plugins/avantcommon/" target="_blank"><?php echo __("Learn about the configuration options on this page"); ?></a>
 </div>
 
 <div class="field">
