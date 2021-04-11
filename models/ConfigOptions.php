@@ -76,11 +76,17 @@ class ConfigOptions
 
         foreach ($rawData as $elementId)
         {
-            $elementName = ItemMetadata::getElementNameFromId($elementId);
-            if (empty($elementName))
+            if ($elementId == 'all') {
+                $elementName = 'all_elements';
+            }
+            else 
             {
-                // This element must have been deleted since the configuration was last saved.
-                continue;
+                $elementName = ItemMetadata::getElementNameFromId($elementId);
+                if (empty($elementName))
+                {
+                    // This element must have been deleted since the configuration was last saved.
+                    continue;
+                }
             }
             $data[$elementId] = $elementName;
         }
@@ -149,10 +155,17 @@ class ConfigOptions
         {
             if (empty($name))
                 continue;
-            $elementId = ItemMetadata::getElementIdForElementName($name);
-            if ($elementId == 0)
+            if ($name == 'all_elements')
             {
-                throw new Omeka_Validate_Exception($optionLabel . ': ' . __('\'%s\' is not an element.', $name));
+                $elementId = 'all';
+            } 
+            else
+            {
+                $elementId = ItemMetadata::getElementIdForElementName($name);
+                if ($elementId == 0)
+                {
+                    throw new Omeka_Validate_Exception($optionLabel . ': ' . __('\'%s\' is not an element.', $name));
+                }
             }
             $elements[] = $elementId;
         }
