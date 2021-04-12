@@ -69,14 +69,14 @@ class ConfigOptions
         return $optionData;
     }
 
-    protected static function getOptionListData($optionName)
+    protected static function getOptionListData($optionName, $acceptAllElements=false)
     {
         $rawData = self::getRawData($optionName);
         $data = array();
 
         foreach ($rawData as $elementId)
         {
-            if ($elementId == 'all') {
+            if ($elementId == 'all' && $acceptAllElements !== false) {
                 $elementName = 'all_elements';
             }
             else 
@@ -147,7 +147,7 @@ class ConfigOptions
         set_option($optionName, $value);
     }
 
-    protected static function saveOptionListData($optionName, $optionLabel)
+    protected static function saveOptionListData($optionName, $optionLabel, $acceptAllElements=false)
     {
         $elements = array();
         $names = array_map('trim', explode(PHP_EOL, $_POST[$optionName]));
@@ -155,7 +155,7 @@ class ConfigOptions
         {
             if (empty($name))
                 continue;
-            if ($name == 'all_elements')
+            if ($name == 'all_elements' && $acceptAllElements !== false)
             {
                 $elementId = 'all';
             } 
