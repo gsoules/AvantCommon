@@ -34,7 +34,7 @@
 
 .plugin-help::before {
     content: "\f059";
-    font-family: "FontAwesome";
+    font-family: "Font Awesome 5 Free";
     font-size: 22px;
     padding-right: 4px;
     vertical-align: middle;
