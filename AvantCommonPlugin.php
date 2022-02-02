@@ -119,6 +119,7 @@ class AvantCommonPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookInitialize()
     {
+        add_translation_source(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'languages');
         // Initialize the filters that will prevent unused elements from appearing on the admin Edit Item form.
         add_filter(array('ElementSetForm', 'Item', 'Dublin Core'), array($this, 'filterElementSetForm'));
         add_filter(array('ElementSetForm', 'Item', 'Item Type Metadata'), array($this, 'filterElementSetForm'));
