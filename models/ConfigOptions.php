@@ -69,18 +69,24 @@ class ConfigOptions
         return $optionData;
     }
 
-    protected static function getOptionListData($optionName)
+    protected static function getOptionListData($optionName, $acceptAllElements=false)
     {
         $rawData = self::getRawData($optionName);
         $data = array();
 
         foreach ($rawData as $elementId)
         {
-            $elementName = ItemMetadata::getElementNameFromId($elementId);
-            if (empty($elementName))
+            if ($elementId == 'all' && $acceptAllElements !== false) {
+                $elementName = 'all_elements';
+            }
+            else 
             {
-                // This element must have been deleted since the configuration was last saved.
-                continue;
+                $elementName = ItemMetadata::getElementNameFromId($elementId);
+                if (empty($elementName))
+                {
+                    // This element must have been deleted since the configuration was last saved.
+                    continue;
+                }
             }
             $data[$elementId] = $elementName;
         }
@@ -141,7 +147,7 @@ class ConfigOptions
         set_option($optionName, $value);
     }
 
-    protected static function saveOptionListData($optionName, $optionLabel)
+    protected static function saveOptionListData($optionName, $optionLabel, $acceptAllElements=false)
     {
         $elements = array();
         $names = array_map('trim', explode(PHP_EOL, $_POST[$optionName]));
@@ -149,10 +155,17 @@ class ConfigOptions
         {
             if (empty($name))
                 continue;
-            $elementId = ItemMetadata::getElementIdForElementName($name);
-            if ($elementId == 0)
+            if ($name == 'all_elements' && $acceptAllElements !== false)
             {
-                throw new Omeka_Validate_Exception($optionLabel . ': ' . __('\'%s\' is not an element.', $name));
+                $elementId = 'all';
+            } 
+            else
+            {
+                $elementId = ItemMetadata::getElementIdForElementName($name);
+                if ($elementId == 0)
+                {
+                    throw new Omeka_Validate_Exception($optionLabel . ': ' . __('\'%s\' is not an element.', $name));
+                }
             }
             $elements[] = $elementId;
         }

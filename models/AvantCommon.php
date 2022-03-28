@@ -464,7 +464,7 @@ class AvantCommon
         // where an item is saved as part of another operation such as a batch edit or a reindex of search records.
         // When the user clicks the Save Changes button, the page posts to submit the Edit form to the server. The
         // other cases are usually peformed as part of a server-side background job that operates on multiple items.
-        return isset($_POST['submit']) && ($_POST['submit'] == 'Save Changes' || $_POST['submit'] == 'Add Item');
+        return isset($_POST['submit']) && ($_POST['submit'] == __('Save Changes') || $_POST['submit'] == __('Add Item'));
     }
 
     public static function userIsAdmin()
