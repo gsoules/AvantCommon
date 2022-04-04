@@ -1,6 +1,8 @@
 <?php
 class ConfigOptions
 {
+    const ALL_ELEMENTS = "all_elements";
+
     public static function configurationErrorsDetected()
     {
         // When a configuration occurs, the Configure Plugin page posts back to itself to display the error
@@ -69,15 +71,16 @@ class ConfigOptions
         return $optionData;
     }
 
-    protected static function getOptionListData($optionName, $acceptAllElements=false)
+    protected static function getOptionListData($optionName)
     {
         $rawData = self::getRawData($optionName);
         $data = array();
 
         foreach ($rawData as $elementId)
         {
-            if ($elementId == 'all' && $acceptAllElements !== false) {
-                $elementName = 'all_elements';
+            if ($elementId == 0 && self::optionAcceptsAllElements($optionName))
+            {
+                $elementName = self::ALL_ELEMENTS;
             }
             else 
             {
@@ -139,6 +142,18 @@ class ConfigOptions
         return $rawData;
     }
 
+    private static function optionAcceptsAllElements($optionName)
+    {
+        $options = [
+            ElementsConfig::OPTION_ADD_INPUT,
+            ElementsConfig::OPTION_HTML,
+            ElementsConfig::OPTION_SHOW_COMMENT,
+            ElementsConfig::OPTION_SHOW_DESCRIPTION
+        ];
+
+        return in_array($optionName, $options);
+    }
+
     public static function saveOptionText($optionName, $optionLabel)
     {
         $value = self::getOptionText($optionName);
@@ -147,7 +162,7 @@ class ConfigOptions
         set_option($optionName, $value);
     }
 
-    protected static function saveOptionListData($optionName, $optionLabel, $acceptAllElements=false)
+    protected static function saveOptionListData($optionName, $optionLabel)
     {
         $elements = array();
         $names = array_map('trim', explode(PHP_EOL, $_POST[$optionName]));
@@ -155,9 +170,9 @@ class ConfigOptions
         {
             if (empty($name))
                 continue;
-            if ($name == 'all_elements' && $acceptAllElements !== false)
+            if ($name == self::ALL_ELEMENTS && self::optionAcceptsAllElements($optionName))
             {
-                $elementId = 'all';
+                $elementId = 0;
             } 
             else
             {
