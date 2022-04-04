@@ -136,8 +136,13 @@
 }
 
 a.lightbox img.item-preview-cover {
-    padding: 12px;
-    background-color: #ffedb947;
+    padding: 2px 2px 2px 28px;
+    background: url("../images/cover-image.png") no-repeat;
+}
+
+a.lightbox img.item-preview-cover-set {
+    padding: 2px 2px 2px 28px;
+    background: url("../images/item-set.png") no-repeat;
 }
 
 .item-preview-multiple {

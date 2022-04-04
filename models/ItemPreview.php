@@ -194,8 +194,11 @@ class ItemPreview
         }
         else if ($isCoverImage)
         {
+            $itemType = ItemMetadata::getElementTextForElementName($this->item, 'Type');
+            $isItemSet = strpos($itemType, 'Set') === 0 && plugin_is_active('AvantRelationships');
+
             // Style this item to indicate that its cover image belongs to another item.
-            $class = "class='item-preview-cover'";
+            $class = $isItemSet ? "class='item-preview-cover-set'" :  "class='item-preview-cover'";
         }
 
         $imgTag = "<img $class src='$thumbnailUrl'>";
