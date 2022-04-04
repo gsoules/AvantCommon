@@ -135,6 +135,11 @@
     padding: 2px;
 }
 
+a.external-link-icon:after {
+    content: url(../images/external-link.png);
+    padding-left: 5px;
+}
+
 a.lightbox img.item-preview-cover {
     padding: 2px 2px 2px 28px;
     background: url("../images/cover-image.png") no-repeat;
