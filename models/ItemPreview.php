@@ -194,7 +194,11 @@ class ItemPreview
         }
         else if ($isCoverImage)
         {
-            $itemType = ItemMetadata::getElementTextForElementName($this->item, 'Type');
+            if ($this->useElasticsearch)
+                $itemType = $source['core-fields']['type'][0];
+            else
+                $itemType = ItemMetadata::getElementTextForElementName($this->item, 'Type');
+
             $isItemSet = strpos($itemType, 'Set') === 0 && plugin_is_active('AvantRelationships');
 
             // Style this item to indicate that its cover image belongs to another item.
