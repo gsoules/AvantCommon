@@ -68,10 +68,6 @@
     margin: 6px 0 6px 0;
 }
 
-[data-tooltip] {
-    border-bottom: 1px dotted #777;
-}
-
 [data-tooltip]:after {
     content: attr(data-tooltip);
     display: none;

@@ -38,18 +38,23 @@ class AvantCommon
 
     public static function emitFlagItemAsRecent($itemId, $recentlyViewedItemIds)
     {
+        $tooltips = [__('Remove from flagged items list'),  __('Add to flagged items list')];
+
         if (in_array($itemId, $recentlyViewedItemIds))
         {
             $flagged = ' flagged';
-            $tooltip = __('Remove from recently visited items list');
+            $tooltip = $tooltips[0];
+            $flagImg = img("flagged-item.png");
         }
         else
         {
             $flagged = '';
-            $tooltip = __('Add to recently visited items list');
+            $tooltip = $tooltips[1];
+            $flagImg = img("unflagged-item.png");
         }
 
-        return "<span data-id='$itemId' class='recent-item-flag$flagged' title='$tooltip'>&nbsp;&nbsp;<a></a></span>";
+        $tooltips = implode('|', $tooltips);
+        return "<span>&nbsp;&nbsp;<a data-tooltip='$tooltip' data-tooltips='$tooltips' data-id='$itemId' class='recent-item-flag$flagged'><img src='$flagImg'></a></span>";
     }
 
     public static function emitRecentlyViewedItems($recentlyViewedItems, $excludeItemId = '', $allowedItems = array(), $alreadyAddedItems = array())
@@ -84,14 +89,14 @@ class AvantCommon
 
         $html .= '<div id="recent-items-section">';
         $html .= '<div class="recent-items-title">';
-        $html .= __('Recently Viewed Items') . ' (<span id="recent-items-count">' . $count . '</span>)';
+        $html .= __('Flagged Items') . ' (<span id="recent-items-count">' . $count . '</span>)';
         $html .= $searchResultsLink;
         $html .= $clearAll;
         $html .= '</div>';
 
         if ($count == 0)
         {
-            $html .= '<div class="recent-items-message">' . __('Your recently viewed items list is empty.') . '</div>';
+            $html .= '<div class="recent-items-message">' . __('Your flagged items list is empty.') . '</div>';
         }
         else
         {
@@ -301,7 +306,7 @@ class AvantCommon
             }
             else
             {
-                // The item does not exist - it must have been deleted since being recently viewed.
+                // The item does not exist - it must have been deleted since being flagged.
                 $deletedItemIds[] = $id;
             }
         }
