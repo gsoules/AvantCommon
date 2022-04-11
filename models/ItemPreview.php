@@ -142,14 +142,14 @@ class ItemPreview
             $source = $this->item['_source'];
             $thumbnailUrl = isset($this->item['_source']['url']['thumb']) ? $this->item['_source']['url']['thumb'] : '';
             $fileCount = $this->item['_source']['file']['total'];
-            $isCoverImage = isset($this->item['_source']['url']['cover']) ?  $this->item['_source']['url']['cover'] : false;
+            $hasCoverImage = isset($this->item['_source']['url']['cover']) ? $this->item['_source']['url']['cover'] : false;
         }
         else
         {
             $source = null;
             $thumbnailUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
             $fileCount = count($this->item->Files);
-            $isCoverImage = !empty(self::getCoverImageIdentifier($this->item->id));
+            $hasCoverImage = !empty(self::getCoverImageIdentifier($this->item->id));
         }
 
         if (!empty($thumbnailUrl) && AvantCommon::isRemoteImageUrl($thumbnailUrl))
@@ -195,7 +195,7 @@ class ItemPreview
             // Style this item to indicate that it has more than one file attached to it.
             $class = "class='item-preview-multiple'";
         }
-        else if ($isCoverImage)
+        else if ($hasCoverImage && $useCoverImage)
         {
             if ($this->useElasticsearch)
                 $itemType = $source['core-fields']['type'][0];
