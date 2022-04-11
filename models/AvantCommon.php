@@ -38,7 +38,10 @@ class AvantCommon
 
     public static function emitFlagItemAsRecent($itemId, $recentlyViewedItemIds)
     {
-        $tooltips = [__('Remove from flagged items list'),  __('Add to flagged items list')];
+        $flag = AvantCommon::getCustomText('flag_item_tooltip', __('Add to flagged items list'));
+        $unflag = AvantCommon::getCustomText('unflag_item_tooltip', __('Remove from flagged items list'));
+
+        $tooltips = [$unflag,  $flag];
 
         if (in_array($itemId, $recentlyViewedItemIds))
         {
@@ -204,6 +207,15 @@ class AvantCommon
             $item = null;
         }
         return $item;
+    }
+
+    public static function getCustomText($textId, $defaultText)
+    {
+        $config = new CommonConfig();
+        $data = $config::OptionDataForCustomText();
+        if (array_key_exists($textId, $data))
+            return $data[$textId];
+        return $defaultText;
     }
 
     public static function getNextIdentifier()

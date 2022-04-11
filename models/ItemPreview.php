@@ -3,7 +3,7 @@
 define('FALLBACK_THUMB_TOOLTIP', __('Click title to view item'));
 define('IMAGE_THUMB_TOOLTIP', __('See larger image (click title to view item)'));
 define('IMAGE_TOOLTIP', __('See larger image'));
-define('PDF_THUMB_TOOLTIP', __('Read this PDF file '));
+define('PDF_THUMB_TOOLTIP', __('Read this PDF file'));
 define('ITEM_LINK_TOOLTIP', __('View this item'));
 
 class ItemPreview
@@ -55,7 +55,7 @@ class ItemPreview
         }
 
         $prefix = ItemMetadata::getIdentifierPrefix();
-        $tooltip = ITEM_LINK_TOOLTIP;
+        $tooltip = AvantCommon::getCustomText('item_link_tooltip', ITEM_LINK_TOOLTIP);
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
         $html .= "<a class='item-preview-identifier' href='$url' data-tooltip='$tooltip'{$target}>{$prefix} {$identifier}</a>";
         $isLocalItem =  $this->useElasticsearch && $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
@@ -251,7 +251,7 @@ class ItemPreview
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
             // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
             // expand into a link to the item.
-            $tooltip = IMAGE_THUMB_TOOLTIP;
+            $tooltip = AvantCommon::getCustomText('image_thumb_tooltip', IMAGE_THUMB_TOOLTIP);
             $class = 'lightbox';
             $html = self::emitImageLinkHtml($class, $originalImageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
         }
@@ -278,7 +278,7 @@ class ItemPreview
         if ($isFallbackImage)
         {
             $class .= ' fallback-image';
-            $tooltipData = " data-tooltip='" . FALLBACK_THUMB_TOOLTIP . "'";
+            $tooltipData = " data-tooltip='" . AvantCommon::getCustomText('fallback_thumb_tooltip', FALLBACK_THUMB_TOOLTIP) . "'";
         }
 
         $html = "<div class=\"$class\"$tooltipData>$html</div>";
@@ -302,7 +302,7 @@ class ItemPreview
             $url = url("items/show/$id");
         }
 
-        $tooltip = ITEM_LINK_TOOLTIP;
+        $tooltip = AvantCommon::getCustomText('item_link_tooltip', ITEM_LINK_TOOLTIP);
         $target = $openInNewWindow ? " target='_blank'" : '';
         $html = "<div class=\"element-text\"><a href='$url' data-tooltip='$tooltip' $target>$title</a>$contributorId</div>";
         return $html;
@@ -402,7 +402,7 @@ class ItemPreview
         // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
         $itemId = (string)$item->id;
         $itemNumber = ItemMetadata::getItemIdentifier($item);
-        $tooltip = $isPdfFile ? PDF_THUMB_TOOLTIP : IMAGE_TOOLTIP;
+        $tooltip = $isPdfFile ? AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_THUMB_TOOLTIP) : AvantCommon::getCustomText('image_tooltip', IMAGE_TOOLTIP);
 
         // Emit HTML to display an attached image.
         $isForeign = '0';

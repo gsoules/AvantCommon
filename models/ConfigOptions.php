@@ -132,7 +132,7 @@ class ConfigOptions
         return $text;
     }
 
-    protected static function getRawData($optionName)
+    public static function getRawData($optionName)
     {
         $rawData = json_decode(get_option($optionName), true);
         if (empty($rawData))

@@ -10,6 +10,9 @@ $privateElementOptionRows = max(2, count(explode(PHP_EOL, $privateElementsOption
 
 $requestImageUrl = CommonConfig::getOptionTextForRequestImageUrl();
 
+$customText = CommonConfig::OptionTextForCustomText();
+$customTextOptionRows = max(2, count(explode(PHP_EOL, $customText)));
+
 $unusedElementsOption = CommonConfig::getOptionTextForUnusedElements();
 $unusedElementsOptionRows = max(2, count(explode(PHP_EOL, $unusedElementsOption)));
 ?>
@@ -85,5 +88,15 @@ $unusedElementsOptionRows = max(2, count(explode(PHP_EOL, $unusedElementsOption)
     <div class="inputs five columns omega">
         <p class="explanation"><?php echo __("The URL of the web page to display when a user requests an image."); ?></p>
         <?php echo $view->formText(CommonConfig::OPTION_REQUEST_IMAGE_URL, $requestImageUrl); ?>
+    </div>
+</div>
+
+<div class="field">
+    <div class="two columns alpha">
+        <label><?php echo CONFIG_LABEL_CUSTOM_TEXT; ?></label>
+    </div>
+    <div class="inputs five columns omega">
+        <p class="explanation"><?php echo __("Custom text that overrides Digital Archive default text."); ?></p>
+        <?php echo $view->formTextarea(CommonConfig::OPTION_CUSTOM_TEXT, $customText, array('rows' => $customTextOptionRows)); ?>
     </div>
 </div>
