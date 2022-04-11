@@ -159,7 +159,11 @@ class ItemPreview
                 $thumbnailUrl = null;
         }
 
-        if (empty($thumbnailUrl))
+        // Temporary until it's possible to identify an audio file from Elasticsearch.
+        $file = $this->useElasticsearch ? null : $this->item->getFile(0);
+        $isAudio = $file != null && substr($file->mime_type, 0) == 'audio/mpeg';
+
+        if (empty($thumbnailUrl) || $isAudio)
         {
             // This item has no thumbnail presumably because the item has no image.
             $thumbnailUrl = self::getFallbackImageUrl($this->item, $this->useElasticsearch);
@@ -178,7 +182,6 @@ class ItemPreview
             else
             {
                 $originalImageUrl = self::getImageUrl($this->item, $useCoverImage, $getThumbnail);
-                $file = $this->item->getFile(0);
                 $isPdfFile = $file && substr($file->mime_type, 0, 15) == 'application/pdf';
                 if ($isPdfFile)
                     $pdfUrl = $file->getWebPath('original');
@@ -382,6 +385,8 @@ class ItemPreview
 
         // Determine the file type.
         $isImage = empty($file) || substr($file->mime_type, 0, 6) == 'image/';
+        $isAudio = !$isImage && substr($file->mime_type, 0) == 'audio/mpeg';
+
         if ($isImage)
         {
             // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
@@ -389,9 +394,9 @@ class ItemPreview
             $class = 'lightbox';
             $title = ItemMetadata::getItemTitle($item);
         }
-        else
+        else if (!$isAudio)
         {
-            // The file is not an image. See if it's a PDF, and if not, just call it a document (e.g. a text file).
+            // The file is not an image or audio. See if it's a PDF, and if not, just call it a document (e.g. a text file).
             $isPdfFile = substr($file->mime_type, 0, 15) == 'application/pdf';
             $class = $isPdfFile ? 'pdf-icon' : 'document-icon';
             if ($isThumbnail)
@@ -399,21 +404,29 @@ class ItemPreview
             $title = '';
         }
 
-        // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
-        $itemId = (string)$item->id;
-        $itemNumber = ItemMetadata::getItemIdentifier($item);
-        $tooltip = $isPdfFile ? AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_THUMB_TOOLTIP) : AvantCommon::getCustomText('image_tooltip', IMAGE_TOOLTIP);
+        // Convert any backslashes in the URL to forward slashes for subsequent logic that expects all forward slashes.
+        $url = $file->getWebPath('original');
+        $url = str_replace("\\", "/", $url);
 
-        // Emit HTML to display an attached image.
-        $isForeign = '0';
-        $imageUrl = $file->getWebPath('original');
+        if ($isAudio)
+        {
+            $fileName = $file->original_filename;
+            $html = "<div class='audio-file-name'>$fileName</div><audio controls><source type='audio/mpeg' src='$url'></audio>";
+        }
+        else
+        {
+            // Cast the Id to a string to workaround logic in globals.php tag_attributes() that ignores integer values.
+            $itemId = (string)$item->id;
 
-        // Convert any backslashes to forward slashes for subsequent logic that expects all forward slashes.
-        $imageUrl = str_replace("\\", "/", $imageUrl);
+            $itemNumber = ItemMetadata::getItemIdentifier($item);
+            $isForeign = '0';
+            $pdfUrl = '';
+            $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
 
-        $pdfUrl = '';
-        $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
-        $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $imageUrl, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index);
+            $tooltip = $isPdfFile ? AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_THUMB_TOOLTIP) : AvantCommon::getCustomText('image_tooltip', IMAGE_TOOLTIP);
+
+            $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $url, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index);
+        }
 
         return $html;
     }

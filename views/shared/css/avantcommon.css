@@ -38,6 +38,12 @@
     color: rgba(0, 85, 150, 0.90);
 }
 
+.audio-file-name {
+    font-size: 11px;
+    margin: 12px 0 2px 0;
+    color: #777;
+}
+
 .pdf-icon::before,
 .pdf-icon-thumb::before {
     font-size: 48px;
