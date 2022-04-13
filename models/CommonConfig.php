@@ -79,7 +79,7 @@ class CommonConfig extends ConfigOptions
     {
         if (self::configurationErrorsDetected())
         {
-            $text = $_POST[self::OPTION_IDENTIFIER];
+            $text = isset($_POST[self::OPTION_IDENTIFIER]) ? $_POST[self::OPTION_IDENTIFIER] : "";
         }
         else
         {
