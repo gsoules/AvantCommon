@@ -58,7 +58,7 @@ class ItemPreview
         $tooltip = AvantCommon::getCustomText('item_link_tooltip', ITEM_LINK_TOOLTIP);
         $target = $openLinkInNewWindow ? " target='_blank'" : '';
         $html .= "<a class='item-preview-identifier' href='$url' data-tooltip='$tooltip'{$target}>{$prefix} {$identifier}</a>";
-        $isLocalItem =  $this->useElasticsearch && $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
+        $isLocalItem =  !$this->useElasticsearch || $this->item['_source']['item']['contributor-id'] == ElasticsearchConfig::getOptionValueForContributorId();
         if ($isLocalItem)
         {
             // Only show identifier when viewing the local site since identifiers are not unique across sites.
