@@ -195,8 +195,9 @@ class ItemPreview
             // Style this item to indicate that it has more than one file attached to it.
             $class = "class='item-preview-multiple'";
         }
-        else if ($hasCoverImage && $useCoverImage)
+        else if ($hasCoverImage)
         {
+            // Always show the icon for a reference item or item set that has a cover image.
             if ($this->useElasticsearch)
                 $itemType = $source['core-fields']['type'][0];
             else
