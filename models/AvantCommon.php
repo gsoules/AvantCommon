@@ -347,8 +347,9 @@ class AvantCommon
                 $identifierList .= '|';
             $identifierList .= $info['identifier'];
         }
+        $condition = AvantSearch::useElasticsearch() ? "contains" : "matches";
         $identifierElementId = ItemMetadata::getElementIdForElementName(ItemMetadata::getIdentifierAliasElementName());
-        $findUrl = ItemSearch::getAdvancedSearchUrl($identifierElementId, $identifierList, 'contains');
+        $findUrl = ItemSearch::getAdvancedSearchUrl($identifierElementId, $identifierList, $condition);
 
         // Limit the search to the local site since recent items are only tracked for the local site.
         $findUrl .= '&site=0';
