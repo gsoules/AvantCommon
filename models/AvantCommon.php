@@ -169,16 +169,29 @@ class AvantCommon
         return $html;
     }
 
-    public static function emitS3Link($identifier)
+    public static function emitS3Link($path)
     {
         $bucket = S3Config::getOptionValueForBucket();
         $console = S3Config::getOptionValueForConsole();
-        $path = S3Config::getOptionValueForPath();
         $region = S3Config::getOptionValueForRegion();
+        $link = "<a href='$console/$bucket/$path/?region=$region&tab=overview' class='cloud-storage-link' target='_blank'>S3</a>";
+        return $link;
+    }
+
+    public static function emitS3LinkForAccession($accession)
+    {
+        $pathAccessions = S3Config::getOptionValueForPathAccessions();
+        $path = "$pathAccessions/$accession";
+        return self::emitS3Link($path);
+    }
+
+    public static function emitS3LinkForItem($identifier)
+    {
+        $pathItems = S3Config::getOptionValueForPathItems();
         $id = intval($identifier);
         $folder = $id - ($id % 1000);
-        $link = "<a href='$console/$bucket/$path/$folder/$identifier/?region=$region&tab=overview' class='cloud-storage-link' target='_blank'>S3</a>";
-        return $link;
+        $path = "$pathItems/$folder/$identifier";
+        return self::emitS3Link($path);
     }
 
     public static function escapeQuotes($text)
