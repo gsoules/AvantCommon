@@ -181,6 +181,12 @@ class AvantCommon
     public static function emitS3LinkForAccession($accession)
     {
         $pathAccessions = S3Config::getOptionValueForPathAccessions();
+
+        // Handle the case when the accession is a sub_accession e.g. 2026_02 which will be in S3 Accessions/2026/2026_02".
+        $parts = explode('_', $accession);
+        if (count($parts) == 2)
+            $accession = $parts[0] . "/" . $accession;
+
         $path = "$pathAccessions/$accession";
         return self::emitS3Link($path);
     }
