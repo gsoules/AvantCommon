@@ -193,6 +193,13 @@ class AvantCommon
 
     public static function emitS3LinkForItem($identifier)
     {
+        $item = ItemMetadata::getItemFromIdentifier($identifier);
+        $avantS3 = new AvantS3($item);
+        $s3Names = $avantS3->getS3NamesForItem();
+        $s3FileCount = count($s3Names);
+        if ($s3FileCount == 0)
+            return "";
+
         $pathItems = S3Config::getOptionValueForPathItems();
         $id = intval($identifier);
         $folder = $id - ($id % 1000);
