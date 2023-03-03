@@ -134,7 +134,9 @@ class ConfigOptions
 
     public static function getRawData($optionName)
     {
-        $rawData = json_decode(get_option($optionName), true);
+        $optionValue = get_option($optionName);
+
+        $rawData = $optionValue ? json_decode(get_option($optionName), true) : "";
         if (empty($rawData))
         {
             $rawData = array();
