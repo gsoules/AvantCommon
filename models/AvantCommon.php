@@ -284,7 +284,11 @@ class AvantCommon
         if (!empty($elementId))
         {
             // Use current() instead of [0] in case the 0th element was deleted using the Remove button.
-            $values = $_POST['Elements'][$elementId];
+            $elements = $_POST['Elements'];
+            if (array_key_exists($elementId, $elements))
+                $values = $_POST['Elements'][$elementId];
+            else
+                $values = null;
             $text = empty($values) ? '' : current($values)['text'];
         }
         return $text;
