@@ -161,7 +161,7 @@ class ItemPreview
 
         // Temporary until it's possible to identify an audio file from Elasticsearch.
         $file = $this->useElasticsearch ? null : $this->item->getFile(0);
-        $isAudio = $file != null && substr($file->mime_type, 0) == 'audio/mpeg';
+        $isAudio = $file != null && $file->mime_type != null && substr($file->mime_type, 0) == 'audio/mpeg';
 
         if (empty($thumbnailUrl) || $isAudio)
         {
