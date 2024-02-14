@@ -402,7 +402,7 @@ class AvantCommon
         $value = isset($_GET[$arg]) ? $_GET[$arg] : $defaultValue;
 
         // If the default value is an integer, assume that the return value should also be an integer.
-        return is_int($defaultValue) ? intval($value) : $value;
+        return is_int($value) ? intval($value) : $value;
     }
 
     public static function queryStringArgOrCookie($arg, $cookie, $defaultValue = '')
