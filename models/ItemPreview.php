@@ -252,12 +252,24 @@ class ItemPreview
 
             $itemUrl = $this->sharedSearchingEnabled ? $source['url']['item'] : url("items/show/$itemId");
 
-            // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
-            // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
-            // expand into a link to the item.
-            $tooltip = AvantCommon::getCustomText('image_thumb_tooltip', IMAGE_THUMB_TOOLTIP);
-            $class = 'lightbox';
-            $html = self::emitImageLinkHtml($class, $originalImageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
+            // Let the user open a PDF file by clicking on its thumbnail, but use Lightbox for images.
+            if ($isPdfFile)
+            {
+                $imageUrl = $isPdfFile ? $pdfUrl : $originalImageUrl;
+                $class = "";
+                $tooltip = AvantCommon::getCustomText('image_thumb_tooltip', PDF_THUMB_TOOLTIP);
+            }
+            else
+            {
+                // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
+                // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
+                // expand into a link to the item.
+                $tooltip = AvantCommon::getCustomText('pdf_thumb_tooltip', IMAGE_THUMB_TOOLTIP);
+                $class = 'lightbox';
+                $imageUrl = $originalImageUrl;
+            }
+
+            $html = self::emitImageLinkHtml($class, $imageUrl, $tooltip, $itemId, $title, $itemNumber, $itemUrl, $isForeign, $contributor, $pdfUrl, $imgTag);
         }
 
         // Give another plugin a chance to add to the class for installation-specific custom styling.
