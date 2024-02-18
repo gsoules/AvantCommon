@@ -3,7 +3,8 @@
 define('FALLBACK_THUMB_TOOLTIP', __('Click title to view item'));
 define('IMAGE_THUMB_TOOLTIP', __('See larger image (click title to view item)'));
 define('IMAGE_TOOLTIP', __('See larger image'));
-define('PDF_THUMB_TOOLTIP', __('Read this PDF file'));
+define('PDF_IMAGE_TOOLTIP', __('Read this PDF'));
+define('PDF_THUMB_TOOLTIP', __('Read this PDF (click title to view item)'));
 define('ITEM_LINK_TOOLTIP', __('View this item'));
 
 class ItemPreview
@@ -257,14 +258,14 @@ class ItemPreview
             {
                 $imageUrl = $isPdfFile ? $pdfUrl : $originalImageUrl;
                 $class = "";
-                $tooltip = AvantCommon::getCustomText('image_thumb_tooltip', PDF_THUMB_TOOLTIP);
+                $tooltip = AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_THUMB_TOOLTIP);
             }
             else
             {
                 // Include the image in the lightbox by simply attaching the 'lightbox' class to the enclosing <a> tag.
                 // Also provide the lightbox with a link to the original image and the image's item Id which jQuery will
                 // expand into a link to the item.
-                $tooltip = AvantCommon::getCustomText('pdf_thumb_tooltip', IMAGE_THUMB_TOOLTIP);
+                $tooltip = AvantCommon::getCustomText('image_thumb_tooltip', IMAGE_THUMB_TOOLTIP);
                 $class = 'lightbox';
                 $imageUrl = $originalImageUrl;
             }
@@ -436,7 +437,7 @@ class ItemPreview
             $pdfUrl = '';
             $thumbUrl = $file->getWebPath($isThumbnail ? 'thumbnail' : 'fullsize');
 
-            $tooltip = $isPdfFile ? AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_THUMB_TOOLTIP) : AvantCommon::getCustomText('image_tooltip', IMAGE_TOOLTIP);
+            $tooltip = $isPdfFile ? AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_IMAGE_TOOLTIP) : AvantCommon::getCustomText('image_tooltip', IMAGE_TOOLTIP);
 
             $html = self::getImageLinkHtml($itemId, $itemNumber, $class, $url, $thumbUrl, $pdfUrl, $title, $tooltip, $isForeign, $index);
         }
