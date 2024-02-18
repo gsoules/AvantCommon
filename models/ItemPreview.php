@@ -137,6 +137,7 @@ class ItemPreview
         $pdfUrl = '';
         $getThumbnail = true;
         $isFallbackImage = false;
+        $isPdfFile = false;
 
         if ($this->useElasticsearch)
         {
@@ -176,7 +177,8 @@ class ItemPreview
 
             if ($this->useElasticsearch)
             {
-                if (isset($source['pdf']['file-url'][0]))
+                $isPdfFile = isset($source['pdf']['file-url'][0]);
+                if ($isPdfFile)
                     $pdfUrl = $source['pdf']['file-url'][0];
                 $originalImageUrl = isset($source['url']['image']) ? $this->item['_source']['url']['image'] : '';
             }
