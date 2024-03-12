@@ -4,7 +4,7 @@ define('FALLBACK_THUMB_TOOLTIP', __('Click title to view item'));
 define('IMAGE_THUMB_TOOLTIP', __('See larger image (click title to view item)'));
 define('IMAGE_TOOLTIP', __('See larger image'));
 define('PDF_IMAGE_TOOLTIP', __('Read this PDF'));
-define('PDF_THUMB_TOOLTIP', __('Read this PDF (click title to view item)'));
+define('PDF_THUMB_TOOLTIP', __('View this item'));
 define('ITEM_LINK_TOOLTIP', __('View this item'));
 
 class ItemPreview
@@ -258,7 +258,7 @@ class ItemPreview
             // Let the user open a PDF file by clicking on its thumbnail, but use Lightbox for images.
             if ($isPdfFile)
             {
-                $imageUrl = $isPdfFile ? $pdfUrl : $originalImageUrl;
+                $imageUrl = $isPdfFile ? $itemUrl : $originalImageUrl;
                 $class = "";
                 $tooltip = AvantCommon::getCustomText('pdf_thumb_tooltip', PDF_THUMB_TOOLTIP);
             }
