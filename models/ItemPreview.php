@@ -125,7 +125,7 @@ class ItemPreview
 
         $html = "<div class='grid-view-cell'>";
         $html .= $this->emitItemHeader(true);
-        $html .= $this->emitItemThumbnail(true);
+        $html .= $this->emitItemThumbnail(false);
         $html .= $this->emitItemTitle(true, $contributorId);
         $html .= "</div>";
         return $html;
