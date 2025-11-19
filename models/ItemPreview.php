@@ -28,24 +28,14 @@ class ItemPreview
         return $html;
     }
 
-    public function emitItemHeader($openLinkInNewWindow = false)
+    public function emitItemHeader($pageId = 0, $openLinkInNewWindow = false)
     {
-        if ($this->useElasticsearch)
-        {
-            $itemId = $this->item['_source']['item']['id'];
-            $contributorId = $this->sharedSearchingEnabled ? $this->item['_source']['item']['contributor-id'] . '-' : '';
-            $identifier = $this->item['_source']['core-fields']['identifier'][0];
-            $identifier = $contributorId . $identifier;
-            $url = $this->item['_source']['url']['item'];
-            $public =  $this->item['_source']['item']['public'];
-        }
-        else
-        {
-            $itemId = $this->item->id;
-            $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
-            $url = url("items/show/$itemId");
-            $public = $this->item->public;
-        }
+        $itemId = $this->item->id;
+        $identifier = ItemMetadata::getItemIdentifierAlias($this->item);
+        $pageId = $pageId ?: AvantCommon::getPageId();
+        // $url = url("items/show/$itemId?id=$pageId");
+        $url = url("items/show/$itemId");
+        $public = $this->item->public;
 
         $html = '<div class="item-preview-header">';
 
@@ -119,14 +109,12 @@ class ItemPreview
         return $html;
     }
 
-    public function emitItemPreviewForGrid($sharedSearchingEnabled)
+    public function emitItemPreviewForGrid($pageId)
     {
-        $contributorId = $sharedSearchingEnabled ? ' <span class="contributor-id">' . $this->item['_source']['item']['contributor'] . '</span>' : '';
-
         $html = "<div class='grid-view-cell'>";
-        $html .= $this->emitItemHeader(true);
+        $html .= $this->emitItemHeader($pageId);
         $html .= $this->emitItemThumbnail(false);
-        $html .= $this->emitItemTitle(true, $contributorId);
+        $html .= $this->emitItemTitle($pageId, true);
         $html .= "</div>";
         return $html;
     }
@@ -305,25 +293,17 @@ class ItemPreview
         return $html;
     }
 
-    public function emitItemTitle($openInNewWindow = false, $contributorId = '')
+    public function emitItemTitle($pageId = 0, $openInNewWindow = false)
     {
-        if ($this->useElasticsearch)
-        {
-            $source = $this->item['_source'];
-            $element = $source['core-fields'];
-            $title = isset($element["title"]) ? $element["title"][0] : UNTITLED_ITEM;
-            $url = $this->item['_source']['url']['item'];
-        }
-        else
-        {
-            $title = ItemMetadata::getItemTitle($this->item);
-            $id = $this->item->id;
-            $url = url("items/show/$id");
-        }
+        $title = ItemMetadata::getItemTitle($this->item);
+        $id = $this->item->id;
+        $pageId = $pageId ?: AvantCommon::getPageId();
+        // $url = url("items/show/$id?id=$pageId");
+        $url = url("items/show/$id");
 
         $tooltip = AvantCommon::getCustomText('item_link_tooltip', ITEM_LINK_TOOLTIP);
         $target = $openInNewWindow ? " target='_blank'" : '';
-        $html = "<div class=\"element-text\"><a href='$url' data-tooltip='$tooltip' $target>$title</a>$contributorId</div>";
+        $html = "<div class=\"element-text\"><a href='$url' data-tooltip='$tooltip' $target>$title</a></div>";
         return $html;
     }
 

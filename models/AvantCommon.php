@@ -104,6 +104,7 @@ class AvantCommon
         else
         {
             $html .= '<div id="recent-items">';
+            $pageId = AvantCommon::generatePageId();
 
             foreach ($recentlyViewedItemInfo as $recentItemId => $info)
             {
@@ -116,7 +117,7 @@ class AvantCommon
                 $thumbnail = $itemPreview->emitItemThumbnail(false);
 
                 // Get the title as a link. If it's for the admin view, change to the public view.
-                $title = $itemPreview->emitItemTitle(true);
+                $title = $itemPreview->emitItemTitle($pageId);
                 $title = str_replace('admin/items', 'items', $title);
 
                 $type = ItemMetadata::getElementTextForElementName($recentItem, 'Type');
@@ -233,6 +234,16 @@ class AvantCommon
             $item = null;
         }
         return $item;
+    }
+
+    public static function generatePageId()
+    {
+        return random_int(10000, 99999);
+    }
+
+    public static function getPageId()
+    {
+        return $_GET['id'] ?? 1000;
     }
 
     public static function getCustomText($textId, $defaultText)
